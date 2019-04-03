@@ -11,7 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockSuitMaker extends BlockSH
+public class BlockSuitMaker extends BlockBasic
 {
 	public BlockSuitMaker(String name)
 	{

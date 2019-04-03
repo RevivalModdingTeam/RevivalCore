@@ -57,6 +57,20 @@ public abstract class TileEntitySH extends TileEntity implements IInventory
         return stack;
 	}
 	
+	/**
+	 *  Called when itemstack is changed inside inventory (decrStackSize, setInventorySlotContents)
+	 */
+	@Override
+	public void markDirty()
+	{
+		super.markDirty();
+		
+		if(this instanceof ICraftSystem)
+		{
+			((ICraftSystem)this).slotChanged(this);
+		}
+	}
+	
 	// TODO: maybe call markDirty() too? Time will show
 	@Override
 	public ItemStack removeStackFromSlot(int index)

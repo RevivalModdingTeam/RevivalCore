@@ -11,11 +11,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class BlockSH extends Block
+public class BlockBasic extends Block
 {
 	private String[] description = new String[0];
 	
-	public BlockSH(String name, Material material) 
+	public BlockBasic(String name, Material material) 
 	{
 		super(material);
 		setUnlocalizedName(name);
@@ -26,18 +26,18 @@ public class BlockSH extends Block
 		Registries.Registry.registerItemBlock(this);
 	}
 	
-	public BlockSH(String name)
+	public BlockBasic(String name)
 	{
 		this(name, Material.ROCK);
 	}
 	
-	public BlockSH(String name, Material material, String... description)
+	public BlockBasic(String name, Material material, String... description)
 	{
 		this(name, material);
 		this.description = description;
 	}
 	
-	public BlockSH addDescription(String... strings)
+	public BlockBasic addDescription(String... strings)
 	{
 		this.description = strings;
 		return this;
