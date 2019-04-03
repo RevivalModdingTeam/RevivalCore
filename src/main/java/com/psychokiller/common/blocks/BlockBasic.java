@@ -18,7 +18,7 @@ public class BlockBasic extends Block
 	public BlockBasic(String name, Material material) 
 	{
 		super(material);
-		setUnlocalizedName(name);
+		setTranslationKey(name);
 		setRegistryName(name);
 		setCreativeTab(CreativeTabs.MISC);
 		

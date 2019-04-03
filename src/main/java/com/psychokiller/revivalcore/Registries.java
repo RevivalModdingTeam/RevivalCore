@@ -7,18 +7,28 @@ import com.psychokiller.common.blocks.BlockSuitMaker;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import static jdk.nashorn.internal.objects.Global.Infinity;
 
 public class Registries
 {
@@ -67,6 +77,24 @@ public class Registries
 			iBlock.setRegistryName(block.getRegistryName());
 			itemblocks.add(iBlock);
 		}
+
+		public static void registerEntity(EntityEntry entityEntry) {
+		}
+
+		@SubscribeEvent
+		public static void addEntities(RegistryEvent.Register<EntityEntry> e) {
+			IForgeRegistry<EntityEntry> reg = e.getRegistry();
+			EntityEntries.ENTITY_ENTRIES.forEach(reg::register);
+		}
+
+		public static class EntityEntries {
+			public static final List<EntityEntry> ENTITY_ENTRIES = new ArrayList<EntityEntry>();
+		}
+
+		// Use in preinit in mod.
+		public static void registerTileEntity(Class<? extends TileEntity> clazz, String name) {
+			GameRegistry.registerTileEntity(clazz, new ResourceLocation(RevivalCore.MODID, name));
+		}
 	}
 	
 	@EventBusSubscriber(Side.CLIENT)
@@ -81,7 +109,7 @@ public class Registries
 			// block model registry
 			for(ResourceLocation l : blocks.getKeys())
 			{
-				if(l.getResourceDomain().equals(RevivalCore.MODID))
+				if(l.getPath().equals(RevivalCore.MODID))
 				{
 					register(blocks.getValue(l));
 				}
@@ -90,13 +118,13 @@ public class Registries
 			// item model registry
 			for(ResourceLocation l : items.getKeys())
 			{
-				if(l.getResourceDomain().equals(RevivalCore.MODID))
+				if(l.getPath().equals(RevivalCore.MODID))
 				{
 					register(items.getValue(l));
 				}
 			}
 		}
-		
+
 		private static void register(Item item)
 		{
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));

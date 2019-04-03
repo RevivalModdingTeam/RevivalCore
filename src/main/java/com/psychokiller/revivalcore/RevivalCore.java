@@ -36,11 +36,10 @@ public class RevivalCore
 	public static void preInit(FMLPreInitializationEvent event)
 	{
 		logger = event.getModLog();
-		registerTileEntities();
-		
+		Registries.Registry.registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
 		proxy.preInit(event);
 	}
-	
+
 	@EventHandler
 	public static void init(FMLInitializationEvent event)
 	{
@@ -52,15 +51,7 @@ public class RevivalCore
 	{
 		proxy.postInit(event);
 	}
-	
-	private static void registerTileEntities()
-	{
-		registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
-	}
-	
-	private static void registerTileEntity(Class<? extends TileEntity> teclass, String name)
-	{
-		GameRegistry.registerTileEntity(teclass, new ResourceLocation(MODID + ":" + name));
-	}
+
+
 }
 
