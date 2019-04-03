@@ -9,7 +9,7 @@ import com.psychokiller.recipes.SHRecipe;
 public class SuitMakerRecipeRegistry implements ISHRecipeRegistry<SHRecipe>
 {
 	public static SuitMakerRecipeRegistry instance;
-	private static final Set<SHRecipe> RECIPES = new HashSet<SHRecipe>();
+	public static final Set<SHRecipe> RECIPES = new HashSet<SHRecipe>();
 	
 	@Override
 	public void register(SHRecipe recipe)

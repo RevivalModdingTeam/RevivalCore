@@ -13,6 +13,16 @@ public class SHRecipe
 		this.ingredients = ingredients;
 	}
 	
+	public SHIngredient[] getIngredients()
+	{
+		return ingredients;
+	}
+	
+	public ItemStack getResult()
+	{
+		return result;
+	}
+	
 	public boolean containsIngredient(ItemStack stack)
 	{
 		for(int i = 0; i < ingredients.length; i++)
