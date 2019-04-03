@@ -1,58 +1,20 @@
 package com.psychokiller.revivalcore;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
+import com.psychokiller.recipes.ISHRecipeRegistry;
+import com.psychokiller.recipes.SHRecipe;
 
-public class SuitMakerRecipeRegistry 
+public class SuitMakerRecipeRegistry implements ISHRecipeRegistry<SHRecipe>
 {
-	private static final Set<SuitMakerRecipe> RECIPES = new HashSet<SuitMakerRecipe>();
+	public static SuitMakerRecipeRegistry instance;
+	private static final Set<SHRecipe> RECIPES = new HashSet<SHRecipe>();
 	
-	public static void register(SuitMakerRecipe recipe)
+	@Override
+	public void register(SHRecipe recipe)
 	{
-		if(RECIPES.contains(recipe))
+		if(!RECIPES.contains(recipe))
 			RECIPES.add(recipe);
-	}
-	
-	public final class SuitMakerRecipe
-	{
-		private final SuitMakerIngredient[] ingredients;
-		private final ItemStack result;
-		
-		public SuitMakerRecipe(ItemStack result, SuitMakerIngredient... ingredients)
-		{
-			this.result = result;
-			this.ingredients = ingredients;
-		}
-		
-		public boolean containsIngredient(ItemStack stack)
-		{
-			for(int i = 0; i < ingredients.length; i++)
-			{
-				ItemStack ing = ingredients[i].ingredient;
-				
-				if(ItemStack.areItemStacksEqual(stack, ing))
-				{
-					return true;
-				}
-			}
-			
-			return false;
-		}
-	}
-	
-	public final class SuitMakerIngredient
-	{
-		public final int index;
-		public final ItemStack ingredient;
-		
-		public SuitMakerIngredient(int slotIndex, ItemStack ingredient)
-		{
-			this.index = slotIndex;
-			this.ingredient = ingredient;
-		}
 	}
 }
