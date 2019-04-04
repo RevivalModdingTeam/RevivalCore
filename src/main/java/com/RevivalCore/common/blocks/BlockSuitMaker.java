@@ -1,8 +1,8 @@
 package com.RevivalCore.common.blocks;
 
 import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
+import com.RevivalCore.revivalcore.RevivalCore;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,21 +20,21 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSuitMaker extends BlockBasic {
+public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
-    protected static final AxisAlignedBB MODEL_SOUTH_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
+    protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, 1); // Still needs to be done
+    protected static final AxisAlignedBB MODEL_SOUTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, 0); // Still needs to be done
     protected static final AxisAlignedBB MODEL_WEST_AABB = new AxisAlignedBB(0.2, 0, 1, 1, 0.6, -2);
-    protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
+    protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1); // Still needs to be done
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
 
-    public BlockSuitMaker(String name, Material material) {
+    public BlockSuitMaker(String name) {
         super(name);
-
+        setCreativeTab(RevivalCore.coretab);
     }
 
-    // TODO
+    // TODO Open GUI
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
@@ -66,7 +66,18 @@ public class BlockSuitMaker extends BlockBasic {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.2, 0, 0, 1, 0.6, 1);
+        switch (state.getValue(FACING)) {
+            case EAST:
+                return new AxisAlignedBB(0.2, 0, 0, 1, 0.6, 1);
+            case WEST:
+                return new AxisAlignedBB(0.2, 0, 0, 1, 0.6, 1);
+            case SOUTH:
+                return new AxisAlignedBB(0, 0, 0, -1, 0.6, 1); // TODO Still needs to be configered
+            case NORTH:
+                return new AxisAlignedBB(1, 0, 1, -1, 0.6, 1); // TODO Still needs to be configered
+            default:
+                return new AxisAlignedBB(-1, 0, -1, 1, 0.6, 1);
+        }
     }
 
     @Override
@@ -105,10 +116,10 @@ public class BlockSuitMaker extends BlockBasic {
         return true;
     }
 
+    @Nullable
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
-    {
-    	return new TileEntitySuitMaker();
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntitySuitMaker();
     }
 
     @Override
