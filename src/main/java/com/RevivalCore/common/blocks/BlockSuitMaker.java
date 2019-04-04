@@ -30,7 +30,8 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
 
     public BlockSuitMaker(String name, Material material) {
-        super(name, material);
+        super(name);
+
     }
 
     // TODO
