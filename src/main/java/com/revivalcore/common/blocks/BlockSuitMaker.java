@@ -1,7 +1,7 @@
 package com.revivalcore.common.blocks;
 
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
-import com.revivalcore.revivalcore.RevivalCore;
+import com.revivalcore.core.RevivalCore;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;

@@ -1,7 +1,7 @@
 package com.revivalcore.common.blocks;
 
 import com.revivalcore.common.items.CoreItems;
-import com.revivalcore.revivalcore.RevivalCore;
+import com.revivalcore.core.RevivalCore;
 import com.revivalcore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

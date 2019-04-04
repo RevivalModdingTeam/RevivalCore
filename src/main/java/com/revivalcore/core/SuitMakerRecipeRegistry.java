@@ -1,4 +1,4 @@
-package com.revivalcore.revivalcore;
+package com.revivalcore.core;
 
 import com.revivalcore.recipes.IRVRecipeRegistry;
 import com.revivalcore.recipes.RVRecipe;

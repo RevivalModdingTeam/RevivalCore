@@ -1,4 +1,4 @@
-package com.revivalcore.revivalcore;
+package com.revivalcore.core;
 
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.network.NetworkManager;

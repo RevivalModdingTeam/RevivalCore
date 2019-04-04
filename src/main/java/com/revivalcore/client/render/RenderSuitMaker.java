@@ -3,7 +3,7 @@ package com.revivalcore.client.render;
 import com.revivalcore.client.models.ModelSuitMaker;
 import com.revivalcore.common.blocks.BlockSuitMaker;
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
-import com.revivalcore.revivalcore.RevivalCore;
+import com.revivalcore.core.RevivalCore;
 import com.revivalcore.util.helper.RenderHelpers;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

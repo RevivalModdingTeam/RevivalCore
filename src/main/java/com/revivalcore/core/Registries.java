@@ -1,4 +1,4 @@
-package com.revivalcore.revivalcore;
+package com.revivalcore.core;
 
 import com.revivalcore.client.render.RenderSuitMaker;
 import com.revivalcore.common.blocks.CoreBlocks;

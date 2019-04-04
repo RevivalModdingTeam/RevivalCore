@@ -7,26 +7,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 
-public abstract class TileEntitySH extends TileEntity implements IInventory {
+public abstract class TileEntityRC extends TileEntity implements IInventory
+{
     /**
      * @return instance of global variable for inventory
      */
     public abstract NonNullList<ItemStack> getInventory();
 
     @Override
-    public int getSizeInventory() {
+    public int getSizeInventory()
+    {
         return this.getInventory().size();
     }
 
     @Override
-    public void clear() {
+    public void clear()
+    {
         this.getInventory().clear();
     }
 
     @Override
-    public boolean isEmpty() {
-        for (ItemStack stack : this.getInventory()) {
-            if (!stack.isEmpty()) {
+    public boolean isEmpty()
+    {
+        for(ItemStack stack : this.getInventory())
+        {
+            if(!stack.isEmpty())
+            {
                 return false;
             }
         }
@@ -35,46 +41,58 @@ public abstract class TileEntitySH extends TileEntity implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getStackInSlot(int index)
+    {
         return index >= 0 && index < this.getSizeInventory() ? this.getInventory().get(index) : ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack decrStackSize(int index, int count)
+    {
         ItemStack stack = ItemStackHelper.getAndSplit(this.getInventory(), index, count);
-        if (!stack.isEmpty()) {
+        if(!stack.isEmpty())
+        {
             this.markDirty();
         }
         return stack;
     }
 
     /**
-     * Called when itemstack is changed inside inventory (decrStackSize, setInventorySlotContents)
+     *  Called when itemstack is changed inside inventory (decrStackSize, setInventorySlotContents)
      */
     @Override
-    public void markDirty() {
+    public void markDirty()
+    {
         super.markDirty();
 
-        if (this instanceof ICraftSystem) {
-            ((ICraftSystem) this).slotChanged(this);
+        if(this instanceof com.RevivalCore.common.tileentity.ICraftSystem)
+        {
+            ((com.RevivalCore.common.tileentity.ICraftSystem)this).slotChanged(this);
         }
     }
 
     // TODO: maybe call markDirty() too? Time will show
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (this.getStackInSlot(index).isEmpty()) {
+    public ItemStack removeStackFromSlot(int index)
+    {
+        if(this.getStackInSlot(index).isEmpty())
+        {
             return ItemStack.EMPTY;
-        } else {
+        }
+
+        else
+        {
             this.getInventory().set(index, ItemStack.EMPTY);
             return this.getStackInSlot(index);
         }
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setInventorySlotContents(int index, ItemStack stack)
+    {
         this.getInventory().set(index, stack);
-        if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
+        if(!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit())
+        {
             stack.setCount(this.getInventoryStackLimit());
         }
 
@@ -82,45 +100,54 @@ public abstract class TileEntitySH extends TileEntity implements IInventory {
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getInventoryStackLimit()
+    {
         return 64;
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player)
+    {
         return true;
     }
 
     // No idea what these 2 methods are supposed to do
     @Override
-    public int getField(int id) {
+    public int getField(int id)
+    {
         return 0;
     }
 
     @Override
-    public int getFieldCount() {
+    public int getFieldCount()
+    {
         return 0;
     }
 
     @Override
-    public void setField(int id, int value) {
+    public void setField(int id, int value)
+    {
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean isItemValidForSlot(int index, ItemStack stack)
+    {
         return true;
     }
 
     @Override
-    public boolean hasCustomName() {
+    public boolean hasCustomName()
+    {
         return true;
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(EntityPlayer player)
+    {
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(EntityPlayer player)
+    {
     }
 }
