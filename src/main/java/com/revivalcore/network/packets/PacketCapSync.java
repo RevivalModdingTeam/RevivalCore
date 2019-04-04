@@ -43,7 +43,8 @@ public class PacketCapSync implements IMessage {
         @Override
         public IMessage onMessage(PacketCapSync message, MessageContext ctx) {
             EntityPlayer player = message.player;
-            if (player != null) Minecraft.getMinecraft().addScheduledTask(() -> CapabilitySpeedster.get(player).deserializeNBT(message.data));
+            if (player != null)
+                Minecraft.getMinecraft().addScheduledTask(() -> CapabilitySpeedster.get(player).deserializeNBT(message.data));
             return null;
         }
     }

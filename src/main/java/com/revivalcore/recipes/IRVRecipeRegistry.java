@@ -3,9 +3,8 @@ package com.revivalcore.recipes;
 /**
  * @param <R> - the output recipe
  */
-public interface IRVRecipeRegistry<R> 
-{
-	public void register(R recipe);
-	
-	public void register(R... recipeArr);
+public interface IRVRecipeRegistry<R> {
+    void register(R recipe);
+
+    void register(R... recipeArr);
 }

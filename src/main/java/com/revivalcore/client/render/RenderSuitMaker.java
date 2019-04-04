@@ -18,7 +18,6 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
 
     public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
     public ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suitmaker.png");
-
     Minecraft mc;
 
     public RenderSuitMaker() {

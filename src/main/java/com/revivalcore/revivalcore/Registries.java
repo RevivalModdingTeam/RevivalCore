@@ -38,11 +38,10 @@ public class Registries {
         public static void onBlockRegister(RegistryEvent.Register<Block> event) {
             event.getRegistry().registerAll(CoreBlocks.BLOCK_LIST.toArray(new Block[0]));
         }
-        
+
         @SubscribeEvent
-        public static void onSuitMakerRecipesRegister(RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent e)
-        {
-        	//e.register(recipe);
+        public static void onSuitMakerRecipesRegister(RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent e) {
+            //e.register(recipe);
         }
 
 

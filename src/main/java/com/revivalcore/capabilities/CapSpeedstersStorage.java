@@ -38,6 +38,7 @@ public class CapSpeedstersStorage implements IStorage {
 
         @Override
         public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-            return capability == CAP ? (T)cap : null;
-        }}
+            return capability == CAP ? (T) cap : null;
+        }
+    }
 }
