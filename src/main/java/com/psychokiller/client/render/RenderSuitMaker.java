@@ -8,7 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {
 
     public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
@@ -27,8 +30,10 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         GlStateManager.translate(x, y + 1.5, z);
         GlStateManager.rotate(180, 1, 0, 0);
         IBlockState state = te.getWorld().getBlockState(te.getPos());
-        mc.getTextureManager().bindTexture(TEXTURE);
-        modelSuitMaker.render(null, 0,0,0,0,0,0.0625F);
+        if (state instanceof TileEntitySuitMaker) {
+            mc.getTextureManager().bindTexture(TEXTURE);
+            modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
+        }
         GlStateManager.popMatrix();
     }
 }
