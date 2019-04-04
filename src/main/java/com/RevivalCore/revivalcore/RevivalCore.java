@@ -1,10 +1,13 @@
 package com.RevivalCore.revivalcore;
 
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -34,6 +37,10 @@ public class RevivalCore
 		logger = event.getModLog();
 		Registries.Registry.registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
 		proxy.preInit(event);
+		// Working on disabling mod
+		//if (Loader.isModLoaded("speedsterheroes")) {
+		//
+		//}
 	}
 
 	@EventHandler
