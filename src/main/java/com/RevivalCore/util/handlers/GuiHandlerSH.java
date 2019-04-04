@@ -1,4 +1,4 @@
-package com.RevivalCore.util;
+package com.RevivalCore.util.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
