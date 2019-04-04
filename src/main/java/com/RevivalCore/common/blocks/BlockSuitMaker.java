@@ -25,8 +25,6 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
        super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-        TileEntitySuitMaker te = (TileEntitySuitMaker) worldIn.getTileEntity(pos);
-        te.openInventory(playerIn);
         return true;
     }
 

@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 
 public class SlowMotionAPI {
 
-    public static void SlowProjectiles(EntityPlayer player, int speed) {
+    public static void SlowProjectiles(EntityPlayer player, double speed) {
         double s = speed; // Default speed is 0.3 //
          int v = 0;
 
