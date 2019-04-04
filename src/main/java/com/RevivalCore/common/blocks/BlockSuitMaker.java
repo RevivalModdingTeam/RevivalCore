@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
+public class BlockSuitMaker extends BlockBasic {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
@@ -105,10 +105,10 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
         return true;
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntitySuitMaker();
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+    	return new TileEntitySuitMaker();
     }
 
     @Override

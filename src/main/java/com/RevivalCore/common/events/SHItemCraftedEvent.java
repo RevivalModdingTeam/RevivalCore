@@ -1,6 +1,6 @@
 package com.RevivalCore.common.events;
 
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -8,12 +8,12 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class SHItemCraftedEvent extends Event
 {
 	private World world;
-	private Item item;
+	private ItemStack item;
 	
-	public SHItemCraftedEvent(World world, Item craftedItem) 
+	public SHItemCraftedEvent(World world, ItemStack itemStack) 
 	{
 		this.world = world;
-		this.item = craftedItem;
+		this.item = itemStack;
 	}
 	
 	public World getWorld()
@@ -21,7 +21,7 @@ public class SHItemCraftedEvent extends Event
 		return world;
 	}
 	
-	public Item getCraftedItem()
+	public ItemStack getCraftedItem()
 	{
 		return item;
 	}

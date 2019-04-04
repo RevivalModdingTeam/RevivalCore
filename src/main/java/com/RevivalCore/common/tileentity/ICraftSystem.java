@@ -2,10 +2,13 @@ package com.RevivalCore.common.tileentity;
 
 import java.util.Set;
 
+import com.RevivalCore.common.events.SHItemCraftedEvent;
 import com.RevivalCore.recipes.SHIngredient;
 import com.RevivalCore.recipes.SHRecipe;
+import com.RevivalCore.util.helper.RVHelper;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author Toma1O6
@@ -18,14 +21,16 @@ public interface ICraftSystem<R extends SHRecipe>
 		if(!te.getStackInSlot(getOutput()).isEmpty())
 			return;
 		
-		boolean running = true;
+		boolean running = false;
 		SHRecipe recipe = null;
 		
 		for(SHRecipe rec : this.getRegistry())
 		{
+			running = true;
+			
 			for(SHIngredient i : rec.getIngredients())
 			{
-				if(!ItemStack.areItemsEqual(te.getStackInSlot(i.index), i.ingredient))
+				if(!RVHelper.areItemstacksCraftable(i.ingredient, te.getStackInSlot(i.index)))
 				{
 					running = false;
 					break;
@@ -43,6 +48,7 @@ public interface ICraftSystem<R extends SHRecipe>
 		if(running && recipe != null)
 		{
 			te.setInventorySlotContents(this.getOutput(), recipe.getResult());
+			MinecraftForge.EVENT_BUS.post(new SHItemCraftedEvent(te.getWorld(), recipe.getResult()));
 			this.consumeIngredients(recipe, te);
 		}
 	}
