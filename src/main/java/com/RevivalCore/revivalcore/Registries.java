@@ -6,7 +6,6 @@ import com.RevivalCore.common.items.CoreItems;
 import com.RevivalCore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -34,7 +33,6 @@ public class Registries {
 
     @EventBusSubscriber
     public static class Registry {
-        static final List<ItemBlock> itemblocks = new ArrayList<ItemBlock>();
 
         @SubscribeEvent
         public static void onItemRegister(RegistryEvent.Register<Item> event) {
@@ -47,6 +45,7 @@ public class Registries {
         }
 
         public static void registerEntity(EntityEntry entityEntry) {
+            EntityEntries.ENTITY_ENTRIES.add(entityEntry);
         }
 
         @SubscribeEvent
