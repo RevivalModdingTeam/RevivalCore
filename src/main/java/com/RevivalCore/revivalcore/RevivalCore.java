@@ -32,6 +32,7 @@ public class RevivalCore
 		logger = event.getModLog();
 		proxy.preInit(event);
 		NetworkManager.init();
+		Registries.TileRegistry.init();
 		// Working on disabling mod
 		//if (Loader.isModLoaded("speedsterheroes")) {
 		//
