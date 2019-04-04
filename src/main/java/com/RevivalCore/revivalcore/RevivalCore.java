@@ -23,7 +23,7 @@ public class RevivalCore
     
     public static Logger logger;
     
-    @SidedProxy(clientSide = "com.RevivalCore.proxies.ClientProxy", serverSide = "com.RevivalCore.proxies.ServerProxy")
+    @SidedProxy(clientSide = "com.RevivalCore.proxy.ClientProxy", serverSide = "com.RevivalCore.proxy.ServerProxy")
     public static IProxy proxy;
 
 	@EventHandler

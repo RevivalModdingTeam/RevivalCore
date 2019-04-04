@@ -9,5 +9,5 @@ import java.util.List;
 public class CoreBlocks {
     public static final List<Block> BLOCK_LIST = new ArrayList<Block>();
 
-    public static final Block SUITMAKER = new BlockSuitMaker("suit_maker", Material.IRON);
+    public static final Block SUIT_MAKER = new BlockSuitMaker("suit_maker", Material.IRON);
 }
