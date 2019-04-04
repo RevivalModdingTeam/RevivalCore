@@ -1,6 +1,7 @@
 package com.RevivalCore.revivalcore;
 
 import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
+import com.RevivalCore.network.NetworkManager;
 import com.RevivalCore.proxies.IProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,6 +33,7 @@ public class RevivalCore
 		logger = event.getModLog();
 		Registries.Registry.registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
 		proxy.preInit(event);
+		NetworkManager.init();
 		// Working on disabling mod
 		//if (Loader.isModLoaded("speedsterheroes")) {
 		//
