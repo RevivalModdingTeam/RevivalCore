@@ -2,18 +2,18 @@ package com.RevivalCore.recipes;
 
 import net.minecraft.item.ItemStack;
 
-public class SHRecipe
+public class RVRecipe
 {
-	private final SHIngredient[] ingredients;
+	private final RVIngredient[] ingredients;
 	private final ItemStack result;
 	
-	public SHRecipe(ItemStack result, SHIngredient... ingredients)
+	protected RVRecipe(ItemStack result, RVIngredient... ingredients)
 	{
 		this.result = result;
 		this.ingredients = ingredients;
 	}
 	
-	public SHIngredient[] getIngredients()
+	public RVIngredient[] getIngredients()
 	{
 		return ingredients;
 	}

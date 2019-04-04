@@ -2,6 +2,7 @@ package com.RevivalCore.revivalcore;
 
 import com.RevivalCore.client.render.RenderSuitMaker;
 import com.RevivalCore.common.blocks.CoreBlocks;
+import com.RevivalCore.common.events.RVRecipeRegistryEvent;
 import com.RevivalCore.common.items.CoreItems;
 import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
 import com.RevivalCore.util.helper.IHasModel;
@@ -36,6 +37,12 @@ public class Registries {
         @SubscribeEvent
         public static void onBlockRegister(RegistryEvent.Register<Block> event) {
             event.getRegistry().registerAll(CoreBlocks.BLOCK_LIST.toArray(new Block[0]));
+        }
+        
+        @SubscribeEvent
+        public static void onSuitMakerRecipesRegister(RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent e)
+        {
+        	//e.register(recipe);
         }
 
 

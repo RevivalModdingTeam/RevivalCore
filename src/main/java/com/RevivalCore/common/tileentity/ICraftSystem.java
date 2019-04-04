@@ -3,8 +3,8 @@ package com.RevivalCore.common.tileentity;
 import java.util.Set;
 
 import com.RevivalCore.common.events.SHItemCraftedEvent;
-import com.RevivalCore.recipes.SHIngredient;
-import com.RevivalCore.recipes.SHRecipe;
+import com.RevivalCore.recipes.RVIngredient;
+import com.RevivalCore.recipes.RVRecipe;
 import com.RevivalCore.util.helper.RVHelper;
 
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Toma1O6
  * @param <R> - the type of set containing all recipes related to this TE
  */
-public interface ICraftSystem<R extends SHRecipe>
+public interface ICraftSystem<R extends RVRecipe>
 {
 	default void slotChanged(TileEntitySH te)
 	{
@@ -22,13 +22,13 @@ public interface ICraftSystem<R extends SHRecipe>
 			return;
 		
 		boolean running = false;
-		SHRecipe recipe = null;
+		RVRecipe recipe = null;
 		
-		for(SHRecipe rec : this.getRegistry())
+		for(RVRecipe rec : this.getRegistry())
 		{
 			running = true;
 			
-			for(SHIngredient i : rec.getIngredients())
+			for(RVIngredient i : rec.getIngredients())
 			{
 				if(!RVHelper.areItemstacksCraftable(i.ingredient, te.getStackInSlot(i.index)))
 				{
@@ -53,7 +53,7 @@ public interface ICraftSystem<R extends SHRecipe>
 		}
 	}
 	
-	default void consumeIngredients(SHRecipe recipe, TileEntitySH te)
+	default void consumeIngredients(RVRecipe recipe, TileEntitySH te)
 	{
 		for(int i = 0; i < recipe.getIngredients().length; i++)
 		{

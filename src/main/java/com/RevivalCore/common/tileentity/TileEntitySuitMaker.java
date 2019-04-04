@@ -1,6 +1,6 @@
 package com.RevivalCore.common.tileentity;
 
-import com.RevivalCore.recipes.SHRecipe;
+import com.RevivalCore.recipes.RVRecipe;
 import com.RevivalCore.revivalcore.SuitMakerRecipeRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.Set;
 
-public class TileEntitySuitMaker extends TileEntitySH implements ICraftSystem<SHRecipe>
+public class TileEntitySuitMaker extends TileEntitySH implements ICraftSystem<RVRecipe>
 {
 	public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
 	protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(17, ItemStack.EMPTY);
@@ -52,7 +52,7 @@ public class TileEntitySuitMaker extends TileEntitySH implements ICraftSystem<SH
 	}
 	
 	@Override
-	public Set<SHRecipe> getRegistry()
+	public Set<RVRecipe> getRegistry()
 	{
 		return SuitMakerRecipeRegistry.RECIPES;
 	}
