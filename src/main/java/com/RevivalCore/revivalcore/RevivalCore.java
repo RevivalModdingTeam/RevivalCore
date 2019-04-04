@@ -1,8 +1,7 @@
 package com.RevivalCore.revivalcore;
 
-import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
 import com.RevivalCore.network.NetworkManager;
-import com.RevivalCore.proxies.IProxy;
+import com.RevivalCore.proxy.IProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -31,7 +30,6 @@ public class RevivalCore
 	public static void preInit(FMLPreInitializationEvent event)
 	{
 		logger = event.getModLog();
-		Registries.Registry.registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
 		proxy.preInit(event);
 		NetworkManager.init();
 		// Working on disabling mod

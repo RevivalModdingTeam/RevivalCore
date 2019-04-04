@@ -1,7 +1,9 @@
 package com.RevivalCore.revivalcore;
 
+import com.RevivalCore.client.render.RenderSuitMaker;
 import com.RevivalCore.common.blocks.CoreBlocks;
 import com.RevivalCore.common.items.CoreItems;
+import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
 import com.RevivalCore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -9,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -66,6 +69,16 @@ public class Registries {
         // Use in preinit in mod.
         public static void registerTileEntity(Class<? extends TileEntity> clazz, String name) {
             GameRegistry.registerTileEntity(clazz, new ResourceLocation(RevivalCore.MODID, name));
+        }
+    }
+
+    public static class TileRegistry {
+        public static void init() {
+            Registries.Registry.registerTileEntity(TileEntitySuitMaker.class, "suit_maker");
+        }
+
+        public static void bindEntityTEISR() {
+            ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySuitMaker.class, new RenderSuitMaker());
         }
     }
 }

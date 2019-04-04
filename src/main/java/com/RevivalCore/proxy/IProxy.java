@@ -1,4 +1,4 @@
-package com.RevivalCore.proxies;
+package com.RevivalCore.proxy;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
