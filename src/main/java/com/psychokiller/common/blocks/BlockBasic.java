@@ -7,7 +7,6 @@ import com.psychokiller.revivalcore.Registries;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -20,7 +19,6 @@ public class BlockBasic extends Block
 		super(material);
 		setTranslationKey(name);
 		setRegistryName(name);
-		setCreativeTab(CreativeTabs.MISC);
 		
 		// automatically registers item block for this instance of block
 		Registries.Registry.registerItemBlock(this);

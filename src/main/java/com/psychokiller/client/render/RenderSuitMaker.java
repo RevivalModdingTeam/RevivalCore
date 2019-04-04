@@ -29,11 +29,8 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y + 1.5, z);
         GlStateManager.rotate(180, 1, 0, 0);
-        IBlockState state = te.getWorld().getBlockState(te.getPos());
-        if (state instanceof TileEntitySuitMaker) {
-            mc.getTextureManager().bindTexture(TEXTURE);
-            modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
-        }
+        mc.getTextureManager().bindTexture(TEXTURE);
+        modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GlStateManager.popMatrix();
     }
 }
