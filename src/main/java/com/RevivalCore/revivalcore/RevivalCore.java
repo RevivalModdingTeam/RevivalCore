@@ -2,6 +2,8 @@ package com.RevivalCore.revivalcore;
 
 import com.RevivalCore.network.NetworkManager;
 import com.RevivalCore.proxy.IProxy;
+import com.RevivalCore.tabs.CoreTab;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -22,6 +24,7 @@ public class RevivalCore
     public static RevivalCore instance;
     
     public static Logger logger;
+    public static final CreativeTabs coretab = new CoreTab("coretab");
     
     @SidedProxy(clientSide = "com.RevivalCore.proxy.ClientProxy", serverSide = "com.RevivalCore.proxy.ServerProxy")
     public static IProxy proxy;
