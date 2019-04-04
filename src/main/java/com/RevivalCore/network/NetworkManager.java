@@ -14,23 +14,12 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class NetworkManager 
 {
-	public static final Set<RCPacket> SERVER_PACKETS = new HashSet<RCPacket>();
-	public static final Set<RCPacket> CLIENT_PACKETS = new HashSet<RCPacket>();
-	
 	private static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(RevivalCore.MODID);
 	private static int ID = -1;
 	
 	public static void initialize()
 	{
-		for(RCPacket cpacket : CLIENT_PACKETS)
-		{
-			registerCPacket(cpacket.getClass());
-		}
-		
-		for(RCPacket spacket : SERVER_PACKETS)
-		{
-			registerSPacket(spacket.getClass());
-		}
+		//call register here
 	}
 	
 	public static void sendToClient(RCPacket packet, EntityPlayerMP player)
@@ -78,22 +67,12 @@ public class NetworkManager
 		INSTANCE.sendToServer(packet);
 	}	
 	
-	public static void registerClientPacket(RCPacket packet)
-	{
-		CLIENT_PACKETS.add(packet);
-	}
-	
-	public static void registerServerPacket(RCPacket packet)
-	{
-		SERVER_PACKETS.add(packet);
-	}
-	
-	private static void registerCPacket(Class packetClass)
+	private static void registerClientPacket(Class packetClass)
 	{
 		INSTANCE.registerMessage(packetClass, packetClass, getPacketID(), Side.CLIENT);
 	}
 	
-	private static void registerSPacket(Class packetClass)
+	private static void registerServerPacket(Class packetClass)
 	{
 		INSTANCE.registerMessage(packetClass, packetClass, getPacketID(), Side.SERVER);
 	}
