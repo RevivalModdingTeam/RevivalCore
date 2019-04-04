@@ -1,8 +1,11 @@
 package com.RevivalCore.client.render;
 
 import com.RevivalCore.client.models.ModelSuitMaker;
+import com.RevivalCore.common.blocks.BlockSuitMaker;
 import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
 import com.RevivalCore.revivalcore.RevivalCore;
+import com.RevivalCore.util.helper.RenderHelpers;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -26,8 +29,12 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
     @Override
     public void render(TileEntitySuitMaker te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x - 0.2, y + 1.5, z + 0.6);
+        GlStateManager.translate(x + 0.6 , y + 1.5, z -0.2);
         GlStateManager.rotate(180, 1, 0, 0);
+        IBlockState state = te.getWorld().getBlockState(te.getPos());
+        if (state.getBlock() instanceof BlockSuitMaker) {
+            GlStateManager.rotate(RenderHelpers.getAngleFromFacing(state.getValue(BlockSuitMaker.FACING)), 0, 1, 0);
+        }
         mc.getTextureManager().bindTexture(TEXTURE);
         modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GlStateManager.popMatrix();

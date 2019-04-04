@@ -1,16 +1,18 @@
 package com.RevivalCore.common.blocks;
 
-import java.util.List;
-
-import com.RevivalCore.revivalcore.Registries;
-
+import com.RevivalCore.common.items.CoreItems;
+import com.RevivalCore.revivalcore.RevivalCore;
+import com.RevivalCore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class BlockBasic extends Block
+import java.util.List;
+
+public class BlockBasic extends Block implements IHasModel
 {
 	private String[] description = new String[0];
 	
@@ -20,8 +22,8 @@ public class BlockBasic extends Block
 		setTranslationKey(name);
 		setRegistryName(name);
 		
-		// automatically registers item block for this instance of block
-		Registries.Registry.registerItemBlock(this);
+		CoreBlocks.BLOCK_LIST.add(this);
+		CoreItems.ITEM_LIST.add(Item.getItemFromBlock(this));
 	}
 	
 	public BlockBasic(String name)
@@ -51,5 +53,10 @@ public class BlockBasic extends Block
 				tooltip.add(s);
 			}
 		}
+	}
+
+	@Override
+	public void registerModels() {
+		RevivalCore.proxy.registerItemRenderer(Item.getItemFromBlock(this), 0, "inventory");
 	}
 }

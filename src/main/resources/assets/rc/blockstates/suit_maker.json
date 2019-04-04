@@ -1,8 +1,8 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "rc:suit_maker"
-  },
+      "model": "rc:suit_maker"
+    },
   "variants": {
     "normal": [
       {}
@@ -22,5 +22,6 @@
     "facing=south": [
       {}
     ]
+
   }
 }

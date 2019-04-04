@@ -1,12 +1,16 @@
 package com.RevivalCore.proxies;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public interface IProxy 
-{
-	public void preInit(FMLPreInitializationEvent e);
-	public void init(FMLInitializationEvent e);
-	public void postInit(FMLPostInitializationEvent e);
+public interface IProxy {
+    void preInit(FMLPreInitializationEvent e);
+
+    void init(FMLInitializationEvent e);
+
+    void postInit(FMLPostInitializationEvent e);
+
+    void registerItemRenderer(Item item, int meta, String id);
 }
