@@ -15,8 +15,10 @@ public class EventHandler
     @SubscribeEvent
     public static void EntityLivingEvent(LivingEvent.LivingUpdateEvent e) {
         if(doAllowed) {
-            EntityPlayer player = (EntityPlayer) e.getEntity();
-             SlowMotionAPI.SlowProjectiles(player, 0.3);
+            if (e.getEntity() instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) e.getEntity();
+                SlowMotionAPI.SlowProjectiles(player, 0.3);
+            }
         }
     }
 }
