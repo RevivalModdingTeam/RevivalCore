@@ -1,10 +1,10 @@
 package com.RevivalCore.revivalcore;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.RevivalCore.recipes.ISHRecipeRegistry;
 import com.RevivalCore.recipes.SHRecipe;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class SuitMakerRecipeRegistry implements ISHRecipeRegistry<SHRecipe>
 {
