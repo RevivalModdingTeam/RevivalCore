@@ -2,6 +2,7 @@ package com.RevivalCore.common.blocks;
 
 import com.RevivalCore.common.tileentity.TileEntitySuitMaker;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,8 +29,8 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
 
-    public BlockSuitMaker(String name) {
-        super(name);
+    public BlockSuitMaker(String name, Material material) {
+        super(name, material);
     }
 
     // TODO
