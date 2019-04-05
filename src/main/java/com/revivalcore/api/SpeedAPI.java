@@ -1,4 +1,4 @@
-package com.revivalcore.util.helper.powers;
+package com.revivalcore.api;
 
 import com.revivalcore.capabilities.CapSpeedstersStorage;
 import com.revivalcore.capabilities.CapabilitySpeedster;

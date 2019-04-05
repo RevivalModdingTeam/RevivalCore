@@ -1,4 +1,4 @@
-package com.revivalcore.util.helper.powers;
+package com.revivalcore.api;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
