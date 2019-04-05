@@ -65,9 +65,9 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     {
         super.markDirty();
 
-        if(this instanceof com.RevivalCore.common.tileentity.ICraftSystem)
+        if(this instanceof ICraftSystem)
         {
-            ((com.RevivalCore.common.tileentity.ICraftSystem)this).slotChanged(this);
+            ((ICraftSystem)this).slotChanged(this);
         }
     }
 

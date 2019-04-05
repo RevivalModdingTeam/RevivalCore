@@ -1,4 +1,4 @@
-package com.revivalcore.revivalcore;
+package com.revivalcore.core;
 
 import com.revivalcore.core.RevivalCore;
 import net.minecraftforge.common.config.Config;
