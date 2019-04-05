@@ -12,4 +12,10 @@ public class RVIngredient
 		this.index = slotIndex;
 		this.ingredient = ingredient;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "{SlotID:"+index + ",Item:" + ingredient.getItem().getRegistryName() + "}";
+	}
 }

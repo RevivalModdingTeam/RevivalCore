@@ -1,5 +1,8 @@
 package com.revivalcore.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -9,6 +12,7 @@ public class RVRecipeBuilder {
     private ItemStack result;
     private RVIngredient[] ingredients = new RVIngredient[0];
     private String name = "";
+    private List<RVIngredient> recList = new ArrayList<RVIngredient>();
 
     private RVRecipeBuilder() {
     }
@@ -34,28 +38,21 @@ public class RVRecipeBuilder {
 
     public RVRecipeBuilder addIngredient(Item item, int count, int slotIndex) {
         ItemStack ing = new ItemStack(item, count);
-        if (ingredients.length == 0)
-            ingredients[0] = new RVIngredient(slotIndex, ing);
-
-        else ingredients[ingredients.length] = new RVIngredient(slotIndex, ing);
-
+        recList.add(new RVIngredient(slotIndex, ing));
         return this;
     }
 
     public RVRecipeBuilder addIngredient(Block block, int count, int slotIndex) {
         ItemStack ing = new ItemStack(block, count);
-        if (ingredients.length == 0)
-            ingredients[0] = new RVIngredient(slotIndex, ing);
-
-        else ingredients[ingredients.length] = new RVIngredient(slotIndex, ing);
-
+        recList.add(new RVIngredient(slotIndex, ing));
         return this;
     }
 
     public RVRecipe build() throws IllegalArgumentException {
         result = Preconditions.checkNotNull(result);
-        if (ingredients.length == 0) throw new IllegalArgumentException("Ingredient array cannot be empty!");
-        if(name.isEmpty()) throw new IllegalArgumentException("Name cannot be empty!");
+        if (recList.isEmpty()) throw new IllegalArgumentException("Ingredient list cannot be empty!");
+        if (name.isEmpty()) throw new IllegalArgumentException("Name cannot be empty!");
+        ingredients = recList.toArray(new RVIngredient[0]);
 
         return new RVRecipe(name, result, ingredients);
     }
