@@ -1,4 +1,4 @@
-package com.revivalcore.capabilities;
+package com.revivalcore.common.capabilities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;

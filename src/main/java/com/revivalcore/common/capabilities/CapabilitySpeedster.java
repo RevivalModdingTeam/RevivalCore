@@ -1,6 +1,6 @@
-package com.revivalcore.capabilities;
+package com.revivalcore.common.capabilities;
 
-import com.revivalcore.capabilities.CapSpeedstersStorage.SpeedsterCapProvider;
+import com.revivalcore.common.capabilities.CapSpeedstersStorage.SpeedsterCapProvider;
 import com.revivalcore.network.NetworkManager;
 import com.revivalcore.network.packets.PacketCapSync;
 import com.revivalcore.core.RevivalCore;
@@ -61,13 +61,6 @@ public class CapabilitySpeedster implements ISpeedsterCap {
             if (event.getObject() instanceof EntityPlayer)
                 event.addCapability(new ResourceLocation(RevivalCore.MODID, "speedster_cap"), new SpeedsterCapProvider((EntityPlayer) event.getObject()));
         }
-
-     /*   @SubscribeEvent
-        public static void update(LivingEvent.LivingUpdateEvent event) {
-            CapabilitySpeedster cap = event.getEntityLiving().getCapability(CapSpeedstersStorage.CAP, null);
-            if (cap != null)
-                cap.update();
-        }*/
 
         @SubscribeEvent
         public static void onPlayerClone(PlayerEvent.Clone event) {

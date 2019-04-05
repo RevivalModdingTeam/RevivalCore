@@ -1,7 +1,7 @@
 package com.revivalcore.api;
 
-import com.revivalcore.capabilities.CapabilitySpeedster;
-import com.revivalcore.capabilities.ISpeedsterCap;
+import com.revivalcore.common.capabilities.CapabilitySpeedster;
+import com.revivalcore.common.capabilities.ISpeedsterCap;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**

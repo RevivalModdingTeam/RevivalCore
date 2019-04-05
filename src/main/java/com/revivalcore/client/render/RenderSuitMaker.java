@@ -8,6 +8,7 @@ import com.revivalcore.util.helper.RenderHelpers;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.SimpleBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,4 +39,6 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GlStateManager.popMatrix();
     }
+
+
 }

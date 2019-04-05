@@ -1,6 +1,6 @@
 package com.revivalcore.network.packets;
 
-import com.revivalcore.capabilities.CapabilitySpeedster;
+import com.revivalcore.common.capabilities.CapabilitySpeedster;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

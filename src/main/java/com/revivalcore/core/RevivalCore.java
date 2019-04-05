@@ -1,8 +1,8 @@
 package com.revivalcore.core;
 
-import com.revivalcore.capabilities.CapSpeedstersStorage;
-import com.revivalcore.capabilities.CapabilitySpeedster;
-import com.revivalcore.capabilities.ISpeedsterCap;
+import com.revivalcore.common.capabilities.CapSpeedstersStorage;
+import com.revivalcore.common.capabilities.CapabilitySpeedster;
+import com.revivalcore.common.capabilities.ISpeedsterCap;
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.network.NetworkManager;
 import com.revivalcore.proxy.IProxy;
