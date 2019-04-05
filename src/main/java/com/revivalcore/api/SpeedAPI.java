@@ -1,7 +1,7 @@
 package com.revivalcore.api;
 
-import com.revivalcore.capabilities.CapSpeedstersStorage;
 import com.revivalcore.capabilities.CapabilitySpeedster;
+import com.revivalcore.capabilities.ISpeedsterCap;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -16,14 +16,14 @@ public class SpeedAPI {
     }
 
     public static void setSpeedFromCap(EntityPlayer player) {
-        CapabilitySpeedster cap = player.getCapability(CapSpeedstersStorage.CAP, null);
-        // setSpeed(player, cap.getSpeedLevel); // TODO getSpeedLevel initialize
+        ISpeedsterCap cap = CapabilitySpeedster.get(player);
+        setSpeed(player, cap.getSpeedLevel());
         cap.sync();
     }
 
     public static void setSpeedToCap(EntityPlayer player, float level) {
-        CapabilitySpeedster cap = player.getCapability(CapSpeedstersStorage.CAP, null);
-        // cap.setSpeedLevel(float); // TODO setSpeedLevel initialize
+        ISpeedsterCap cap = CapabilitySpeedster.get(player);
+        cap.setSpeedLevel(level);
         setSpeed(player, level);
         cap.sync();
     }

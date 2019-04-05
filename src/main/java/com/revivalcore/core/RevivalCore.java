@@ -1,11 +1,15 @@
 package com.revivalcore.core;
 
+import com.revivalcore.capabilities.CapSpeedstersStorage;
+import com.revivalcore.capabilities.CapabilitySpeedster;
+import com.revivalcore.capabilities.ISpeedsterCap;
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.network.NetworkManager;
 import com.revivalcore.proxy.IProxy;
 import com.revivalcore.tabs.CoreTab;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -37,6 +41,7 @@ public class RevivalCore {
         NetworkManager.init();
         Registries.TileRegistry.init();
         SuitMakerRecipeRegistry.init();
+        CapabilityManager.INSTANCE.register(ISpeedsterCap.class, new CapSpeedstersStorage(), CapabilitySpeedster::new);
         // Working on disabling mod
         //if (Loader.isModLoaded("speedsterheroes")) {
         //

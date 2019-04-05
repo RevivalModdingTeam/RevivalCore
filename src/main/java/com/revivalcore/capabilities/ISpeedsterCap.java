@@ -6,4 +6,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 public interface ISpeedsterCap extends INBTSerializable<NBTTagCompound> {
 
     void sync();
+
+    void setSpeedLevel(float level);
+
+    float getSpeedLevel();
 }
