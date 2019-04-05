@@ -1,7 +1,5 @@
-package com.RevivalCore.common.tileentity;
+package com.revivalcore.common.tileentity;
 
-import com.revivalcore.common.tileentity.ICraftSystem;
-import com.revivalcore.common.tileentity.TileEntityRC;
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.core.SuitMakerRecipeRegistry;
 import net.minecraft.item.ItemStack;
