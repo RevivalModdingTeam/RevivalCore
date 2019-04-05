@@ -8,12 +8,18 @@ import net.minecraft.item.ItemStack;
 public class RVRecipeBuilder {
     private ItemStack result;
     private RVIngredient[] ingredients = new RVIngredient[0];
+    private String name = "";
 
     private RVRecipeBuilder() {
     }
 
     public static RVRecipeBuilder create() {
         return new RVRecipeBuilder();
+    }
+    
+    public RVRecipeBuilder name(String name) {
+    	this.name = name;
+    	return this;
     }
 
     public RVRecipeBuilder result(Item item, int count) {
@@ -49,7 +55,8 @@ public class RVRecipeBuilder {
     public RVRecipe build() throws IllegalArgumentException {
         result = Preconditions.checkNotNull(result);
         if (ingredients.length == 0) throw new IllegalArgumentException("Ingredient array cannot be empty!");
+        if(name.isEmpty()) throw new IllegalArgumentException("Name cannot be empty!");
 
-        return new RVRecipe(result, ingredients);
+        return new RVRecipe(name, result, ingredients);
     }
 }

@@ -6,11 +6,15 @@ public class RVRecipe
 {
 	private final RVIngredient[] ingredients;
 	private final ItemStack result;
+	private final String name;
 	
-	protected RVRecipe(ItemStack result, RVIngredient... ingredients)
+	protected RVRecipe(String name, ItemStack result, RVIngredient... ingredients) throws IllegalArgumentException
 	{
 		this.result = result;
 		this.ingredients = ingredients;
+		if(name.isEmpty())
+			throw new IllegalArgumentException("Recipe name cannot be empty!");
+		this.name = name;
 	}
 	
 	public RVIngredient[] getIngredients()
@@ -21,6 +25,11 @@ public class RVRecipe
 	public ItemStack getResult()
 	{
 		return result;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public boolean containsIngredient(ItemStack stack)
@@ -36,5 +45,11 @@ public class RVRecipe
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Recipe: [Name=" + name + ", Result=" + result + ", Ingredients=" + ingredients + "]";
 	}
 }

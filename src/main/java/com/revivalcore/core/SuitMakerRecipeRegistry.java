@@ -22,4 +22,15 @@ public class SuitMakerRecipeRegistry implements IRVRecipeRegistry<RVRecipe> {
         for (RVRecipe r : recipeArr)
             register(r);
     }
+    
+    @Override
+    public void getRecipes()
+    {
+    	RevivalCore.logger.info("Printing all recipes... ");
+    	
+    	for(RVRecipe r : RECIPES)
+    	{
+    		RevivalCore.logger.info(r);
+    	}
+    }
 }
