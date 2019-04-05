@@ -1,4 +1,4 @@
-package com.revivalcore.api;
+package com.revivalcore.superpowerbase.api;
 
 import com.revivalcore.common.capabilities.CapabilitySpeedster;
 import com.revivalcore.common.capabilities.ISpeedsterCap;

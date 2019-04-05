@@ -1,4 +1,4 @@
-package com.revivalcore.api;
+package com.revivalcore.superpowerbase.api;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
@@ -44,9 +44,9 @@ public class SlowMotionAPI {
     }
 
 
-    public static void SlowOtherPlayers(EntityPlayer player, int range) {
+    public static void SlowOtherPlayers(EntityPlayer player, int range, double slow) {
         for(EntityPlayer player1 : player.world.getEntitiesWithinAABB(EntityPlayer.class, player.getEntityBoundingBox().grow(range, range, range))) {
-            SpeedAPI.setSpeedToCap(player1, 1.0F);
+            player1.setVelocity(slow, slow, slow);
         }
     }
 }
