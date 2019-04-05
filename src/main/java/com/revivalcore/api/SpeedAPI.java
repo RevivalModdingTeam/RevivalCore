@@ -27,4 +27,9 @@ public class SpeedAPI {
         setSpeed(player, level);
         cap.sync();
     }
+
+
+    public static void Synco(EntityPlayer player) {
+        player.sendPlayerAbilities();
+    }
 }

@@ -1,15 +1,14 @@
 package com.revivalcore.common.capabilities;
 
 import com.revivalcore.common.capabilities.CapSpeedstersStorage.SpeedsterCapProvider;
+import com.revivalcore.core.RevivalCore;
 import com.revivalcore.network.NetworkManager;
 import com.revivalcore.network.packets.PacketCapSync;
-import com.revivalcore.core.RevivalCore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,9 +18,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import javax.annotation.Nonnull;
 
 public class CapabilitySpeedster implements ISpeedsterCap {
-
-    @CapabilityInject(ISpeedsterCap.class)
-    public static final Capability<ISpeedsterCap> CAPABILITY = null;
 
     private EntityPlayer player;
     private float speed_level = 1;
@@ -36,21 +32,19 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     @Override
     public void sync() {
-        if(player.world.isRemote) {
-            throw new IllegalStateException("We don't need to sync client to server");
-        }else {
             NetworkManager.INSTANCE.sendToAll(new PacketCapSync(player, serializeNBT()));
-        }
+            System.out.println("test");
+
     }
 
     @Override
     public void setSpeedLevel(float level) {
-        this.speed_level = level;
+        speed_level = level;
     }
 
     @Override
     public float getSpeedLevel() {
-        return this.speed_level;
+        return speed_level;
     }
 
     @Mod.EventBusSubscriber(modid = RevivalCore.MODID) // TODO change to SHR  later
@@ -64,40 +58,40 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
         @SubscribeEvent
         public static void onPlayerClone(PlayerEvent.Clone event) {
-            Capability.IStorage storage = CapSpeedstersStorage.CAP.getStorage();
+            Capability.IStorage storage = CapSpeedstersStorage.CAPABILITY.getStorage();
 
             ISpeedsterCap oldCap = get(event.getOriginal());
             ISpeedsterCap newCap = get(event.getEntityPlayer());
 
-            NBTTagCompound nbt = (NBTTagCompound) storage.writeNBT(CapSpeedstersStorage.CAP, oldCap, null);
-            storage.readNBT(CapSpeedstersStorage.CAP, newCap, null, nbt);
+            NBTTagCompound nbt = (NBTTagCompound) storage.writeNBT(CapSpeedstersStorage.CAPABILITY, oldCap, null);
+            storage.readNBT(CapSpeedstersStorage.CAPABILITY, newCap, null, nbt);
             get(event.getEntityPlayer()).sync();
         }
-    }
 
-    @SubscribeEvent
-    public static void onPlayerRespawn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent event) {
-        get(event.player).sync();
-    }
+        @SubscribeEvent
+        public static void onPlayerRespawn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent event) {
+            get(event.player).sync();
+        }
 
-    @SubscribeEvent
-    public static void onPlayerChangedDimension(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
-        get(event.player).sync();
-    }
+        @SubscribeEvent
+        public static void onPlayerChangedDimension(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
+            get(event.player).sync();
+        }
 
-    @SubscribeEvent
-    public static void onDeathEvent(LivingDeathEvent e) {
-        if (e.getEntityLiving() instanceof EntityPlayer) {
-            get((EntityPlayer) e.getEntityLiving()).sync();
+        @SubscribeEvent
+        public static void onDeathEvent(LivingDeathEvent e) {
+            if (e.getEntityLiving() instanceof EntityPlayer) {
+                get((EntityPlayer) e.getEntityLiving()).sync();
+            }
         }
     }
 
     @Nonnull
     public static ISpeedsterCap get(EntityPlayer player) {
-        if (player.hasCapability(CapSpeedstersStorage.CAP, null)) {
-            return player.getCapability(CapSpeedstersStorage.CAP, null);
+        if (player.hasCapability(CapSpeedstersStorage.CAPABILITY, null)) {
+            return player.getCapability(CapSpeedstersStorage.CAPABILITY, null);
         }
-        throw new IllegalStateException("Missing Speedster capability: " + player + ", please report this!");
+        throw new IllegalStateException("Missing Cap");
     }
 
     @Override

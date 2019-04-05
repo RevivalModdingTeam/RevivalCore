@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 public class CapSpeedstersStorage implements IStorage {
 
     @CapabilityInject(ISpeedsterCap.class)
-    public static Capability<CapabilitySpeedster> CAP = null;
+    public static Capability<CapabilitySpeedster> CAPABILITY = null;
 
     @Override
     public NBTBase writeNBT(Capability capability, Object instance, EnumFacing side) {
@@ -33,12 +33,12 @@ public class CapSpeedstersStorage implements IStorage {
 
         @Override
         public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-            return capability == CAP;
+            return capability == CAPABILITY;
         }
 
         @Override
         public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-            return capability == CAP ? (T) cap : null;
+            return capability == CAPABILITY ? (T) cap : null;
         }
     }
 }
