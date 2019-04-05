@@ -43,6 +43,7 @@ public class SlowMotionAPI {
         }
     }
 
+
     public static void SlowOtherPlayers(EntityPlayer player, int range) {
         for(EntityPlayer player1 : player.world.getEntitiesWithinAABB(EntityPlayer.class, player.getEntityBoundingBox().grow(range, range, range))) {
             SpeedAPI.setSpeedToCap(player1, 1.0F);

@@ -23,7 +23,7 @@ public class SpeedAPI {
 
     public static void setSpeedToCap(EntityPlayer player, float level) {
         CapabilitySpeedster cap = player.getCapability(CapSpeedstersStorage.CAP, null);
-        // cap.setSpeedLevel(float);
+        // cap.setSpeedLevel(float); // TODO setSpeedLevel initialize
         setSpeed(player, level);
         cap.sync();
     }
