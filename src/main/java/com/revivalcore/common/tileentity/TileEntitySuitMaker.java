@@ -2,6 +2,9 @@ package com.revivalcore.common.tileentity;
 
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.core.SuitMakerRecipeRegistry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -56,6 +59,12 @@ public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RV
     public Set<RVRecipe> getRegistry()
     {
         return SuitMakerRecipeRegistry.RECIPES;
+    }
+    
+    @Override
+    public void closeInventory(EntityPlayer player)
+    {
+    	InventoryHelper.dropInventoryItems(world, pos, this);
     }
 
     @Override

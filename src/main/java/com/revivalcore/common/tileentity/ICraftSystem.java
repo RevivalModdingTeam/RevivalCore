@@ -34,7 +34,6 @@ public interface ICraftSystem<R extends RVRecipe>
                 if(!RVHelper.areItemstacksCraftable(i.ingredient, te.getStackInSlot(i.index)))
                 {
                     running = false;
-                    break;
                 }
             }
 
