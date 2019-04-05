@@ -50,6 +50,17 @@ public class RVRecipe
 	@Override
 	public String toString()
 	{
-		return "Recipe: [Name=" + name + ", Result=" + result + ", Ingredients=" + ingredients + "]";
+		return "Recipe: [Name=" + name + ", Result=" + result.getItem().getRegistryName() + ", Ingredients=" + this.printIngredients() + "]";
+	}
+	
+	private String printIngredients()
+	{
+		String s = "";
+		for(RVIngredient i : ingredients)
+		{
+			s = s + i.toString() + ",";
+		}
+		
+		return s;
 	}
 }

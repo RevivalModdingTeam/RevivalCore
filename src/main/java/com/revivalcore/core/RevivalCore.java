@@ -36,6 +36,7 @@ public class RevivalCore {
         proxy.preInit(event);
         NetworkManager.init();
         Registries.TileRegistry.init();
+        SuitMakerRecipeRegistry.init();
         // Working on disabling mod
         //if (Loader.isModLoaded("speedsterheroes")) {
         //

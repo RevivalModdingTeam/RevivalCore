@@ -9,8 +9,14 @@ import java.util.Set;
 public class SuitMakerRecipeRegistry implements IRVRecipeRegistry<RVRecipe> {
     public static SuitMakerRecipeRegistry instance;
 
-    public static final Set<RVRecipe> RECIPES = new HashSet<RVRecipe>();
+    public static Set<RVRecipe> RECIPES;
 
+    public static void init()
+    {
+    	instance = new SuitMakerRecipeRegistry();
+    	RECIPES = new HashSet<RVRecipe>();
+    }
+    
     @Override
     public void register(RVRecipe recipe) {
         if (!RECIPES.contains(recipe))
