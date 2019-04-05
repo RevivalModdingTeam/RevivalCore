@@ -2,7 +2,7 @@ package com.revivalcore.common.events;
 
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.core.RevivalCore;
-import com.revivalcore.core.SuitMakerRecipeRegistry;
+import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.Set;

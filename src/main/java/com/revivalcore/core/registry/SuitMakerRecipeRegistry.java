@@ -1,5 +1,6 @@
-package com.revivalcore.core;
+package com.revivalcore.core.registry;
 
+import com.revivalcore.core.RevivalCore;
 import com.revivalcore.recipes.IRVRecipeRegistry;
 import com.revivalcore.recipes.RVRecipe;
 

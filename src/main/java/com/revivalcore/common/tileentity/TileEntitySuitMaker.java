@@ -1,7 +1,7 @@
 package com.revivalcore.common.tileentity;
 
 import com.revivalcore.recipes.RVRecipe;
-import com.revivalcore.core.SuitMakerRecipeRegistry;
+import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;

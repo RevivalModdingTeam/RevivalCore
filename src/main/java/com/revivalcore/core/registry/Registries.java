@@ -1,10 +1,11 @@
-package com.revivalcore.core;
+package com.revivalcore.core.registry;
 
 import com.revivalcore.client.render.RenderSuitMaker;
 import com.revivalcore.common.blocks.CoreBlocks;
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.common.items.CoreItems;
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
+import com.revivalcore.core.RevivalCore;
 import com.revivalcore.recipes.RVRecipeBuilder;
 import com.revivalcore.util.helper.IHasModel;
 import net.minecraft.block.Block;
