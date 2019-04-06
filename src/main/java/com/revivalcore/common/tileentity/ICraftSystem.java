@@ -3,7 +3,7 @@ package com.revivalcore.common.tileentity;
 import java.util.Set;
 
 
-import com.revivalcore.common.events.SHItemCraftedEvent;
+import com.revivalcore.common.events.RVItemCraftedEvent;
 import com.revivalcore.common.tileentity.TileEntityRC;
 import com.revivalcore.recipes.RVIngredient;
 import com.revivalcore.recipes.RVRecipe;
@@ -48,7 +48,7 @@ public interface ICraftSystem<R extends RVRecipe>
         if(running && recipe != null)
         {
             te.setInventorySlotContents(this.getOutput(), recipe.getResult());
-            MinecraftForge.EVENT_BUS.post(new SHItemCraftedEvent(te.getWorld(), recipe.getResult()));
+            MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.getResult()));
             this.consumeIngredients(recipe, te);
         }
     }

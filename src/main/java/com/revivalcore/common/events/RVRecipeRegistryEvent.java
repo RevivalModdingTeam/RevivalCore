@@ -7,11 +7,12 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.Set;
 
-public class RVRecipeRegistryEvent {
+public class RVRecipeRegistryEvent extends Event{
 
     private static Set<RVRecipe> RECIPES;
 
-    public static final class SuitMakerRecipeRegistryEvent extends Event {
+    public static class SuitMakerRecipeRegistryEvent extends RVRecipeRegistryEvent {
+    	
         public SuitMakerRecipeRegistryEvent(Set<RVRecipe> recipes) {
             RevivalCore.logger.info("Starting RV recipe registration");
             RECIPES = recipes;
