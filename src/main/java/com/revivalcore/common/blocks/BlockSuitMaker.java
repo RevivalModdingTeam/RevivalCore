@@ -41,12 +41,6 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-        ISpeedsterCap cap = CapabilitySpeedster.get(playerIn);
-        if(playerIn.isSneaking()) {
-            cap.setSpeedLevel(0.5F);
-        }else{
-            System.out.println(cap.getSpeedLevel());
-        }
         return true;
     }
 

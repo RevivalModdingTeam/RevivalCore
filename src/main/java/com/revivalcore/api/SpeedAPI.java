@@ -16,16 +16,20 @@ public class SpeedAPI {
     }
 
     public static void setSpeedFromCap(EntityPlayer player) {
-        ISpeedsterCap cap = CapabilitySpeedster.get(player);
-        setSpeed(player, cap.getSpeedLevel());
-        cap.sync();
+        if (!player.world.isRemote) {
+            ISpeedsterCap cap = CapabilitySpeedster.get(player);
+            setSpeed(player, cap.getSpeedLevel());
+            cap.sync();
+        }
     }
 
     public static void setSpeedToCap(EntityPlayer player, float level) {
-        ISpeedsterCap cap = CapabilitySpeedster.get(player);
-        cap.setSpeedLevel(level);
-        setSpeed(player, level);
-        cap.sync();
+        if (!player.world.isRemote) {
+            ISpeedsterCap cap = CapabilitySpeedster.get(player);
+            cap.setSpeedLevel(level);
+            setSpeed(player, level);
+            cap.sync();
+        }
     }
 
 
