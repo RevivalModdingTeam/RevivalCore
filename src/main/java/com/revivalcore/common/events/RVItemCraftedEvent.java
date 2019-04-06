@@ -5,12 +5,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 // TODO: Not called yet
-public class SHItemCraftedEvent extends Event {
+public class RVItemCraftedEvent extends Event {
 
     private World world;
     private ItemStack item;
 
-    public SHItemCraftedEvent(World world, ItemStack itemStack) {
+    public RVItemCraftedEvent(World world, ItemStack itemStack) {
         this.world = world;
         this.item = itemStack;
     }

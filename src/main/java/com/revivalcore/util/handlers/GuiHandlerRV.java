@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-public class GuiHandlerSH implements IGuiHandler {
+public class GuiHandlerRV implements IGuiHandler {
     private static int id = -1;
 
     // GUI registry
