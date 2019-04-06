@@ -4,6 +4,7 @@ import com.revivalcore.common.capabilities.CapabilitySpeedster;
 import com.revivalcore.common.capabilities.ISpeedsterCap;
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
 import com.revivalcore.core.RevivalCore;
+import com.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalcore.util.helper.PlayerHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyDirection;
@@ -39,8 +40,12 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
 
     // TODO Open GUI
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+        if(!playerIn.isSneaking() && !worldIn.isRemote)
+        {
+        	playerIn.openGui(RevivalCore.instance, GuiHandlerRV.GUI_SUITMAKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        }
         return true;
     }
 
@@ -123,6 +128,12 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntitySuitMaker();
+    }
+    
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) 
+    {
+    	return new TileEntitySuitMaker();
     }
 
     @Override
