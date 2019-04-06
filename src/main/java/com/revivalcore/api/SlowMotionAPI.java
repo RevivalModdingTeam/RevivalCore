@@ -43,9 +43,9 @@ public class SlowMotionAPI {
         }
     }
 
-    public static void SlowOtherPlayers(EntityPlayer player, int range, double slow) {
+    public static void SlowOtherPlayers(EntityPlayer player, int range, float slow) {
         for (EntityPlayer player1 : player.world.getEntitiesWithinAABB(EntityPlayer.class, player.getEntityBoundingBox().grow(range, range, range))) {
-            player1.setVelocity(slow, slow, slow);
+            player1.setAIMoveSpeed(slow);
         }
     }
 }

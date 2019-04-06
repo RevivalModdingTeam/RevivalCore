@@ -9,6 +9,10 @@ public interface ISpeedsterCap extends INBTSerializable<NBTTagCompound> {
 
     void sync();
 
+    void setSpeedster(boolean speedster);
+
+    boolean isSpeedster();
+
     void setSpeedLevel(float level);
 
     float getSpeedLevel();

@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class SpeedAPI {
 
     public static void setSpeed(EntityPlayer player, float level) {
-        player.setAIMoveSpeed(level);
+        player.capabilities.setPlayerWalkSpeed(level);
     }
 
     public static void setSpeedFromCap(EntityPlayer player) {

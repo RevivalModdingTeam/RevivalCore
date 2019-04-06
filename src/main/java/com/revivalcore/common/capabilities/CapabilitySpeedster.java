@@ -12,11 +12,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -26,6 +22,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     private EntityPlayer player;
     private float speed_level = 1;
+    private boolean isSpeedster = false;
 
     public CapabilitySpeedster() {
 
@@ -37,12 +34,21 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     @Override
     public void update() {
-
     }
 
     @Override
     public void sync() {
             NetworkManager.INSTANCE.sendToAll(new PacketCapSync(player, serializeNBT()));
+    }
+
+    @Override
+    public void setSpeedster(boolean speedster) {
+        isSpeedster = speedster;
+    }
+
+    @Override
+    public boolean isSpeedster() {
+        return isSpeedster;
     }
 
     @Override
@@ -55,7 +61,22 @@ public class CapabilitySpeedster implements ISpeedsterCap {
         return speed_level;
     }
 
-    //===== CAPABILITY EVENTS =====
+
+    @Override
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setFloat("speed_level", speed_level);
+        nbt.setBoolean("is_speedster", isSpeedster);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt) {
+        speed_level = nbt.getFloat("speed_level");
+        isSpeedster = nbt.getBoolean("is_speedster");
+    }
+
+
     @Mod.EventBusSubscriber(modid = RevivalCore.MODID)
     public static class Events {
 
@@ -114,17 +135,5 @@ public class CapabilitySpeedster implements ISpeedsterCap {
             return player.getCapability(CapSpeedstersStorage.CAPABILITY, null);
         }
         throw new IllegalStateException("Missing Cap");
-    }
-
-    @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setFloat("speed_level", speed_level);
-        return nbt;
-    }
-
-    @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
-        speed_level = nbt.getFloat("speed_level");
     }
 }
