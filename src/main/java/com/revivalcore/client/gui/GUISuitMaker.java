@@ -11,10 +11,14 @@ import net.minecraft.util.ResourceLocation;
 public class GUISuitMaker extends GuiContainer
 {
 	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(RevivalCore.MODID + ":textures/gui/suitmaker.png");
+	private final InventoryPlayer playerInv;
+	private final TileEntitySuitMaker te;
 	
 	public GUISuitMaker(InventoryPlayer playerInv, TileEntitySuitMaker te)
 	{
 		super(new ContainerSuitMaker(playerInv, te));
+		this.playerInv = playerInv;
+		this.te = te;
 	}
 	
 	@Override

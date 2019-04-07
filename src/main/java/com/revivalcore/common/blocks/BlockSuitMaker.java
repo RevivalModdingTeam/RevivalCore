@@ -38,7 +38,6 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
         setCreativeTab(RevivalCore.coretab);
     }
 
-    // TODO Open GUI
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -128,12 +127,6 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntitySuitMaker();
-    }
-    
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) 
-    {
-    	return new TileEntitySuitMaker();
     }
 
     @Override
