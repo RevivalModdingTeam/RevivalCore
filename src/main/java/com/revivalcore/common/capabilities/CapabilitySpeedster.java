@@ -5,6 +5,7 @@ import com.revivalcore.common.capabilities.CapSpeedstersStorage.SpeedsterCapProv
 import com.revivalcore.core.RevivalCore;
 import com.revivalcore.network.NetworkManager;
 import com.revivalcore.network.packets.PacketCapSync;
+import com.revivalcore.util.RCMods;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -106,7 +107,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
         @SubscribeEvent
         public static void attach(AttachCapabilitiesEvent<Entity> event) {
-            if (Loader.isModLoaded("shr")) {
+            if (Loader.isModLoaded(RCMods.SPEEDSTERREBORN)) {
                 if (event.getObject() instanceof EntityPlayer)
                     event.addCapability(new ResourceLocation(RevivalCore.MODID, "speedsters_cap"), new SpeedsterCapProvider((EntityPlayer) event.getObject()));
             }
