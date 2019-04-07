@@ -1,5 +1,6 @@
 package com.revivalcore.common.capabilities;
 
+import com.revivalcore.api.SpeedAPI;
 import com.revivalcore.common.capabilities.CapSpeedstersStorage.SpeedsterCapProvider;
 import com.revivalcore.core.RevivalCore;
 import com.revivalcore.network.NetworkManager;
@@ -21,7 +22,7 @@ import javax.annotation.Nonnull;
 public class CapabilitySpeedster implements ISpeedsterCap {
 
     private EntityPlayer player;
-    private float speed_level = 1;
+    private float speed_level = 0.1f;
     private boolean isSpeedster = false;
 
     public CapabilitySpeedster() {
@@ -34,6 +35,15 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     @Override
     public void update() {
+        if(!isSpeedster()) {
+            setSpeedLevel(0.1f);
+            SpeedAPI.setSpeedFromCap(player);
+            sync();
+        }else{
+            if(getSpeedLevel() != player.capabilities.getWalkSpeed()) {
+                SpeedAPI.setSpeedFromCap(player);
+            }
+        }
     }
 
     @Override

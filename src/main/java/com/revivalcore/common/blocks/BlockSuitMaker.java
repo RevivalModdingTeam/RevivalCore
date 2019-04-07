@@ -41,7 +41,7 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if(!playerIn.isSneaking() && !worldIn.isRemote)
+        if(!playerIn.isSneaking() && !playerIn.world.isRemote)
         {
         	playerIn.openGui(RevivalCore.instance, GuiHandlerRV.GUI_SUITMAKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
