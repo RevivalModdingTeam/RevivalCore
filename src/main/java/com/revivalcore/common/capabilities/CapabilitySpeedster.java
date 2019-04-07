@@ -14,6 +14,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -24,6 +25,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
     private EntityPlayer player;
     private float speed_level = 0.1f;
     private boolean isSpeedster = false;
+    private boolean isPhasing = false;
 
     public CapabilitySpeedster() {
 
@@ -35,12 +37,12 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     @Override
     public void update() {
-        if(!isSpeedster()) {
+        if (!isSpeedster()) {
             setSpeedLevel(0.1f);
             SpeedAPI.setSpeedFromCap(player);
             sync();
-        }else{
-            if(getSpeedLevel() != player.capabilities.getWalkSpeed()) {
+        } else {
+            if (getSpeedLevel() != player.capabilities.getWalkSpeed()) {
                 SpeedAPI.setSpeedFromCap(player);
             }
         }
@@ -48,7 +50,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
     @Override
     public void sync() {
-            NetworkManager.INSTANCE.sendToAll(new PacketCapSync(player, serializeNBT()));
+        NetworkManager.INSTANCE.sendToAll(new PacketCapSync(player, serializeNBT()));
     }
 
     @Override
@@ -71,12 +73,23 @@ public class CapabilitySpeedster implements ISpeedsterCap {
         return speed_level;
     }
 
+    @Override
+    public void setPhasing(boolean phase) {
+        this.isPhasing = phase;
+    }
+
+    @Override
+    public boolean isPhasing() {
+        return isPhasing;
+    }
+
 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setFloat("speed_level", speed_level);
         nbt.setBoolean("is_speedster", isSpeedster);
+        nbt.setBoolean("is_phasing", isPhasing);
         return nbt;
     }
 
@@ -84,6 +97,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
     public void deserializeNBT(NBTTagCompound nbt) {
         speed_level = nbt.getFloat("speed_level");
         isSpeedster = nbt.getBoolean("is_speedster");
+        isPhasing = nbt.getBoolean("is_phasing");
     }
 
 
@@ -92,8 +106,10 @@ public class CapabilitySpeedster implements ISpeedsterCap {
 
         @SubscribeEvent
         public static void attach(AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof EntityPlayer)
-                event.addCapability(new ResourceLocation(RevivalCore.MODID, "speedsters_cap"), new SpeedsterCapProvider((EntityPlayer) event.getObject()));
+            if (Loader.isModLoaded("shr")) {
+                if (event.getObject() instanceof EntityPlayer)
+                    event.addCapability(new ResourceLocation(RevivalCore.MODID, "speedsters_cap"), new SpeedsterCapProvider((EntityPlayer) event.getObject()));
+            }
         }
 
         @SubscribeEvent

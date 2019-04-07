@@ -1,16 +1,14 @@
 package com.revivalcore.common.blocks;
 
-import com.revivalcore.common.capabilities.CapabilitySpeedster;
-import com.revivalcore.common.capabilities.ISpeedsterCap;
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
 import com.revivalcore.core.RevivalCore;
 import com.revivalcore.util.handlers.GuiHandlerRV;
-import com.revivalcore.util.helper.PlayerHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -132,5 +130,10 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
+    }
+
+    @Override
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        return super.addDestroyEffects(world, pos, manager);
     }
 }

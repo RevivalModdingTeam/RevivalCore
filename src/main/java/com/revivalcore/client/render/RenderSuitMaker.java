@@ -8,7 +8,6 @@ import com.revivalcore.util.helper.RenderHelpers;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.SimpleBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {
 
     public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
-    public ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suitmaker.png");
+    public ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
     Minecraft mc;
 
     public RenderSuitMaker() {
@@ -40,5 +39,8 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         GlStateManager.popMatrix();
     }
 
-
+    @Override
+    protected void bindTexture(ResourceLocation location) {
+        super.bindTexture(location);
+    }
 }

@@ -1,8 +1,7 @@
 package com.revivalcore.common.tileentity;
 
-import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
-
+import com.revivalcore.recipes.RVRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -72,4 +71,11 @@ public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RV
         net.minecraft.util.math.AxisAlignedBB bb = INFINITE_EXTENT_AABB;
         return bb;
     }
+
+    @Override
+    public boolean canRenderBreaking() {
+        return true;
+    }
+
+
 }
