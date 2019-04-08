@@ -13,7 +13,6 @@ import com.revivalcore.util.handlers.GuiHandlerRV;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -46,9 +45,7 @@ public class RevivalCore {
         NetworkManager.init();
         Registries.TileRegistry.init();
         SuitMakerRecipeRegistry.init();
-        if (Loader.isModLoaded("shr")) {
-            CapabilityManager.INSTANCE.register(ISpeedsterCap.class, new CapSpeedstersStorage(), CapabilitySpeedster::new);
-        }
+        CapabilityManager.INSTANCE.register(ISpeedsterCap.class, new CapSpeedstersStorage(), CapabilitySpeedster::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
     }
 
