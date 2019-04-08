@@ -2,13 +2,11 @@ package com.revivalcore.common.tileentity;
 
 import java.util.Set;
 
-
 import com.revivalcore.common.events.RVItemCraftedEvent;
-import com.revivalcore.common.tileentity.TileEntityRC;
-import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalcore.recipes.RVIngredient;
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.util.helper.RVHelper;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -51,10 +49,9 @@ public interface ICraftSystem<R extends RVRecipe>
         // all ingredients were valid (ingnoring slots which weren't specified by the recipe)
         if(running && recipe != null)
         {
-            te.addItemStackToInventory(this.getOutput(), recipe.getResult());
-            MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.getResult()));
+            te.addItemStackToInventory(this.getOutput(), new ItemStack(recipe.getResult().getItem(), recipe.getResult().getCount()));
+            MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), new ItemStack(recipe.getResult().getItem(), recipe.getResult().getCount())));
             this.consumeIngredients(recipe, te);
-            System.out.println(recipe);
         }
     }
 
