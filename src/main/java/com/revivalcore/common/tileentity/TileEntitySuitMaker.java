@@ -1,22 +1,29 @@
 package com.revivalcore.common.tileentity;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalcore.recipes.RVRecipe;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
-import java.util.Set;
-
-
-public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RVRecipe>
+public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSystem<RVRecipe>, ITickable
 {
     public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
     protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(21, ItemStack.EMPTY);
+    public boolean isProcessing;
+    public byte processTime = 0;
+    @Nullable
+    public RVRecipe currRecipe = null;
 
     @Override
     public ITextComponent getDisplayName()
@@ -76,6 +83,60 @@ public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RV
     public boolean canRenderBreaking() {
         return true;
     }
-
-
+    
+    @Override
+    public void setProcessing(boolean processing)
+    {
+    	this.isProcessing = processing;
+    }
+    
+    @Override
+    public boolean isProcessing()
+    {
+    	return isProcessing;
+    }
+    
+    @Override
+    public byte getProcessTimer()
+    {
+    	return processTime;
+    }
+    
+    @Override
+    public RVRecipe getRecipe() 
+    {
+    	return currRecipe;
+    }
+    
+    @Override
+    public void process()
+    {
+    	++this.processTime;
+    }
+    
+    @Override
+    public void resetProcessTimer()
+    {
+    	this.processTime = 0;
+    }
+    
+    @Override
+    public void setRecipe(RVRecipe recipe)
+    {
+    	this.currRecipe = recipe;
+    }
+    
+    @Override
+    public void update()
+    {
+    	if(!isProcessing)
+    		return;
+    	
+    	this.process();
+    	
+    	if(this.getProcessTimer() >= 250)
+    	{
+    		this.onProcessFinished(this);
+    	}
+    }
 }

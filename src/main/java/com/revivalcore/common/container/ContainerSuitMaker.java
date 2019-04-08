@@ -22,6 +22,7 @@ public class ContainerSuitMaker extends Container
 		this.initSlots();
 	}
 	
+	//TODO: Finish for craft matrix slots
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
 	{

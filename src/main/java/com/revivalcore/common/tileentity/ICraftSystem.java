@@ -17,7 +17,6 @@ public interface ICraftSystem<R extends RVRecipe>
 {
     default void slotChanged(TileEntityRC te)
     {
-    	
         if(!te.getStackInSlot(getOutput()).isEmpty())
             return;
 
@@ -46,9 +45,18 @@ public interface ICraftSystem<R extends RVRecipe>
         // all ingredients were valid (ingnoring slots which weren't specified by the recipe)
         if(running && recipe != null)
         {
-            te.addItemStackToInventory(this.getOutput(), new ItemStack(recipe.getResult().getItem(), recipe.getResult().getCount()));
-            MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), new ItemStack(recipe.getResult().getItem(), recipe.getResult().getCount())));
-            this.consumeIngredients(recipe, te);
+        	if(te instanceof IProcessCraftSystem)
+        	{
+        		((IProcessCraftSystem)te).setProcessing(true);
+        		((IProcessCraftSystem)te).setRecipe(recipe);
+        		this.consumeIngredients(recipe, te);
+        	}
+        	else
+        	{
+        		te.addItemStackToInventory(this.getOutput(), recipe.constructResult());
+                MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.constructResult()));
+                this.consumeIngredients(recipe, te);
+        	}
         }
     }
 
@@ -82,7 +90,7 @@ public interface ICraftSystem<R extends RVRecipe>
      * @return the registry of recipes for this impl
      */
     public Set<R> getRegistry();
-
+    
     default boolean isSlotInCraftMatrix(int slotIndex)
     {
         return slotIndex >= this.getCraftingMatrixStart() && slotIndex <= this.getCraftingMatrixEnd();

@@ -22,11 +22,6 @@ public class RVRecipe
 		return ingredients;
 	}
 	
-	public ItemStack getResult()
-	{
-		return result;
-	}
-	
 	public String getName()
 	{
 		return name;
@@ -62,5 +57,10 @@ public class RVRecipe
 		}
 		
 		return s;
+	}
+	
+	public ItemStack constructResult()
+	{
+		return new ItemStack(result.getItem(), result.getCount());
 	}
 }
