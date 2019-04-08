@@ -11,19 +11,45 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class SpeedAPI {
 
-    public static void setSpeed(EntityPlayer player, float level) {
-        player.capabilities.setPlayerWalkSpeed(level);
+    public static int MaxSpeedLevel = 5;
+
+    public static void setSpeed(EntityPlayer player, int level) {
+        float speed = 0.1f;
+
+        if(level == 0) {
+            speed = 0.1f;
+        }
+
+        if(level == 1) {
+            speed = 0.3f;
+        }
+
+        if(level == 2) {
+            speed = 0.5f;
+        }
+
+        if(level == 3) {
+            speed = 0.7f;
+        }
+
+        if(level == 4) {
+            speed = 1.0f;
+        }
+
+        // TODO More speeds but own handler with potion for more speed!!!
+
+        player.capabilities.setPlayerWalkSpeed(speed);
+        Sync(player);
     }
 
     public static void setSpeedFromCap(EntityPlayer player) {
         if (!player.world.isRemote) {
             ISpeedsterCap cap = CapabilitySpeedster.get(player);
             setSpeed(player, cap.getSpeedLevel());
-            cap.sync();
         }
     }
 
-    public static void setSpeedToCap(EntityPlayer player, float level) {
+    public static void setSpeedToCap(EntityPlayer player, int level) {
         if (!player.world.isRemote) {
             ISpeedsterCap cap = CapabilitySpeedster.get(player);
             cap.setSpeedLevel(level);
@@ -33,7 +59,8 @@ public class SpeedAPI {
     }
 
 
-    public static void Synco(EntityPlayer player) {
+
+    public static void Sync(EntityPlayer player) {
         player.sendPlayerAbilities();
     }
 }

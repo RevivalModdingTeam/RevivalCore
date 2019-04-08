@@ -22,9 +22,11 @@ import javax.annotation.Nonnull;
 public class CapabilitySpeedster implements ISpeedsterCap {
 
     private EntityPlayer player;
-    private float speed_level = 0.1f;
+    private int speed_level = 0;
     private boolean isSpeedster = false;
     private boolean isPhasing = false;
+    private int level = 1;
+    private double xp = 0;
 
     public CapabilitySpeedster() {
 
@@ -37,7 +39,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
     @Override
     public void update() {
         if (!isSpeedster()) {
-            setSpeedLevel(0.1f);
+            setSpeedLevel(0);
             SpeedAPI.setSpeedFromCap(player);
         } else {
             if (getSpeedLevel() != player.capabilities.getWalkSpeed()) {
@@ -62,12 +64,12 @@ public class CapabilitySpeedster implements ISpeedsterCap {
     }
 
     @Override
-    public void setSpeedLevel(float level) {
+    public void setSpeedLevel(int level) {
         speed_level = level;
     }
 
     @Override
-    public float getSpeedLevel() {
+    public int getSpeedLevel() {
         return speed_level;
     }
 
@@ -81,21 +83,45 @@ public class CapabilitySpeedster implements ISpeedsterCap {
         return isPhasing;
     }
 
+    @Override
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
+
+    @Override
+    public void setXP(double xp) {
+        this.xp = xp;
+    }
+
+    @Override
+    public double getXP() {
+        return xp;
+    }
+
 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setFloat("speed_level", speed_level);
+        nbt.setInteger("speed_level", speed_level);
         nbt.setBoolean("is_speedster", isSpeedster);
         nbt.setBoolean("is_phasing", isPhasing);
+        nbt.setDouble("xp_level", xp);
+        nbt.setInteger("level", level);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        speed_level = nbt.getFloat("speed_level");
+        speed_level = nbt.getInteger("speed_level");
         isSpeedster = nbt.getBoolean("is_speedster");
         isPhasing = nbt.getBoolean("is_phasing");
+        xp = nbt.getDouble("xp_level");
+        level = nbt.getInteger("level");
     }
 
 
@@ -156,6 +182,6 @@ public class CapabilitySpeedster implements ISpeedsterCap {
         if (player.hasCapability(CapSpeedstersStorage.CAPABILITY, null)) {
             return player.getCapability(CapSpeedstersStorage.CAPABILITY, null);
         }
-        throw new IllegalStateException("Missing Cap");
+        throw new IllegalStateException("Missing Cap - SpeedsterHeroesReborn");
     }
 }
