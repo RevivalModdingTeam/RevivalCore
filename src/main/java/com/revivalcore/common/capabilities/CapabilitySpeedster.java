@@ -41,7 +41,6 @@ public class CapabilitySpeedster implements ISpeedsterCap {
         if (!isSpeedster()) {
             setSpeedLevel(0.1f);
             SpeedAPI.setSpeedFromCap(player);
-            sync();
         } else {
             if (getSpeedLevel() != player.capabilities.getWalkSpeed()) {
                 SpeedAPI.setSpeedFromCap(player);
