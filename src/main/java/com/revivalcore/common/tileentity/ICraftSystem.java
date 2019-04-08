@@ -1,14 +1,13 @@
 package com.revivalcore.common.tileentity;
 
-import java.util.Set;
-
 import com.revivalcore.common.events.RVItemCraftedEvent;
 import com.revivalcore.recipes.RVIngredient;
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.util.helper.RVHelper;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.Set;
 
 /**
  * @author Toma1O6
@@ -18,8 +17,6 @@ public interface ICraftSystem<R extends RVRecipe>
 {
     default void slotChanged(TileEntityRC te)
     {
-    	if(te.getWorld().isRemote)
-    		return;
     	
         if(!te.getStackInSlot(getOutput()).isEmpty())
             return;
