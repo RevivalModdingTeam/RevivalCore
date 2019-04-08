@@ -16,7 +16,7 @@ import java.util.Set;
 public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RVRecipe>
 {
     public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
-    protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(17, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(21, ItemStack.EMPTY);
 
     @Override
     public ITextComponent getDisplayName()
@@ -45,13 +45,13 @@ public class TileEntitySuitMaker extends TileEntityRC implements ICraftSystem<RV
     @Override
     public int getCraftingMatrixEnd()
     {
-        return 1;
+        return 21;
     }
 
     @Override
     public int getCraftingMatrixStart()
     {
-        return 16;
+        return 1;
     }
 
     @Override

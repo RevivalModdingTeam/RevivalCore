@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.revivalcore.common.events.RVItemCraftedEvent;
 import com.revivalcore.common.tileentity.TileEntityRC;
+import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalcore.recipes.RVIngredient;
 import com.revivalcore.recipes.RVRecipe;
 import com.revivalcore.util.helper.RVHelper;
@@ -19,6 +20,9 @@ public interface ICraftSystem<R extends RVRecipe>
 {
     default void slotChanged(TileEntityRC te)
     {
+    	if(te.getWorld().isRemote)
+    		return;
+    	
         if(!te.getStackInSlot(getOutput()).isEmpty())
             return;
 
@@ -47,9 +51,10 @@ public interface ICraftSystem<R extends RVRecipe>
         // all ingredients were valid (ingnoring slots which weren't specified by the recipe)
         if(running && recipe != null)
         {
-            te.setInventorySlotContents(this.getOutput(), recipe.getResult());
+            te.addItemStackToInventory(this.getOutput(), recipe.getResult());
             MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.getResult()));
             this.consumeIngredients(recipe, te);
+            System.out.println(recipe);
         }
     }
 
@@ -79,6 +84,9 @@ public interface ICraftSystem<R extends RVRecipe>
      */
     public int getOutput();
 
+    /**
+     * @return the registry of recipes for this impl
+     */
     public Set<R> getRegistry();
 
     default boolean isSlotInCraftMatrix(int slotIndex)

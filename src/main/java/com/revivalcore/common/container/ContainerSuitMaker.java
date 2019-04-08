@@ -25,53 +25,37 @@ public class ContainerSuitMaker extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
 	{
-		ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-
-        if(slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if(index < this.suitMaker.getSizeInventory())
-            {
-                if(!this.mergeItemStack(itemstack1, this.suitMaker.getSizeInventory(), this.inventorySlots.size(), true))
-                {
-                    return ItemStack.EMPTY;
-                }
-            }
-            else if(!this.mergeItemStack(itemstack1, 0, this.suitMaker.getSizeInventory(), false))
-            {
-                return ItemStack.EMPTY;
-            }
-
-            if(itemstack1.isEmpty())
-            {
-                slot.putStack(ItemStack.EMPTY);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-        }
-
-        return itemstack;
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+		if(slot != null && slot.getHasStack())
+		{
+			ItemStack stack1 = slot.getStack();
+			stack = stack.copy();
+			
+			//output
+			if(index == 20)
+			{
+				if(!this.mergeItemStack(stack1, 21, 56, false))
+				{
+					return ItemStack.EMPTY;
+				}
+				
+				slot.onSlotChange(stack1, stack);
+			}
+		}
+		
+		return stack;
 	}
 	
 	private void initSlots()
 	{
 		// Suit maker slots
-		for(int x = 0; x < 4; ++x)
+		for(int y = 0; y < 4; ++y)
 		{
-			this.addSlotToContainer(new Slot(suitMaker, 1+x, 8 + 18 * x, 6));
-		}
-		for(int x = 0; x < 4; ++x)
-		{
-			this.addSlotToContainer(new Slot(suitMaker, 5+x, 8 + 18 * x, 24));
-		}
-		for(int x = 0; x < 4; ++x)
-		{
-			this.addSlotToContainer(new Slot(suitMaker, 9+x, 8 + 18 * x, 42));
+			for(int x = 0; x < 5; ++x)
+			{
+				this.addSlotToContainer(new Slot(this.suitMaker, 1 + y*5 + x, 8 + 18 * x, 6 + 18 * y));
+			}
 		}
 		
 		// output slot

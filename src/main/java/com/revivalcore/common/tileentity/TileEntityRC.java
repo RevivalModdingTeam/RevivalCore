@@ -98,6 +98,16 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
 
         this.markDirty();
     }
+    
+    // same as setInvetorySlotContents but without the markDirty() call to prevent infinite loops
+    public void addItemStackToInventory(int slotID, ItemStack stack)
+    {
+    	this.getInventory().set(slotID, stack);
+    	if(stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit())
+    	{
+    		stack.setCount(this.getInventoryStackLimit());
+    	}
+    }
 
     @Override
     public int getInventoryStackLimit()

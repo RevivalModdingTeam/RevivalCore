@@ -44,9 +44,8 @@ public class Registries {
 
         @SubscribeEvent
         public static void onSuitMakerRecipesRegister(RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent e) {
-            e.register(RVRecipeBuilder.create().name("test0").result(Items.DIAMOND, 1).addIngredient(Items.IRON_AXE, 1, 0).build());
-            e.register(RVRecipeBuilder.create().name("test1").result(Items.GOLD_INGOT, 1).addIngredient(Items.IRON_DOOR, 1, 0).addIngredient(Items.APPLE, 1, 1).build());
-            SuitMakerRecipeRegistry.instance.getRecipes();
+            e.register(RVRecipeBuilder.create().name("test0").result(Items.DIAMOND, 1).addIngredient(Items.IRON_AXE, 1, 1).build());
+            e.register(RVRecipeBuilder.create().name("test1").result(Items.GOLD_INGOT, 1).addIngredient(Items.IRON_DOOR, 1, 1).addIngredient(Items.APPLE, 1, 2).build());
         }
 
 
