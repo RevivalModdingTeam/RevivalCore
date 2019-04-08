@@ -10,10 +10,10 @@ import com.revivalcore.network.NetworkManager;
 import com.revivalcore.proxy.IProxy;
 import com.revivalcore.tabs.CoreTab;
 import com.revivalcore.util.handlers.GuiHandlerRV;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -22,14 +22,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION)
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
-    public static final String VERSION = "0.0.3";
+    public static final String VERSION = "0.0.4";
 
     @Instance
     public static RevivalCore instance;
@@ -47,12 +46,10 @@ public class RevivalCore {
         NetworkManager.init();
         Registries.TileRegistry.init();
         SuitMakerRecipeRegistry.init();
-        CapabilityManager.INSTANCE.register(ISpeedsterCap.class, new CapSpeedstersStorage(), CapabilitySpeedster::new);
+        if (Loader.isModLoaded("shr")) {
+            CapabilityManager.INSTANCE.register(ISpeedsterCap.class, new CapSpeedstersStorage(), CapabilitySpeedster::new);
+        }
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
-        // Working on disabling mod
-        //if (Loader.isModLoaded("speedsterheroes")) {
-        //
-        //}
     }
 
     @EventHandler
