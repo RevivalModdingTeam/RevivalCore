@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class SpeedAPI {
 
-    public static int MaxSpeedLevel = 5;
+    public static int MaxSpeedLevel = 4;
 
     public static void setSpeed(EntityPlayer player, int level) {
         float speed = 0.1f;
