@@ -1,5 +1,7 @@
 package com.revivalcore.common.tileentity;
 
+import com.revivalcore.recipes.RVRecipe;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -62,9 +64,17 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     {
         super.markDirty();
 
-        if(this instanceof ICraftSystem)
+        if(this instanceof IProcessCraftSystem)
         {
-            ((ICraftSystem)this).slotChanged(this);
+        	if(!((IProcessCraftSystem)this).isProcessing())
+        	{
+        		((IProcessCraftSystem)this).slotChanged(this);
+        	}
+        }
+        
+        else if(this instanceof ICraftSystem)
+        {
+    		((ICraftSystem)this).slotChanged(this);
         }
     }
 
@@ -162,15 +172,6 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     {
     	super.writeToNBT(compound);
     	ItemStackHelper.saveAllItems(compound, this.getInventory());
-    	
-    	if(this instanceof IProcessCraftSystem)
-    	{
-    		IProcessCraftSystem craftSystem = (IProcessCraftSystem)this;
-    		compound.setBoolean("isProcessing", craftSystem.isProcessing());
-    		compound.setByte("processTime", craftSystem.getProcessTimer());
-    		//TODO: write recipe to NBT
-    	}
-    	
     	return compound;
     }
     
@@ -180,13 +181,5 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     	super.readFromNBT(compound);
     	this.setInventory(NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY));
     	ItemStackHelper.loadAllItems(compound, getInventory());
-    	
-    	if(this instanceof IProcessCraftSystem)
-    	{
-    		IProcessCraftSystem cs = (IProcessCraftSystem)this;
-    		cs.setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
-    		cs.setProcessTimer(compound.hasKey("processTimer") ? cs.getProcessTimer() : 0);
-    		//TODO: read recipe from NBT
-    	}
     }
 }

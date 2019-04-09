@@ -47,6 +47,7 @@ public interface ICraftSystem<R extends RVRecipe>
         {
         	if(te instanceof IProcessCraftSystem)
         	{
+        		System.out.println("here");
         		((IProcessCraftSystem)te).setProcessing(true);
         		((IProcessCraftSystem)te).setRecipe(recipe);
         		this.consumeIngredients(recipe, te);
