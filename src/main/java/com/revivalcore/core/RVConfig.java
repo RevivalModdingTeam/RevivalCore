@@ -14,7 +14,7 @@ public class RVConfig {
 
 
     public static class RCore {
-        @Config.LangKey("config.shr.updatechecker")
+        @Config.LangKey("config.rcore.updatechecker")
         @Config.Comment("Toggle the update checker")
         public boolean updatechecker = true;
     }
