@@ -23,7 +23,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
     protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(21, ItemStack.EMPTY);
     private boolean isProcessing;
-    private byte processTime = 0;
+    private short processTime = 0;
     @Nullable
     public RVRecipe currRecipe = null;
 
@@ -105,7 +105,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
     
     @Override
-    public byte getProcessTimer()
+    public short getProcessTimer()
     {
     	return processTime;
     }
@@ -135,7 +135,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
     
     @Override
-    public void setProcessTimer(byte timer)
+    public void setProcessTimer(short timer)
     {
     	this.processTime = timer;
     }
@@ -147,16 +147,43 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
     
     @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    {
+    	super.writeToNBT(compound);
+    	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
+    	/*if(this.getRecipe() != null)
+    	{
+    		compound.setBoolean("isProcessing", isProcessing());
+    		compound.setShort("processTime", getProcessTimer());
+    		compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
+    	}*/
+		return compound;
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound compound)
+    {
+    	super.readFromNBT(compound);
+    	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
+    	/*if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
+    	{
+    		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
+    		setProcessTimer(compound.hasKey("processTimer") ? getProcessTimer() : 0);
+    		setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
+    	}*/
+    }
+    
+    @Override
     public void update()
     {
-    	if(!isProcessing)
-    		return;
-    	
-    	this.process();
-    	
-    	if(this.getProcessTimer() >= 250)
+    	if(this.isProcessing())
     	{
-    		this.onProcessFinished(this);
+        	this.process();
+        	
+        	if(this.getProcessTimer() >= 250)
+        	{
+        		this.onProcessFinished(this);
+        	}
     	}
     }
 }

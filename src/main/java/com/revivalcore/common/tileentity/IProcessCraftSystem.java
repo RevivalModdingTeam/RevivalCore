@@ -12,15 +12,22 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 	
 	RVRecipe getRecipe();
 	
-	void setProcessTimer(byte timer);
+	void setProcessTimer(short timer);
 	
 	void process();
 	
 	void resetProcessTimer();
 	
-	byte getProcessTimer();
+	short getProcessTimer();
 	
 	boolean isProcessing();
+	
+	// For gui rendering
+	default float getProgressionStage()
+	{
+		float f = this.getProcessTimer() / 250;
+		return f;
+	}
 	
 	default void onProcessFinished(TileEntityRC te) throws IllegalStateException
 	{
