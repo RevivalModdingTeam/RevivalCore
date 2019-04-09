@@ -25,7 +25,7 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 	// For gui rendering
 	default float getProgressionStage()
 	{
-		float f = this.getProcessTimer() / 250;
+		float f = this.getProcessTimer() / 250f;
 		return f;
 	}
 	
