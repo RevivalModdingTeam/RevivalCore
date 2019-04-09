@@ -9,7 +9,9 @@ import com.revivalcore.recipes.RVRecipe;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,8 +22,8 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
 {
     public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
     protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(21, ItemStack.EMPTY);
-    public boolean isProcessing;
-    public byte processTime = 0;
+    private boolean isProcessing;
+    private byte processTime = 0;
     @Nullable
     public RVRecipe currRecipe = null;
 
@@ -41,6 +43,12 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public NonNullList<ItemStack> getInventory()
     {
         return inventory;
+    }
+    
+    @Override
+    public void setInventory(NonNullList<ItemStack> inv)
+    {
+    	this.inventory = inv;
     }
 
     @Override
@@ -124,6 +132,18 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public void setRecipe(RVRecipe recipe)
     {
     	this.currRecipe = recipe;
+    }
+    
+    @Override
+    public void setProcessTimer(byte timer)
+    {
+    	this.processTime = timer;
+    }
+    
+    @Override
+    public int getSizeInventory()
+    {
+    	return 21;
     }
     
     @Override

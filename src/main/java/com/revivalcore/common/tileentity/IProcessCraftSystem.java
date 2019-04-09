@@ -12,6 +12,8 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 	
 	RVRecipe getRecipe();
 	
+	void setProcessTimer(byte timer);
+	
 	void process();
 	
 	void resetProcessTimer();

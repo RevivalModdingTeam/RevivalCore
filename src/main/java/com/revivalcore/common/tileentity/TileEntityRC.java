@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 
@@ -13,12 +14,8 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
      * @return instance of global variable for inventory
      */
     public abstract NonNullList<ItemStack> getInventory();
-
-    @Override
-    public int getSizeInventory()
-    {
-        return this.getInventory().size();
-    }
+    
+    public abstract void setInventory(NonNullList<ItemStack> inv);
 
     @Override
     public void clear()
@@ -71,7 +68,6 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
         }
     }
 
-    // TODO: maybe call markDirty() too? Time will show
     @Override
     public ItemStack removeStackFromSlot(int index)
     {
@@ -159,5 +155,38 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     @Override
     public void openInventory(EntityPlayer player)
     {
+    }
+    
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    {
+    	super.writeToNBT(compound);
+    	ItemStackHelper.saveAllItems(compound, this.getInventory());
+    	
+    	if(this instanceof IProcessCraftSystem)
+    	{
+    		IProcessCraftSystem craftSystem = (IProcessCraftSystem)this;
+    		compound.setBoolean("isProcessing", craftSystem.isProcessing());
+    		compound.setByte("processTime", craftSystem.getProcessTimer());
+    		//TODO: write recipe to NBT
+    	}
+    	
+    	return compound;
+    }
+    
+    @Override
+    public void readFromNBT(NBTTagCompound compound)
+    {
+    	super.readFromNBT(compound);
+    	this.setInventory(NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY));
+    	ItemStackHelper.loadAllItems(compound, getInventory());
+    	
+    	if(this instanceof IProcessCraftSystem)
+    	{
+    		IProcessCraftSystem cs = (IProcessCraftSystem)this;
+    		cs.setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
+    		cs.setProcessTimer(compound.hasKey("processTimer") ? cs.getProcessTimer() : 0);
+    		//TODO: read recipe from NBT
+    	}
     }
 }
