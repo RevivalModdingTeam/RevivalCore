@@ -24,9 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Registries {
 
     @EventBusSubscriber
@@ -64,18 +61,14 @@ public class Registries {
             }
         }
 
-        public static void registerEntity(EntityEntry entityEntry) {
-            EntityEntries.ENTITY_ENTRIES.add(entityEntry);
-        }
-
         @SubscribeEvent
         public static void addEntities(RegistryEvent.Register<EntityEntry> e) {
             IForgeRegistry<EntityEntry> reg = e.getRegistry();
-            EntityEntries.ENTITY_ENTRIES.forEach(reg::register);
+            reg.registerAll();
         }
 
         public static class EntityEntries {
-            public static final List<EntityEntry> ENTITY_ENTRIES = new ArrayList<EntityEntry>();
+
         }
 
         // Use in preinit in mod.

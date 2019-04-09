@@ -1,15 +1,9 @@
 package com.revivalcore.common.tileentity;
 
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalcore.recipes.RVRecipe;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
@@ -17,6 +11,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSystem<RVRecipe>, ITickable
 {
@@ -151,12 +148,12 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
     	super.writeToNBT(compound);
     	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-    	/*if(this.getRecipe() != null)
+    	if(this.getRecipe() != null)
     	{
     		compound.setBoolean("isProcessing", isProcessing());
     		compound.setShort("processTime", getProcessTimer());
     		compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
-    	}*/
+    	}
 		return compound;
     }
     
@@ -165,12 +162,12 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
     	super.readFromNBT(compound);
     	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-    	/*if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
+    	if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
     	{
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
     		setProcessTimer(compound.hasKey("processTimer") ? getProcessTimer() : 0);
     		setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
-    	}*/
+    	}
     }
     
     @Override
