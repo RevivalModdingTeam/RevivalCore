@@ -19,11 +19,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION)
+@Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION, updateJSON = RevivalCore.UPDATEURL)
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
     public static final String VERSION = "0.0.4";
+    public static final String UPDATEURL = "https://raw.githubusercontent.com/revivalmodding/RevivalCore/master/update.json";
 
     @Instance
     public static RevivalCore instance;
