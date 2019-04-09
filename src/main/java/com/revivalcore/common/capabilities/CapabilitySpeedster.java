@@ -26,7 +26,7 @@ public class CapabilitySpeedster implements ISpeedsterCap {
     private boolean isSpeedster = false;
     private boolean isPhasing = false;
     private int level = 1;
-    private double xp = 0;
+    private double xp = 0.0;
 
     public CapabilitySpeedster() {
 
