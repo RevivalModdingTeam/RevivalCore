@@ -41,11 +41,11 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
         return inventory;
     }
-    
+
     @Override
     public void setInventory(NonNullList<ItemStack> inv)
     {
-    	this.inventory = inv;
+        this.inventory = inv;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
         return SuitMakerRecipeRegistry.RECIPES;
     }
-    
+
     @Override
     public void closeInventory(EntityPlayer player)
     {
-    	InventoryHelper.dropInventoryItems(world, pos, this);
+        InventoryHelper.dropInventoryItems(world, pos, this);
     }
 
     @Override
@@ -88,80 +88,80 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public boolean canRenderBreaking() {
         return true;
     }
-    
+
     @Override
     public void setProcessing(boolean processing)
     {
-    	this.isProcessing = processing;
+        this.isProcessing = processing;
     }
-    
+
     @Override
     public boolean isProcessing()
     {
-    	return isProcessing;
+        return isProcessing;
     }
-    
+
     @Override
     public short getProcessTimer()
     {
-    	return processTime;
+        return processTime;
     }
-    
+
     @Override
-    public RVRecipe getRecipe() 
+    public RVRecipe getRecipe()
     {
-    	return currRecipe;
+        return currRecipe;
     }
-    
+
     @Override
     public void process()
     {
-    	++this.processTime;
+        ++this.processTime;
     }
-    
+
     @Override
     public void resetProcessTimer()
     {
-    	this.processTime = 0;
+        this.processTime = 0;
     }
-    
+
     @Override
     public void setRecipe(RVRecipe recipe)
     {
-    	this.currRecipe = recipe;
+        this.currRecipe = recipe;
     }
-    
+
     @Override
     public void setProcessTimer(short timer)
     {
-    	this.processTime = timer;
+        this.processTime = timer;
     }
-    
+
     @Override
     public int getSizeInventory()
     {
-    	return 21;
+        return 21;
     }
-    
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
-    	super.writeToNBT(compound);
-    	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-    	if(this.getRecipe() != null)
-    	{
-    		compound.setBoolean("isProcessing", isProcessing());
-    		compound.setShort("processTime", getProcessTimer());
-    		//compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
-    	}
-		return compound;
+        super.writeToNBT(compound);
+        // TODO: Fix - something here causes glitch which makes whole tileentity corrupted
+        if(this.getRecipe() != null)
+        {
+            compound.setBoolean("isProcessing", isProcessing());
+            compound.setShort("processTime", getProcessTimer());
+            //compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
+        }
+        return compound;
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound compound)
     {
-    	super.readFromNBT(compound);
-    	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
+        super.readFromNBT(compound);
+        // TODO: Fix - something here causes glitch which makes whole tileentity corrupted
     	/*if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
     	{
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
@@ -169,18 +169,18 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     		//setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
     	}*/
     }
-    
+
     @Override
     public void update()
     {
-    	if(this.isProcessing())
-    	{
-        	this.process();
-        	
-        	if(this.getProcessTimer() >= 250)
-        	{
-        		this.onProcessFinished(this);
-        	}
-    	}
+        if(this.isProcessing())
+        {
+            this.process();
+
+            if(this.getProcessTimer() >= 250)
+            {
+                this.onProcessFinished(this);
+            }
+        }
     }
 }
