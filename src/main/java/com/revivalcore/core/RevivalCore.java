@@ -1,5 +1,8 @@
 package com.revivalcore.core;
 
+import com.revivalcore.common.capability.CapMetaStorage;
+import com.revivalcore.common.capability.CapabilityMeta;
+import com.revivalcore.common.capability.IMetaCap;
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.core.registry.Registries;
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
@@ -9,6 +12,7 @@ import com.revivalcore.tabs.CoreTab;
 import com.revivalcore.util.handlers.GuiHandlerRV;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -42,6 +46,7 @@ public class RevivalCore {
         NetworkManager.init();
         Registries.TileRegistry.init();
         SuitMakerRecipeRegistry.init();
+        CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
     }
 
