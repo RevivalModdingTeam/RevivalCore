@@ -1,12 +1,12 @@
 package com.revivalcore.core.registry;
 
-import com.revivalcore.client.render.tileentity.RenderSuitMaker;
-import com.revivalcore.common.blocks.CoreBlocks;
-import com.revivalcore.common.events.RVRecipeRegistryEvent;
-import com.revivalcore.common.items.CoreItems;
-import com.revivalcore.common.tileentity.TileEntitySuitMaker;
-import com.revivalcore.core.RevivalCore;
-import com.revivalcore.recipes.RVRecipeBuilder;
+import com.revivalcore.RevivalCore;
+import com.revivalcore.core.client.render.tileentity.RenderSuitMaker;
+import com.revivalcore.core.common.blocks.CoreBlocks;
+import com.revivalcore.core.common.events.RVRecipeRegistryEvent;
+import com.revivalcore.core.common.items.CoreItems;
+import com.revivalcore.core.common.tileentity.TileEntitySuitMaker;
+import com.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalcore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;

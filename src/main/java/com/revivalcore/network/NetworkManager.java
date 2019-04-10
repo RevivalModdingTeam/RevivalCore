@@ -1,6 +1,6 @@
 package com.revivalcore.network;
 
-import com.revivalcore.core.RevivalCore;
+import com.revivalcore.RevivalCore;
 import com.revivalcore.network.packets.PacketCapSync;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;

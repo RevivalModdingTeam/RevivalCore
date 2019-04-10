@@ -1,8 +1,8 @@
 package com.revivalcore.core.registry;
 
-import com.revivalcore.core.RevivalCore;
-import com.revivalcore.recipes.IRVRecipeRegistry;
-import com.revivalcore.recipes.RVRecipe;
+import com.revivalcore.RevivalCore;
+import com.revivalcore.core.recipes.IRVRecipeRegistry;
+import com.revivalcore.core.recipes.RVRecipe;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,6 @@
 package com.revivalcore.network.packets;
 
-import com.revivalcore.common.capability.CapabilityMeta;
+import com.revivalcore.meta.capability.CapabilityMeta;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

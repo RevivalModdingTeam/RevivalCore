@@ -1,15 +1,12 @@
 package com.revivalcore.util.handlers;
 
-import com.revivalcore.client.gui.GUISuitMaker;
-import com.revivalcore.common.container.ContainerSuitMaker;
-import com.revivalcore.common.tileentity.TileEntitySuitMaker;
-
+import com.revivalcore.core.client.gui.GUISuitMaker;
+import com.revivalcore.core.common.container.ContainerSuitMaker;
+import com.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiHandlerRV implements IGuiHandler {
     private static int id = -1;

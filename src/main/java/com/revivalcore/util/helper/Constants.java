@@ -1,7 +1,6 @@
 package com.revivalcore.util.helper;
 
-import com.revivalcore.core.RevivalCore;
-
+import com.revivalcore.RevivalCore;
 import net.minecraft.util.ResourceLocation;
 
 public final class Constants
