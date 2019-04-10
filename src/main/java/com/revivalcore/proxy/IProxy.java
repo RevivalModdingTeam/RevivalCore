@@ -13,4 +13,8 @@ public interface IProxy {
     void postInit(FMLPostInitializationEvent e);
 
     void registerItemRenderer(Item item, int meta, String id);
+
+    void registerItemRendererMeta(Item item, int meta, String filename,String id);
+
+    void registerModelBakeryVariants();
 }

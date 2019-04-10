@@ -22,4 +22,14 @@ public class ServerProxy implements IProxy {
     public void registerItemRenderer(Item item, int meta, String id) {
 
     }
+
+    @Override
+    public void registerItemRendererMeta(Item item, int meta, String filename, String id) {
+
+    }
+
+    @Override
+    public void registerModelBakeryVariants() {
+
+    }
 }
