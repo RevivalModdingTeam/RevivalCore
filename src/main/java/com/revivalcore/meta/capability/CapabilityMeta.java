@@ -17,6 +17,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Created by Josia50
+ * on 10/04/2019.
+ */
+
 public class CapabilityMeta implements IMetaCap {
 
     private EntityPlayer player;
@@ -50,6 +55,7 @@ public class CapabilityMeta implements IMetaCap {
     public int getMetaPower() {
         return metapowerid;
     }
+
 
     @Override
     public boolean hasMetaPowers() {
