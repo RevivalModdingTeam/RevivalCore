@@ -27,11 +27,11 @@ import javax.annotation.Nullable;
 public class BlockSuitMaker extends Block implements ITileEntityProvider {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, 1); // Still needs to be done
-    protected static final AxisAlignedBB MODEL_SOUTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, 0); // Still needs to be done
+    protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1.6, 0.6, -0.5);
+    protected static final AxisAlignedBB MODEL_SOUTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, -0.8);
     protected static final AxisAlignedBB MODEL_WEST_AABB = new AxisAlignedBB(0.2, 0, 1, 1, 0.6, -2);
-    protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1); // Still needs to be done
-    protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
+    protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1);
+    protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1);
 
     public BlockSuitMaker(String name, Material material) {
         super(material);
@@ -81,11 +81,11 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider {
             case EAST:
                 return new AxisAlignedBB(0.2, 0, 0, 1, 0.6, 1);
             case WEST:
-                return new AxisAlignedBB(0.2, 0, 0, 1, 0.6, 1);
+                return new AxisAlignedBB(0.2, 0, 1, 1, 0.6, -1.4);
             case SOUTH:
-                return new AxisAlignedBB(0, 0, 0, -1, 0.6, 1); // TODO Still needs to be configered
+                return new AxisAlignedBB(-0.5, 0, 0, 1.8, 0.6, -0.8);
             case NORTH:
-                return new AxisAlignedBB(1, 0, 1, -1, 0.6, 1); // TODO Still needs to be configered
+                return new AxisAlignedBB(-0.5, 0, 0, 1.8, 0.6, -0.5);
             default:
                 return new AxisAlignedBB(-1, 0, -1, 1, 0.6, 1);
         }
