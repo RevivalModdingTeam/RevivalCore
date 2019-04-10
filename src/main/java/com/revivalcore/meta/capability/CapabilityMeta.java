@@ -22,8 +22,6 @@ public class CapabilityMeta implements IMetaCap {
     private EntityPlayer player;
     private int metapowerid = -1;
 
-
-
     public CapabilityMeta() {
 
     }
