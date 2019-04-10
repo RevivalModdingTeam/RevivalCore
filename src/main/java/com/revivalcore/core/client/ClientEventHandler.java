@@ -1,5 +1,11 @@
 package com.revivalcore.core.client;
 
+import com.revivalcore.core.client.bakedmodel.BakedModelSuitMaker;
+import com.revivalcore.core.common.items.CoreItems;
+
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -9,7 +15,15 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientEventHandler {
 
     @SubscribeEvent
-    public void keyPressed(InputEvent.KeyInputEvent e) {
+    public static void keyPressed(InputEvent.KeyInputEvent e) {
 
+    }
+    
+    @SubscribeEvent
+    public static void onModelBake(ModelBakeEvent e)
+    {
+    	Item item = CoreItems.SUIT_MAKER_ITEM;
+    	ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName(), "inventory");
+    	e.getModelRegistry().putObject(mrl, new BakedModelSuitMaker());
     }
 }
