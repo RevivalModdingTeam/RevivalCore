@@ -144,4 +144,5 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
     		
     		default: break;
     	}
-    }}
+    }
+}
