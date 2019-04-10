@@ -20,6 +20,9 @@ import javax.annotation.Nonnull;
 public class CapabilityMeta implements IMetaCap {
 
     private EntityPlayer player;
+    private int metapowerid = -1;
+
+
 
     public CapabilityMeta() {
 
@@ -39,17 +42,22 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
-    public void makeSpeedster(boolean enable) {
-
+    public void setMetaPower(int metaPower) {
+        if(!hasMetaPowers() || metaPower == -1) {
+            this.metapowerid = metaPower;
+        }
     }
 
     @Override
-    public String getMetaPower() {
-        return null;
+    public int getMetaPower() {
+        return metapowerid;
     }
 
     @Override
     public boolean hasMetaPowers() {
+        if(getMetaPower() > -1) {
+            return true;
+        }
         return false;
     }
 
@@ -57,12 +65,13 @@ public class CapabilityMeta implements IMetaCap {
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("power_id", metapowerid);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-
+        metapowerid = nbt.getInteger("power_id");
     }
 
 

@@ -9,9 +9,9 @@ public interface IMetaCap extends INBTSerializable<NBTTagCompound> {
 
     void sync();
 
-    void makeSpeedster(boolean enable);
+    void setMetaPower(int metaPower);
 
-    String getMetaPower();
+    int getMetaPower();
 
     boolean hasMetaPowers();
 
