@@ -38,6 +38,21 @@ public class CapabilityMeta implements IMetaCap {
         NetworkManager.INSTANCE.sendToAll(new PacketCapSync(player, serializeNBT()));
     }
 
+    @Override
+    public void makeSpeedster(boolean enable) {
+
+    }
+
+    @Override
+    public String getMetaPower() {
+        return null;
+    }
+
+    @Override
+    public boolean hasMetaPowers() {
+        return false;
+    }
+
 
     @Override
     public NBTTagCompound serializeNBT() {
