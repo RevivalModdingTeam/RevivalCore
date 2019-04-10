@@ -18,11 +18,6 @@ public class ItemSuitMaker extends ItemBlock implements IHasModel {
     }
 
     @Override
-    public boolean isFull3D() {
-        return true;
-    }
-
-    @Override
     public void registerModels() {
         RevivalCore.proxy.registerItemRenderer(this, 0, "inventory");
     }
