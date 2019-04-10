@@ -20,8 +20,8 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {
 
-    public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
-    public static  ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
+    public final ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
+    public static final ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
     Minecraft mc;
     EntityItem itemE = new EntityItem(null, 0.0D, 0.0D, 0.0D);
 
@@ -57,6 +57,7 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
     
     private void renderItem(TileEntitySuitMaker te, double x, double y, double z, float partialTicks, IBlockState state, boolean isEmpty)
     {
+    	// craft render
     	if(isEmpty)
     	{
         	if(itemE == null || te.getRecipe().getResult().getItem() != itemE.getItem().getItem())
@@ -70,17 +71,22 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         	
         	GlStateManager.pushMatrix();
         	{
+        		GlStateManager.enableBlend();
         		GL11.glDisable(GL11.GL_LIGHTING);
+        		//TODO: fading
+        		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         		GlStateManager.color(1f, 1f, 1f, te.getProgressionStage());
         		GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
         		GlStateManager.translate(0, 0.5, 0);
         		this.renderItemWithFacing(facing, te.getProgressionStage());
         		mc.getRenderManager().renderEntity(itemE, 0D, 0D, 0D, 0F, 0F, false);
         		GL11.glEnable(GL11.GL_LIGHTING);
+        		GlStateManager.disableBlend();
         	}
         	GlStateManager.popMatrix();
     	}
     	
+    	// rendering the output slot
     	else
     	{
         	if(itemE == null || te.getStackInSlot(te.getOutput()).getItem() != itemE.getItem().getItem())
@@ -95,33 +101,47 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         	GlStateManager.pushMatrix();
         	{
         		GL11.glDisable(GL11.GL_LIGHTING);
-        		GlStateManager.enableAlpha();
         		GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
         		GlStateManager.translate(0, 0.5, 0);
         		this.renderItemWithFacing(facing, 1f);
         		mc.getRenderManager().renderEntity(itemE, 0D, 0D, 0D, 0F, 0F, false);
-        		GlStateManager.disableAlpha();
         		GL11.glEnable(GL11.GL_LIGHTING);
         	}
         	GlStateManager.popMatrix();
     	}
     }
     
-    private void renderItemWithFacing(EnumFacing facing, float progress)
+    private static void renderItemWithFacing(EnumFacing facing, float progress)
     {
-    	// 0 - south, 1 - west, 2 - north, 3 - south
     	switch(facing)
     	{
     		case SOUTH: {
         		GlStateManager.rotate(90f, 1f, 0f, 0f);
-        		GlStateManager.translate(0.1, -1.2, -0.15);
+        		GlStateManager.translate(0.1, -1.2, -0.16);
         		break;
     		}
     		
     		case NORTH: {
-        		GlStateManager.rotate(270f, 1f, 0f, 0f);
-        		GlStateManager.translate(0, 0, -0.3);
+    			GlStateManager.rotate(180f, 0f, 1f, 0f);
+    			GlStateManager.rotate(90f, 1f, 0f, 0f);
+    			GlStateManager.translate(-0.1, 0.15, -0.16);
+        		break;
     		}
+    		
+    		case WEST: {
+    			GlStateManager.rotate(90f, 1f, 0f, 0f);
+    			GlStateManager.rotate(90f, 0f, 0f, 1f);
+    			GlStateManager.translate(-0.7, -0.6, -0.16);
+    			break;
+    		}
+    		
+    		case EAST: {
+    			GlStateManager.rotate(90f, 1f, 0f, 0f);
+    			GlStateManager.rotate(270f, 0f, 0f, 1f);
+    			GlStateManager.translate(0.7, -0.4, -0.16);
+    			break;
+    		}
+    		
+    		default: break;
     	}
-    }
-}
+    }}
