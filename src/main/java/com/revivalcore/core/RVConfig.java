@@ -12,7 +12,7 @@ public class RVConfig {
 
     public static final RCore revivalCore = new RCore();
 
-
+    @Config.LangKey("config.tab.revivalcore")
     public static class RCore {
         @Config.LangKey("config.rcore.updatechecker")
         @Config.Comment("Toggle the update checker")

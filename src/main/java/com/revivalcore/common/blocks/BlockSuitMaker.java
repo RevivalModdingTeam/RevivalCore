@@ -3,7 +3,9 @@ package com.revivalcore.common.blocks;
 import com.revivalcore.common.tileentity.TileEntitySuitMaker;
 import com.revivalcore.core.RevivalCore;
 import com.revivalcore.util.handlers.GuiHandlerRV;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -22,7 +24,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
+public class BlockSuitMaker extends Block implements ITileEntityProvider {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 2, 0.6, 1); // Still needs to be done
@@ -31,9 +33,13 @@ public class BlockSuitMaker extends BlockBasic implements ITileEntityProvider {
     protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1); // Still needs to be done
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1); // Still needs to be done
 
-    public BlockSuitMaker(String name) {
-        super(name);
+    public BlockSuitMaker(String name, Material material) {
+        super(material);
+        setTranslationKey(name);
+        setRegistryName(name);
         setCreativeTab(RevivalCore.coretab);
+
+        CoreBlocks.BLOCK_LIST.add(this);
     }
 
     @Override

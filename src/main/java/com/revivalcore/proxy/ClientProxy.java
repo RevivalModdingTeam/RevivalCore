@@ -18,6 +18,7 @@ public class ClientProxy implements IProxy {
     public void init(FMLInitializationEvent e) {
     }
 
+
     @Override
     public void postInit(FMLPostInitializationEvent e) {
     }

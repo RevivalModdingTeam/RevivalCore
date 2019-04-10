@@ -1,4 +1,4 @@
-package com.revivalcore.client.render;
+package com.revivalcore.client.render.tileentity;
 
 import com.revivalcore.client.models.ModelSuitMaker;
 import com.revivalcore.common.blocks.BlockSuitMaker;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {
 
     public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
-    public ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
+    public static  ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
     Minecraft mc;
 
     public RenderSuitMaker() {

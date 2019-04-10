@@ -1,6 +1,6 @@
 package com.revivalcore.core.registry;
 
-import com.revivalcore.client.render.RenderSuitMaker;
+import com.revivalcore.client.render.tileentity.RenderSuitMaker;
 import com.revivalcore.common.blocks.CoreBlocks;
 import com.revivalcore.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.common.items.CoreItems;
