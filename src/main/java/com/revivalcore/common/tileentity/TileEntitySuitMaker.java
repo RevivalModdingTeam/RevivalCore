@@ -152,7 +152,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     	{
     		compound.setBoolean("isProcessing", isProcessing());
     		compound.setShort("processTime", getProcessTimer());
-    		compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
+    		//compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
     	}
 		return compound;
     }
@@ -162,12 +162,12 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
     	super.readFromNBT(compound);
     	// TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-    	if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
+    	/*if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
     	{
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
     		setProcessTimer(compound.hasKey("processTimer") ? getProcessTimer() : 0);
-    		setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
-    	}
+    		//setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
+    	}*/
     }
     
     @Override

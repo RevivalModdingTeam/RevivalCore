@@ -33,6 +33,11 @@ public class RVRecipe
 		return ingredients;
 	}
 	
+	public ItemStack getResult()
+	{
+		return this.result;
+	}
+	
 	public String getName()
 	{
 		return name;
