@@ -18,6 +18,7 @@ public class ItemLocked extends Item {
     public ItemLocked() {
         this.UUIDS.add(RCTeam.JOSIA50);
         this.UUIDS.add(RCTeam.TOMA);
+        this.UUIDS.add(RCTeam.TUD);
     }
 
 
