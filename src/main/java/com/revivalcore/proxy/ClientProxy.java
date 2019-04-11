@@ -1,6 +1,8 @@
 package com.revivalcore.proxy;
 
 import com.revivalcore.RevivalCore;
+import com.revivalcore.core.client.render.item.RenderSuitMakerItem;
+import com.revivalcore.core.common.items.CoreItems;
 import com.revivalcore.core.registry.Registries;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -28,6 +30,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void registerItemRenderer(Item item, int meta, String id) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+        if(item == CoreItems.SUIT_MAKER_ITEM) item.setTileEntityItemStackRenderer(new RenderSuitMakerItem());
     }
 
     @Override
