@@ -125,9 +125,7 @@ public class BakedModelSuitMaker implements IBakedModel
 				return Pair.of(this, trsrt.getMatrix());
 			}
 			
-			default: break;
+			default: return Pair.of(this, trsrt.getMatrix());
 		}
-		
-		return Pair.of(this, trsrt.getMatrix());
 	}
 }
