@@ -69,7 +69,6 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
             {
                 GlStateManager.enableBlend();
                 GL11.glDisable(GL11.GL_LIGHTING);
-                //TODO: fading
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
                 GlStateManager.translate(0, 0.5, 0);
