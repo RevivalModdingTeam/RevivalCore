@@ -44,8 +44,8 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         GlStateManager.popMatrix();
 
         // item part
-        if (te.isProcessing() || !te.getStackInSlot(te.getOutput()).isEmpty()) {
-            renderItem(te, x, y, z, partialTicks, state, te.getStackInSlot(te.getOutput()).isEmpty());
+        if (!te.getStackInSlot(te.getOutput()).isEmpty()) {
+            renderItem(te, x, y, z, partialTicks, state);
         }
     }
 
@@ -54,58 +54,28 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         super.bindTexture(location);
     }
 
-    private void renderItem(TileEntitySuitMaker te, double x, double y, double z, float partialTicks, IBlockState state, boolean isEmpty) {
-        // craft render
-        if (isEmpty) {
-            if (itemE == null || te.getRecipe().getResult().getItem() != itemE.getItem().getItem()) {
-                itemE.setItem(te.getRecipe().constructResult());
-                itemE.setItem(new ItemStack(itemE.getItem().getItem(), 1));
-                itemE.hoverStart = 0f;
-            }
-
-            EnumFacing facing = state.getBlock().getBedDirection(state, this.getWorld(), te.getPos());
-
-            GlStateManager.pushMatrix();
-            {
-                GlStateManager.enableBlend();
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
-                GlStateManager.translate(0, 0.5, 0);
-                if (te.getProgressionStage() == 1.0f) {
-                    this.renderItemWithFacing(facing, te.getProgressionStage());
-                    mc.getRenderManager().renderEntity(itemE, 0D, 0D, 0D, 0F, 0F, false);
-                }
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GlStateManager.disableBlend();
-            }
-            GlStateManager.popMatrix();
+    private void renderItem(TileEntitySuitMaker te, double x, double y, double z, float partialTicks, IBlockState state) {
+        if (itemE == null || te.getStackInSlot(te.getOutput()).getItem() != itemE.getItem().getItem()) {
+            itemE.setItem(te.getStackInSlot(te.getOutput()));
+            itemE.setItem(new ItemStack(itemE.getItem().getItem(), 1));
+            itemE.hoverStart = 0f;
         }
 
-        // rendering the output slot
-        else {
-            if (itemE == null || te.getStackInSlot(te.getOutput()).getItem() != itemE.getItem().getItem()) {
-                itemE.setItem(te.getStackInSlot(te.getOutput()));
-                itemE.setItem(new ItemStack(itemE.getItem().getItem(), 1));
-                itemE.hoverStart = 0f;
-            }
+        EnumFacing facing = state.getBlock().getBedDirection(state, this.getWorld(), te.getPos());
 
-            EnumFacing facing = state.getBlock().getBedDirection(state, this.getWorld(), te.getPos());
-
-            GlStateManager.pushMatrix();
-            {
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
-                GlStateManager.translate(0, 0.5, 0);
-                this.renderItemWithFacing(facing, 1f);
-                mc.getRenderManager().renderEntity(itemE, 0D, 0D, 0D, 0F, 0F, false);
-                GL11.glEnable(GL11.GL_LIGHTING);
-            }
-            GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        {
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
+            GlStateManager.translate(0, 0.5, 0);
+            this.renderItemWithFacing(facing);
+            mc.getRenderManager().renderEntity(itemE, 0D, 0D, 0D, 0F, 0F, false);
+            GL11.glEnable(GL11.GL_LIGHTING);
         }
+        GlStateManager.popMatrix();
     }
 
-    private static void renderItemWithFacing(EnumFacing facing, float progress) {
+    private static void renderItemWithFacing(EnumFacing facing) {
         switch (facing) {
             case SOUTH: {
                 GlStateManager.rotate(90f, 1f, 0f, 0f);
