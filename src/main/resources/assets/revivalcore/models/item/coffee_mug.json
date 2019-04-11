@@ -1,9 +1,9 @@
 {
 	"credit": "Made by Josia50",
 	"textures": {
-		"1": "revivalcore:blocks/mug",
-		"2": "revivalcore:blocks/coffee",
-		"particle": "revivalcore:blocks/coffee"
+		"1": "revivalcore:items/mug",
+		"2": "revivalcore:items/coffee",
+		"particle": "revivalcore:items/coffee"
 	},
 	"elements": [
 		{
