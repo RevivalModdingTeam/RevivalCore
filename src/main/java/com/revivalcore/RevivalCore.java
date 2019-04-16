@@ -33,7 +33,6 @@ public class RevivalCore {
     @Instance
     public static RevivalCore instance;
     public static final CreativeTabs coretab = new CoreTab("coretab");
-
     public static Logger logger;
 
     @SidedProxy(clientSide = "com.revivalcore.proxy.ClientProxy", serverSide = "com.revivalcore.proxy.ServerProxy")
