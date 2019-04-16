@@ -33,13 +33,8 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider {
     protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1);
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1);
 
-    public BlockSuitMaker(String name, Material material) {
+    public BlockSuitMaker(Material material) {
         super(material);
-        setTranslationKey(name);
-        setRegistryName(name);
-        setCreativeTab(RevivalCore.coretab);
-
-        CoreBlocks.BLOCK_LIST.add(this);
     }
 
     @Override

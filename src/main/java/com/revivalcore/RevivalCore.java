@@ -1,6 +1,7 @@
 package com.revivalcore;
 
 import com.revivalcore.core.common.events.RVRecipeRegistryEvent;
+import com.revivalcore.core.common.items.CoreItems;
 import com.revivalcore.core.registry.Registries;
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalcore.core.tabs.CoreTab;
@@ -45,6 +46,7 @@ public class RevivalCore {
         NetworkManager.init();
         Registries.TileRegistry.init();
         SuitMakerRecipeRegistry.init();
+        CoreItems.init();
         CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
     }

@@ -7,7 +7,6 @@ import com.revivalcore.core.common.events.RVRecipeRegistryEvent;
 import com.revivalcore.core.common.items.CoreItems;
 import com.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalcore.core.recipes.RVRecipeBuilder;
-import com.revivalcore.util.helper.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -48,17 +47,7 @@ public class Registries {
 
         @SubscribeEvent
         public static void onModelRegister(ModelRegistryEvent event) {
-            for (Item item : CoreItems.ITEM_LIST) {
-                if (item instanceof IHasModel) {
-                    ((IHasModel) item).registerModels();
-                }
-            }
-
-            for (Block block : CoreBlocks.BLOCK_LIST) {
-                if (block instanceof IHasModel) {
-                    ((IHasModel) block).registerModels();
-                }
-            }
+            CoreItems.registerRenders();
         }
 
         @SubscribeEvent
