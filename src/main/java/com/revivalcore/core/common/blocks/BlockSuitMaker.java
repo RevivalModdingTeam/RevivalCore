@@ -3,6 +3,7 @@ package com.revivalcore.core.common.blocks;
 import com.revivalcore.RevivalCore;
 import com.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalcore.util.handlers.GuiHandlerRV;
+import com.revivalcore.util.helper.IHaveItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSuitMaker extends Block implements ITileEntityProvider {
+public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveItem {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1.6, 0.6, -0.5);
@@ -136,5 +137,10 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider {
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         return super.addDestroyEffects(world, pos, manager);
+    }
+
+    @Override
+    public boolean hasItem() {
+        return true;
     }
 }

@@ -22,14 +22,15 @@ public class CoreBlocks {
         CoreBlocks.BLOCK_LIST.add(block);
 
         if (block instanceof IHaveItem) {
-            ItemBlock itemBlock = (ItemBlock) new ItemBlock(block).setRegistryName(name);
+            if(((IHaveItem) block).hasItem()) {
+                ItemBlock itemBlock = (ItemBlock) new ItemBlock(block).setRegistryName(name);
 
-            if (tab) {
-                block.setCreativeTab(RevivalCore.coretab);
+                if (tab) {
+                    block.setCreativeTab(RevivalCore.coretab);
+                }
+                CoreItems.registerRender(itemBlock);
+                CoreItems.ITEM_LIST.add(itemBlock);
             }
-            CoreItems.registerRender(itemBlock);
-            CoreItems.ITEM_LIST.add(itemBlock);
-
         }
         return block;
     }
