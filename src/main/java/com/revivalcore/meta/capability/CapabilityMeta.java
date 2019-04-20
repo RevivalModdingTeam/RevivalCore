@@ -36,8 +36,7 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
-    public void update() {
-    }
+    public void update() {}
 
     @Override
     public void sync() {
@@ -65,6 +64,10 @@ public class CapabilityMeta implements IMetaCap {
         return false;
     }
 
+    @Override
+    public void clear() {
+        setMetaPower(-1);
+    }
 
     @Override
     public NBTTagCompound serializeNBT() {
