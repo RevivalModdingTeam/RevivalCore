@@ -2,8 +2,8 @@
 {
   "modid": "revivalcore",
   "name": "Revival Core",
-  "description": "TEST.",
-  "version": "0.0.4",
+  "description": "The Revival Core for our mods!",
+  "version": "0.0.6",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",
