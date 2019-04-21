@@ -21,7 +21,6 @@ public class ContainerSuitMaker extends Container
 		this.initSlots();
 	}
 	
-	//TODO: Finish for craft matrix slots
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
 	{
@@ -36,6 +35,26 @@ public class ContainerSuitMaker extends Container
 			if(index == 20)
 			{
 				if(!this.mergeItemStack(stack1, 21, 56, false))
+				{
+					return ItemStack.EMPTY;
+				}
+				
+				slot.onSlotChange(stack1, stack);
+			}
+			
+			else if(index >= 0 && index <= 19)
+			{
+				if(!mergeItemStack(stack1, 21, 56, false))
+				{
+					return ItemStack.EMPTY;
+				}
+				
+				slot.onSlotChange(stack1, stack);
+			}
+			
+			else if(index >= 21 && index <= 56)
+			{
+				if(!mergeItemStack(stack1, 0, 19, false))
 				{
 					return ItemStack.EMPTY;
 				}

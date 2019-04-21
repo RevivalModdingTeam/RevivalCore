@@ -2,10 +2,13 @@ package com.revivalcore.core.common.tileentity;
 
 import com.revivalcore.core.recipes.RVRecipe;
 import com.revivalcore.core.registry.SuitMakerRecipeRegistry;
+import com.revivalcore.util.helper.RVHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -162,12 +165,13 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
         super.readFromNBT(compound);
         // TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-    	/*if(!RVRecipe.readRecipeFromNBT(compound).getName().equals("null"))
+    	if(compound.hasKey("recipe"))
     	{
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
-    		setProcessTimer(compound.hasKey("processTimer") ? getProcessTimer() : 0);
+    		setProcessTimer(compound.hasKey("processTime") ? compound.getShort("processTime") : 0);
+    		System.out.println(compound.hasKey("recipe"));
     		//setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
-    	}*/
+    	}
     }
 
     @Override
@@ -175,6 +179,9 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     {
         if(this.isProcessing())
         {
+        	if(world.isRemote)
+        		RVHelper.spawnParticles(world, EnumParticleTypes.SMOKE_NORMAL, pos, 0.15, 4);
+        	
             this.process();
 
             if(this.getProcessTimer() >= 250)
