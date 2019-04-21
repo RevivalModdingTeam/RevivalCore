@@ -17,6 +17,6 @@ public class MetaHelper {
     }
 
     public static String getMetaPowerName(int id) {
-        return MetaPower.values()[0].getName();
+        return MetaPower.values()[id].getName();
     }
 }
