@@ -12,7 +12,7 @@ public class MetaHelper {
     public static void getRandomMetaPower(EntityPlayer player) {
         Random random = new Random();
         IMetaCap cap = CapabilityMeta.get(player);
-        int p = random.nextInt(MetaPower.values().length + 1);
+        int p = random.nextInt(MetaPower.values().length);
         cap.setMetaPower(p);
     }
 

@@ -26,6 +26,7 @@ public class CapabilityMeta implements IMetaCap {
 
     private EntityPlayer player;
     private int metapowerid = -1;
+    private double exhaustionlevel = 0.0;
 
     public CapabilityMeta() {
 
@@ -65,6 +66,16 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
+    public void setExhaustionLevel(double exhaustionLevel) {
+        exhaustionlevel = exhaustionlevel;
+    }
+
+    @Override
+    public double getexhaustionLevel() {
+        return exhaustionlevel;
+    }
+
+    @Override
     public void clear() {
         setMetaPower(-1);
     }
@@ -73,12 +84,14 @@ public class CapabilityMeta implements IMetaCap {
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("power_id", metapowerid);
+        nbt.setDouble("exhaustion", exhaustionlevel);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         metapowerid = nbt.getInteger("power_id");
+        exhaustionlevel = nbt.getDouble("exhaustion");
     }
 
 

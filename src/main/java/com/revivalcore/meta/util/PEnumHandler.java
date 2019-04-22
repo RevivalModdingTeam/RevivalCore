@@ -1,6 +1,5 @@
 package com.revivalcore.meta.util;
 
-import com.revivalcore.meta.capability.IMetaCap;
 import net.minecraft.util.IStringSerializable;
 
 public class PEnumHandler {
@@ -11,7 +10,6 @@ public class PEnumHandler {
 
         private int ID;
         private String name;
-        private IMetaCap cap;
 
         MetaPower(String name, int ID) {
             this.name = name;
