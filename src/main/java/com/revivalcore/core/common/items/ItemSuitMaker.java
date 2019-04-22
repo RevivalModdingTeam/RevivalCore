@@ -11,7 +11,5 @@ public class ItemSuitMaker extends ItemBlock {
         this.setMaxStackSize(1);
         this.setMaxDamage(0);
         this.setHasSubtypes(false);
-
-        CoreItems.ITEM_LIST.add(this);
     }
 }

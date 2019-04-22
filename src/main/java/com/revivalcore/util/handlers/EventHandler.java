@@ -1,6 +1,6 @@
 package com.revivalcore.util.handlers;
 
-import com.revivalcore.core.RVConfig;
+import com.revivalcore.core.RCoreConfig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -18,7 +18,7 @@ public class EventHandler
     @SubscribeEvent
     public static void PlayerJoinWorld(PlayerEvent.PlayerLoggedInEvent playerEvent) {
         EntityPlayer player = playerEvent.player;
-        if (!player.world.isRemote && RVConfig.revivalCore.updatechecker) {
+        if (!player.world.isRemote && RCoreConfig.revivalCore.updatechecker) {
             ForgeVersion.CheckResult version = ForgeVersion.getResult(Loader.instance().activeModContainer());
             if (version.status.equals(ForgeVersion.Status.OUTDATED)) {
                 TextComponentString msg = new TextComponentString(TextFormatting.BLUE + "[RevivalCore] : New Update Available!");

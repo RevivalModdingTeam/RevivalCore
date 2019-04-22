@@ -10,7 +10,5 @@ public class ItemEatable extends ItemFood {
         setTranslationKey(name);
         setRegistryName(name);
         setCreativeTab(RevivalCore.coretab);
-
-        CoreItems.ITEM_LIST.add(this);
     }
 }

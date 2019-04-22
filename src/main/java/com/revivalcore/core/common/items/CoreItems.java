@@ -1,7 +1,6 @@
 package com.revivalcore.core.common.items;
 
 import com.revivalcore.RevivalCore;
-import com.revivalcore.core.common.blocks.CoreBlocks;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -18,15 +17,13 @@ public class CoreItems {
 
     public static final List<Item> ITEM_LIST = new ArrayList<Item>();
 
-    public static Item suit_maker_item, coffee_mug;
+    public static Item coffee_mug;
 
     public static void init() {
-        suit_maker_item = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, false), true);
     }
 
     public static void registerRenders() {
-        registerRender(suit_maker_item);
         registerRender(coffee_mug);
     }
 

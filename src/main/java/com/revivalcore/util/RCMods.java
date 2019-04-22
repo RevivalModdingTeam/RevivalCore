@@ -6,5 +6,6 @@ public class RCMods {
 
     public static final String REVIVALCORE = RevivalCore.MODID;
     public static final String SPEEDSTERREBORN = "shr";
+    public static final String METAVERSE = "metaverse";
 
 }

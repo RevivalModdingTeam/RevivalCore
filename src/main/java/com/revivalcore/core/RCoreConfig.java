@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = RevivalCore.MODID, name = RevivalCore.NAME + " Config")
-public class RVConfig {
+public class RCoreConfig {
 
     public static final RCore revivalCore = new RCore();
 

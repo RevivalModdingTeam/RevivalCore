@@ -19,7 +19,6 @@ public class ClientProxy implements IProxy {
         Item.getItemFromBlock(CoreBlocks.SUIT_MAKER).setTileEntityItemStackRenderer(new RenderSuitMakerItem());
     }
 
-
     @Override
     public void postInit(FMLPostInitializationEvent e) {
     }

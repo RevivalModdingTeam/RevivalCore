@@ -31,7 +31,7 @@ public class ItemLocked extends Item {
                 for(String s : UUIDS.toArray(new String[0])) {
                     if(!(s == player.getUniqueID().toString())) {
                         stack.setCount(0);
-                        PlayerHelper.sendMessage(player, "[RCore] You can't use this item!", false);
+                        PlayerHelper.sendMessage(player, "[RevivalCore] You can't use this item!", false);
                     }
                 }
             }

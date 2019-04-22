@@ -1,7 +1,7 @@
 package com.revivalcore.core.client;
 
 import com.revivalcore.core.client.bakedmodel.BakedModelSuitMaker;
-import com.revivalcore.core.common.items.CoreItems;
+import com.revivalcore.core.common.blocks.CoreBlocks;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -21,7 +21,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent e)
     {
-    	Item item = CoreItems.suit_maker_item;
+    	Item item = Item.getItemFromBlock(CoreBlocks.SUIT_MAKER);
     	ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName(), "inventory");
     	e.getModelRegistry().putObject(mrl, new BakedModelSuitMaker());
     }

@@ -18,7 +18,7 @@ public class CoreBlocks {
 
     public static final List<Block> BLOCK_LIST = new ArrayList<Block>();
 
-    public static Block SUIT_MAKER = RegisterBlock(new BlockSuitMaker( Material.ROCK), "suit_maker", false);
+    public static Block SUIT_MAKER = RegisterBlock(new BlockSuitMaker( Material.ROCK), "suit_maker", true);
 
 
     public static Block RegisterBlock(Block block, String name, boolean tab) {
