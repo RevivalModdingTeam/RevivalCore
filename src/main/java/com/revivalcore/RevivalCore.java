@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
-    public static final String VERSION = "0.0.6";
+    public static final String VERSION = "0.0.8";
     public static final String UPDATEURL = "https://raw.githubusercontent.com/revivalmodding/RevivalCore/master/update.json";
 
     @Instance
