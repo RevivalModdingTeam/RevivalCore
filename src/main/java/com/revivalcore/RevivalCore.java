@@ -61,6 +61,5 @@ public class RevivalCore {
     public static void postinit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
     }
-
 }
 
