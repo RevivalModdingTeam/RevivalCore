@@ -51,12 +51,12 @@ public class RevivalCore {
         CoreItems.init();
         CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
+        ModHelper.startupChecks();
     }
 
     @EventHandler
     public static void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.post(new RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent(SuitMakerRecipeRegistry.RECIPES));
-        ModHelper.startupChecks();
         proxy.init(event);
     }
 
