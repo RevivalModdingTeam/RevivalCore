@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.meta.capability;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
+import com.revivalmodding.revivalcore.util.helper.EnumHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Josia50
@@ -27,6 +30,7 @@ public class CapabilityMeta implements IMetaCap {
     private EntityPlayer player;
     private int metapowerid = -1;
     private double exhaustionlevel = 0.0;
+    private List<String> powers = new ArrayList<>();
 
     public CapabilityMeta() {
 
@@ -37,7 +41,8 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
-    public void update() {}
+    public void update() {
+    }
 
     @Override
     public void sync() {
@@ -46,7 +51,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public void setMetaPower(int metaPower) {
-        if(!hasMetaPowers() || metaPower == -1) {
+        if (!hasMetaPowers() || metaPower == -1) {
             this.metapowerid = metaPower;
         }
     }
@@ -59,7 +64,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public boolean hasMetaPowers() {
-        if(getMetaPower() > -1) {
+        if (getMetaPower() > -1) {
             return true;
         }
         return false;
@@ -73,6 +78,27 @@ public class CapabilityMeta implements IMetaCap {
     @Override
     public double getexhaustionLevel() {
         return exhaustionlevel;
+    }
+
+    @Override
+    public void setPowerEnabled(int id) {
+        powers.add(EnumHelper.Powers.values()[id].getName());
+    }
+
+    @Override
+    public boolean hasPowerEnabled(int id) {
+        for (String n : powers) {
+            if (n == EnumHelper.Powers.values()[id].getName())
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setPowerDisabled(int id) {
+        if(hasPowerEnabled(id)) {
+            powers.remove(EnumHelper.Powers.values()[id].getName());
+        }
     }
 
     @Override
@@ -100,8 +126,8 @@ public class CapabilityMeta implements IMetaCap {
 
         @SubscribeEvent
         public static void attach(AttachCapabilitiesEvent<Entity> event) {
-                if (event.getObject() instanceof EntityPlayer)
-                    event.addCapability(new ResourceLocation(RevivalCore.MODID, "meta_cap"), new CapMetaStorage.MetaCapProvider((EntityPlayer) event.getObject()));
+            if (event.getObject() instanceof EntityPlayer)
+                event.addCapability(new ResourceLocation(RevivalCore.MODID, "meta_cap"), new CapMetaStorage.MetaCapProvider((EntityPlayer) event.getObject()));
         }
 
         @SubscribeEvent
