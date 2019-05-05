@@ -3,9 +3,6 @@ package com.revivalmodding.revivalcore.util.handlers.client;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.bakedmodel.BakedModelSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
@@ -37,40 +34,7 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void keyPressed(InputEvent.KeyInputEvent e) {
-        IMetaCap metaCap = CapabilityMeta.get(Minecraft.getMinecraft().player);
-        if (ENABLE.isPressed()) {
-            if (metaCap.hasPowerEnabled(0)) {
-                metaCap.setPowerDisabled(0);
-            } else {
-                metaCap.setPowerEnabled(0);
-            }
-        }
-
-        if (POWER1.isPressed()) {
-            if (metaCap.hasPowerEnabled(1)) {
-                metaCap.setPowerDisabled(1);
-            } else {
-                metaCap.setPowerEnabled(1);
-            }
-        }
-
-        if (POWER2.isPressed()) {
-            if (metaCap.hasPowerEnabled(2)) {
-                metaCap.setPowerDisabled(2);
-            } else {
-                metaCap.setPowerEnabled(2);
-            }
-        }
-
-        if (POWER3.isPressed()) {
-            if (metaCap.hasPowerEnabled(3)) {
-                metaCap.setPowerDisabled(3);
-            } else {
-                metaCap.setPowerEnabled(3);
-            }
-        }
-    }
+    public static void keyPressed(InputEvent.KeyInputEvent e) {}
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent e) {

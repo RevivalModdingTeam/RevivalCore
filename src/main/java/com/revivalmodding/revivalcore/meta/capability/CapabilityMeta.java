@@ -3,7 +3,6 @@ package com.revivalmodding.revivalcore.meta.capability;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
-import com.revivalmodding.revivalcore.util.helper.EnumHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,27 +77,6 @@ public class CapabilityMeta implements IMetaCap {
     @Override
     public double getexhaustionLevel() {
         return exhaustionlevel;
-    }
-
-    @Override
-    public void setPowerEnabled(int id) {
-        powers.add(EnumHelper.Powers.values()[id].getName());
-    }
-
-    @Override
-    public boolean hasPowerEnabled(int id) {
-        for (String n : powers) {
-            if (n == EnumHelper.Powers.values()[id].getName())
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void setPowerDisabled(int id) {
-        if(hasPowerEnabled(id)) {
-            powers.remove(EnumHelper.Powers.values()[id].getName());
-        }
     }
 
     @Override

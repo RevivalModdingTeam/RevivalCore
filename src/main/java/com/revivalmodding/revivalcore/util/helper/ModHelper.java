@@ -30,6 +30,10 @@ public class ModHelper {
         setTeamMembers(RCTeam.JOSIA50);
         setTeamMembers(RCTeam.TUD);
         setTeamMembers(RCTeam.TOMA);
+
+        setBetaTester(RCTeam.KIROZAKI);
+        setBetaTester(RCTeam.CHARLES);
+        setBetaTester(RCTeam.X39);
         betaTester.addAll(teamMembers);
     }
 
