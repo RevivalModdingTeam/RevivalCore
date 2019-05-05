@@ -11,6 +11,7 @@ import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.proxy.IProxy;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
+import com.revivalmodding.revivalcore.util.handlers.client.ClientEventHandler;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,6 +58,7 @@ public class RevivalCore {
     @EventHandler
     public static void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.post(new RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent(SuitMakerRecipeRegistry.RECIPES));
+        ClientEventHandler.init();
         proxy.init(event);
     }
 
