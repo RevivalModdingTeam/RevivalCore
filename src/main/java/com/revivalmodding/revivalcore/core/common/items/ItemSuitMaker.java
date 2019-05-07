@@ -7,7 +7,7 @@ public class ItemSuitMaker extends ItemBlock {
 
     public ItemSuitMaker(Block block) {
         super(block);
-        this.setRegistryName(block.getRegistryName()+ "_item");
+        this.setRegistryName(block.getRegistryName() + "_item");
         this.setMaxStackSize(1);
         this.setMaxDamage(0);
         this.setHasSubtypes(false);

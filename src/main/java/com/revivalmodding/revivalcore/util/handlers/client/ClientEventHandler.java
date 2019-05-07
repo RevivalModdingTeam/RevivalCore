@@ -1,11 +1,7 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.core.client.bakedmodel.BakedModelSuitMaker;
-import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -38,8 +34,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent e) {
-        Item item = Item.getItemFromBlock(CoreBlocks.SUIT_MAKER);
+      /*  Item item = Item.getItemFromBlock(CoreBlocks.SUIT_MAKER);
         ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName(), "inventory");
-        e.getModelRegistry().putObject(mrl, new BakedModelSuitMaker());
+        e.getModelRegistry().putObject(mrl, new BakedModelSuitMaker());*/
     }
 }
