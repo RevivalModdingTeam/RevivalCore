@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class ModHelper {
@@ -45,9 +44,9 @@ public class ModHelper {
         teamMembers.add(uuid);
     }
 
-    public static boolean betaTesterCheck(UUID uuid) {
+    public static boolean betaTesterCheck(String uuid) {
         for (String uuid1 : betaTester) {
-            if (String.valueOf(uuid) == uuid1) {
+            if (uuid1.equals(uuid)) {
                 return true;
             }
         }
@@ -55,9 +54,9 @@ public class ModHelper {
     }
 
     @SubscribeEvent
-    public static void PreventNonBetaTester(PlayerEvent.PlayerLoggedInEvent e) throws IllegalAccessException {
-        if(!ModHelper.betaTesterCheck(e.player.getUniqueID()) && !ModHelper.getIsDev()) {
-            throw new IllegalAccessException("You don't have acces to this!");
+    public static void PreventNonBetaTester(PlayerEvent.PlayerLoggedInEvent e) {
+        if(!ModHelper.betaTesterCheck(e.player.getUniqueID().toString()) && !ModHelper.getIsDev()) {
+            throw new IllegalStateException("You don't have acces to this!");
         }
     }
  }

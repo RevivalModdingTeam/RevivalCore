@@ -28,8 +28,8 @@ public class ItemLocked extends Item {
         if (entityIn instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (isSelected) {
-                for(String s : UUIDS.toArray(new String[0])) {
-                    if(!(s == player.getUniqueID().toString())) {
+                for(String s : UUIDS) {
+                    if(!(player.getUniqueID().toString().equals(s))) {
                         stack.setCount(0);
                         PlayerHelper.sendMessage(player, "[RevivalCore] You can't use this item!", false);
                     }

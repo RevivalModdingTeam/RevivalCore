@@ -16,8 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Josia50
@@ -29,7 +27,6 @@ public class CapabilityMeta implements IMetaCap {
     private EntityPlayer player;
     private int metapowerid = -1;
     private double exhaustionlevel = 0.0;
-    private List<String> powers = new ArrayList<>();
 
     public CapabilityMeta() {
 
