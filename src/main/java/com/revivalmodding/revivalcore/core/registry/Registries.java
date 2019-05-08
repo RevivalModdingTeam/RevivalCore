@@ -7,6 +7,7 @@ import com.revivalmodding.revivalcore.core.common.events.RVRecipeRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
+import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
@@ -41,7 +42,10 @@ public class Registries {
         public static void onModelRegister(ModelRegistryEvent event) {
             CoreItems.registerRenders();
             for(Block block : CoreBlocks.BLOCK_LIST) {
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "normal"));
+                if(block instanceof IHaveItem) {
+                    if(((IHaveItem) block).hasItem())
+                        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "normal"));
+                }
             }
         }
 

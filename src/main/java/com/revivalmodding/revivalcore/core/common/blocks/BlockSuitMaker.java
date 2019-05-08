@@ -39,6 +39,7 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
 
     public BlockSuitMaker(Material material) {
         super(material);
+        setCreativeTab(RevivalCore.coretab);
     }
 
     @Override
@@ -150,6 +151,6 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
 
     @Override
     public boolean hasItem() {
-        return true;
+        return false;
     }
 }
