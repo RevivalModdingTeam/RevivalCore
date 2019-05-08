@@ -30,9 +30,9 @@ public class CoreBlocks {
             if(((IHaveItem) block).hasItem()) {
                 ItemBlock itemBlock = (ItemBlock) new ItemBlock(block).setRegistryName(name);
 
-                if (tab) {
+                if (tab)
                     block.setCreativeTab(RevivalCore.coretab);
-                }
+
                 CoreItems.registerRender(itemBlock);
                 CoreItems.ITEM_LIST.add(itemBlock);
             }
