@@ -22,7 +22,7 @@ public class CoreItems {
 
     public static void init() {
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, false), true);
-        suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true); // TODO Make it work
+        suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
     }
 
     public static void registerRenders() {
