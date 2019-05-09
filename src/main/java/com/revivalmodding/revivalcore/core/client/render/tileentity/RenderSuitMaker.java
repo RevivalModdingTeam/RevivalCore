@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {
 
-    public final ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
+    public ModelSuitMaker modelSuitMaker = new ModelSuitMaker();
     public static final ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/suit_maker.png");
     Minecraft mc;
     EntityItem itemE = new EntityItem(null, 0.0D, 0.0D, 0.0D);
@@ -43,7 +43,6 @@ public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMak
         modelSuitMaker.render(null, 0, 0, 0, 0, 0, 0.0625F);
         GlStateManager.popMatrix();
 
-        // item part
         if (!te.getStackInSlot(te.getOutput()).isEmpty()) {
             renderItem(te, x, y, z, partialTicks, state);
         }

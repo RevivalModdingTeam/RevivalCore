@@ -54,6 +54,10 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
         super.getDrops(drops, world, pos, state, fortune);
         drops.clear();
         drops.add(new ItemStack(CoreItems.suit_maker));
+         TileEntitySuitMaker tileEntitySuitMaker = (TileEntitySuitMaker) world.getTileEntity(pos);
+         for(int i = 0; i < tileEntitySuitMaker.getInventory().size(); i++) {
+             drops.add(new ItemStack(tileEntitySuitMaker.getStackInSlot(i).getItem()));
+         }
     }
 
     @Nullable
