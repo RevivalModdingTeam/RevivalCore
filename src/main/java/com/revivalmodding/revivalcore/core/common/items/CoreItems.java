@@ -25,7 +25,7 @@ public class CoreItems {
     public static final List<Item> ITEM_LIST = new ArrayList<Item>();
 
     public static Item coffee_mug,suit_maker;
-    public static Item suit_head,suit_body,suit_legs,suit_boots;
+    public static ItemSuit suit_head,suit_body,suit_legs,suit_boots;
 
     public static void init() {
     	
@@ -44,10 +44,15 @@ public class CoreItems {
         registerRender(suit_maker);
     }
     
-    public static Item registerItem(Item item) {
+    public static <T extends Item> T registerItem(T item) {
     	ITEM_LIST.add(item);
     	return item;
     }
+    
+    /*public static Item registerItem(Item item) {
+    	ITEM_LIST.add(item);
+    	return item;
+    }*/
 
     public static Item registerItem(Item item, boolean tab) {
         if (tab)

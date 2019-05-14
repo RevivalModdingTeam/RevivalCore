@@ -16,25 +16,25 @@ public class SuitDebug extends AbstractSuit
 	@Override
 	public ItemSuit getHelmet()
 	{
-		return (ItemSuit) CoreItems.suit_head;
+		return CoreItems.suit_head;
 	}
 	
 	@Override
 	public ItemSuit getChest()
 	{
-		return (ItemSuit) CoreItems.suit_body;
+		return CoreItems.suit_body;
 	}
 	
 	@Override
 	public ItemSuit getLeggings() 
 	{
-		return (ItemSuit) CoreItems.suit_legs;
+		return CoreItems.suit_legs;
 	}
 	
 	@Override
 	public ItemSuit getBoots()
 	{
-		return (ItemSuit) CoreItems.suit_boots;
+		return CoreItems.suit_boots;
 	}
 	
 	@Override

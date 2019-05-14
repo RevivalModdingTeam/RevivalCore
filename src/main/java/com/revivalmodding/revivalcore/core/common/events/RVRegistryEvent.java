@@ -46,7 +46,6 @@ public class RVRegistryEvent extends Event{
     	public void register(String name, AbstractSuit suit)
     	{
     		SuitRegistry.putEntry(name, suit);
-    		System.out.println("registered");
     	}
     }
 }
