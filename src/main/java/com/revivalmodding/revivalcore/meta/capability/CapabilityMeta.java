@@ -68,7 +68,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public void setExhaustionLevel(double exhaustionLevel) {
-        exhaustionlevel = exhaustionlevel;
+        this.exhaustionlevel = exhaustionLevel;
     }
 
     @Override
