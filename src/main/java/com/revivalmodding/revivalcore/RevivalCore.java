@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore;
 
-import com.revivalmodding.revivalcore.core.common.events.RVRecipeRegistryEvent;
+import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
@@ -57,13 +57,14 @@ public class RevivalCore {
 
     @EventHandler
     public static void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.post(new RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent(SuitMakerRecipeRegistry.RECIPES));
+        MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitMakerRecipeRegistryEvent(SuitMakerRecipeRegistry.RECIPES));
         ClientEventHandler.init();
         proxy.init(event);
     }
 
     @EventHandler
     public static void postinit(FMLPostInitializationEvent event) {
+    	MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitRegistryEvent());
         proxy.postInit(event);
     }
 }

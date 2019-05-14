@@ -1,6 +1,9 @@
 package com.revivalmodding.revivalcore.util.handlers;
 
 import com.revivalmodding.revivalcore.core.RCoreConfig;
+import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
+import com.revivalmodding.revivalcore.core.registry.SuitRegistry;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -11,6 +14,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod.EventBusSubscriber
 public class EventHandler
@@ -27,6 +31,16 @@ public class EventHandler
                 player.sendMessage(msg);
             }
         }
+    }
+    
+    //TODO: optimize
+    @SubscribeEvent
+    public static void onWorldTick(TickEvent.WorldTickEvent e) {
+    	for(String key : SuitRegistry.SUITS.keySet()) {
+    		for(EntityPlayer player : e.world.playerEntities) {
+    			SuitRegistry.SUITS.get(key).tick(player);
+    		}
+    	}
     }
 }
 

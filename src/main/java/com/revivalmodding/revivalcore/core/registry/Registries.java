@@ -3,8 +3,9 @@ package com.revivalmodding.revivalcore.core.registry;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
-import com.revivalmodding.revivalcore.core.common.events.RVRecipeRegistryEvent;
+import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
@@ -32,11 +33,15 @@ public class Registries {
     public static class Registry {
 
         @SubscribeEvent
-        public static void onSuitMakerRecipesRegister(RVRecipeRegistryEvent.SuitMakerRecipeRegistryEvent e) {
+        public static void onSuitMakerRecipesRegister(RVRegistryEvent.SuitMakerRecipeRegistryEvent e) {
             e.register(RVRecipeBuilder.create().name("test0").result(Items.DIAMOND, 1).addIngredient(Items.IRON_AXE, 1, 1).build());
             e.register(RVRecipeBuilder.create().name("test1").result(Items.GOLD_INGOT, 1).addIngredient(Items.IRON_DOOR, 1, 1).addIngredient(Items.APPLE, 1, 2).build());
         }
 
+        @SubscribeEvent
+        public static void onSuitRegister(RVRegistryEvent.SuitRegistryEvent e) {
+        	e.register("debug", new SuitDebug());
+        }
 
         @SubscribeEvent
         public static void onModelRegister(ModelRegistryEvent event) {
