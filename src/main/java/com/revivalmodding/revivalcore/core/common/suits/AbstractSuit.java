@@ -1,12 +1,18 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
+import java.awt.Color;
+
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3f;
+
+import com.revivalmodding.revivalcore.core.registry.SuitRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AbstractSuit
 {
@@ -16,6 +22,21 @@ public abstract class AbstractSuit
 	{
 		this.name = name;
 	}
+	
+    public static AbstractSuit getSuit(EntityPlayer player) {
+    	for(int i = 2; i < 6; ++i) {
+    		if(!(player.getItemStackFromSlot(EntityEquipmentSlot.values()[i]).getItem() instanceof ItemSuit)) {
+    			return null;
+    		}
+    	}
+    	for(String s : SuitRegistry.SUITS.keySet()) {
+    		AbstractSuit suit = SuitRegistry.SUITS.get(s);
+    		if(suit.isSuitComplete(player)) {
+    			return suit;
+    		}
+    	}
+    	return null;
+    }
 	
 	public abstract ItemSuit getHelmet();
 	
@@ -46,14 +67,12 @@ public abstract class AbstractSuit
 	}
 	
 	/**
-	 * <li>x - Red
-	 * <li>y - Green
-	 * <li>z - Blue
-	 * @return RGB for trail
+	 * @return Color for trail
 	 */
 	@Nullable
-	public Vector3f getTrailRGB()
+	@SideOnly(Side.CLIENT)
+	public Color getTrailRGB()
 	{
-		return null;
+		return Color.RED;
 	}
 }
