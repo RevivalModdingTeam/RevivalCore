@@ -17,10 +17,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class AbstractSuit
 {
 	private final String name;
+	private final Color color;
 	
 	public AbstractSuit(String name)
 	{
+		this(name, Color.RED);
+	}
+	
+	public AbstractSuit(String name, float red, float green, float blue)
+	{
+		this(name, new Color(red, green, blue));
+	}
+	
+	public AbstractSuit(String name, Color color)
+	{
 		this.name = name;
+		this.color = color;
 	}
 	
     public static AbstractSuit getSuit(EntityPlayer player) {
@@ -71,8 +83,8 @@ public abstract class AbstractSuit
 	 */
 	@Nullable
 	@SideOnly(Side.CLIENT)
-	public Color getTrailRGB()
+	public final Color getTrailRGB()
 	{
-		return Color.RED;
+		return color;
 	}
 }
