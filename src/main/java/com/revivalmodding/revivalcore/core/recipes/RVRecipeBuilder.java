@@ -37,6 +37,16 @@ public class RVRecipeBuilder implements IBuilder<RVRecipe> {
         result = new ItemStack(block, count);
         return this;
     }
+    
+    public RVRecipeBuilder result(Item item) {
+        result = new ItemStack(item);
+        return this;
+    }
+
+    public RVRecipeBuilder result(Block block) {
+        result = new ItemStack(block);
+        return this;
+    }
 
     public RVRecipeBuilder addIngredient(Item item, int count, int slotIndex) {
         ItemStack ing = new ItemStack(item, count);
@@ -46,6 +56,18 @@ public class RVRecipeBuilder implements IBuilder<RVRecipe> {
 
     public RVRecipeBuilder addIngredient(Block block, int count, int slotIndex) {
         ItemStack ing = new ItemStack(block, count);
+        recList.add(new RVIngredient(slotIndex, ing));
+        return this;
+    }
+    
+    public RVRecipeBuilder addIngredient(Item item, int slotIndex) {
+        ItemStack ing = new ItemStack(item);
+        recList.add(new RVIngredient(slotIndex, ing));
+        return this;
+    }
+
+    public RVRecipeBuilder addIngredient(Block block, int slotIndex) {
+        ItemStack ing = new ItemStack(block);
         recList.add(new RVIngredient(slotIndex, ing));
         return this;
     }

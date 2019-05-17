@@ -151,13 +151,14 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        // TODO: Fix - something here causes glitch which makes whole tileentity corrupted
-        if(this.getRecipe() != null)
+        // TODO: Fix - [!!!net.minecraft.nbt.NBTTagCompound@6f68d53b=>java.lang.StackOverflowError:null!!!]
+        /*if(this.getRecipe() != null)
         {
             compound.setBoolean("isProcessing", isProcessing());
             compound.setInteger("processTime", getProcessTimer());
-            //compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
-        }
+            compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
+            System.out.println(compound.getTag("recipe"));
+        }*/
         return compound;
     }
 
@@ -165,12 +166,14 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
-        // TODO: Fix - something here causes glitch which makes whole tileentity corrupted
     	if(compound.hasKey("recipe"))
     	{
+    		System.out.println("here");
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
     		setProcessTimer(compound.hasKey("processTime") ? compound.getInteger("processTime") : 0);
-    		//setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
+    		setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
+    		
+            System.out.println(getRecipe());
     	}
     }
 

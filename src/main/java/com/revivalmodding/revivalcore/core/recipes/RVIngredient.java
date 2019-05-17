@@ -35,12 +35,10 @@ public class RVIngredient
 	{
 		if(compound.hasKey("itemstack"))
 		{
-			int slotID = compound.hasKey("slotID") ? compound.getInteger("slotID") : 0;
-			ItemStack ingredient = compound.hasKey("itemID") ? compound.hasKey("itemCount") ?
-					new ItemStack(Item.getItemById(compound.getInteger("itemID")), compound.getInteger("itemCount")) : 
-						new ItemStack(Item.getItemById(compound.getInteger("itemID"))) : ItemStack.EMPTY;
-						
-			return new RVIngredient(slotID, ingredient);
+			NBTTagCompound c = compound.getCompoundTag("itemstack");
+			int slot = c.getInteger("slotID");
+			ItemStack ing = new ItemStack(Item.getItemById(c.getInteger("itemID")), c.getInteger("itemCount"));
+			return new RVIngredient(slot, ing);
 		}
 		
 		return new RVIngredient(0, ItemStack.EMPTY);

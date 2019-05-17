@@ -7,10 +7,12 @@ import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
+import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +36,13 @@ public class Registries {
         @SubscribeEvent
         public static void onSuitMakerRecipesRegister(RVRegistryEvent.SuitMakerRecipeRegistryEvent e) {
         	//TODO: recipes for suit maker
+        	e.register(
+        			RVRecipeBuilder.create()
+        			.name("debug")
+        			.result(CoreItems.coffee_mug)
+        			.addIngredient(Items.DIAMOND, 2)
+        			.craftingTime(250)
+        			.build());
         }
 
         @SubscribeEvent

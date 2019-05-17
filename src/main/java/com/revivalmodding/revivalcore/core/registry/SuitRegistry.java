@@ -14,10 +14,6 @@ public class SuitRegistry
 	
 	public static void putEntry(AbstractSuit suit)
 	{
-		if(!isSuitValid(suit)) {
-			RevivalCore.logger.error("Attempted to add suit {} with name {}, but suit is invalid, skipping...", suit, suit.getSuitName());
-			return;
-		}
 		SUITS.add(suit);
 	}
 	
@@ -33,17 +29,5 @@ public class SuitRegistry
 		}
 		
 		return null;
-	}
-	
-	private static boolean isSuitValid(AbstractSuit suit)
-	{
-		for(int i = 0; i < suit.getSet().length; ++i) {
-			ItemSuit suitItem = suit.getSet()[i];
-			int eqSlotIndex = EntityEquipmentSlot.values().length - i - 1;
-			if(!suitItem.getEquipmentSlot().equals(EntityEquipmentSlot.values()[eqSlotIndex])) {
-				return false;
-			}
-		}
-		return true;
 	}
 }
