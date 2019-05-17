@@ -1,5 +1,8 @@
 package com.revivalmodding.revivalcore.core.common.events;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
@@ -7,9 +10,6 @@ import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalmodding.revivalcore.core.registry.SuitRegistry;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
-
-import java.util.HashMap;
-import java.util.Set;
 
 public class RVRegistryEvent extends Event{
 
@@ -38,14 +38,14 @@ public class RVRegistryEvent extends Event{
      */
     public static class SuitRegistryEvent extends RVRegistryEvent {
     	
-    	public HashMap getSuits()
+    	public HashSet getSuits()
     	{
     		return SuitRegistry.SUITS;
     	}
     	
-    	public void register(String name, AbstractSuit suit)
+    	public void register(AbstractSuit suit)
     	{
-    		SuitRegistry.putEntry(name, suit);
+    		SuitRegistry.putEntry(suit);
     	}
     }
 }

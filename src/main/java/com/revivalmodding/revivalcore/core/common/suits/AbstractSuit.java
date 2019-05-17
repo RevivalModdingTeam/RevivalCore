@@ -41,8 +41,7 @@ public abstract class AbstractSuit
     			return null;
     		}
     	}
-    	for(String s : SuitRegistry.SUITS.keySet()) {
-    		AbstractSuit suit = SuitRegistry.SUITS.get(s);
+    	for(AbstractSuit suit : SuitRegistry.SUITS) {
     		if(suit.isSuitComplete(player)) {
     			return suit;
     		}
@@ -86,5 +85,10 @@ public abstract class AbstractSuit
 	public final Color getTrailRGB()
 	{
 		return color;
+	}
+	
+	public final String getSuitName()
+	{
+		return name;
 	}
 }

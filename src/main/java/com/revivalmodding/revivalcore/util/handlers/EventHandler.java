@@ -36,10 +36,10 @@ public class EventHandler
     //TODO: optimize
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent e) {
-    	for(String key : SuitRegistry.SUITS.keySet()) {
-    		for(EntityPlayer player : e.world.playerEntities) {
-    			SuitRegistry.SUITS.get(key).tick(player);
-    		}
+    	for(EntityPlayer player : e.world.playerEntities) {
+    		AbstractSuit suit = AbstractSuit.getSuit(player);
+    		if(suit != null)
+    			suit.tick(player);
     	}
     }
 }

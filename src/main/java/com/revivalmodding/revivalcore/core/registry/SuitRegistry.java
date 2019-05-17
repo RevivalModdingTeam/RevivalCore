@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core.registry;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
@@ -8,30 +9,31 @@ import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 
-public class SuitRegistry 
+public class SuitRegistry
 {
-	public static final HashMap<String, AbstractSuit> SUITS = new HashMap<String, AbstractSuit>();
+	public static final HashSet<AbstractSuit> SUITS = new HashSet<AbstractSuit>();
 	
-	public static void putEntry(String name, AbstractSuit suit)
+	public static void putEntry(AbstractSuit suit)
 	{
-		if(!canAddSuit(name, suit)) {
-			RevivalCore.logger.error("Attempted to add suit {} with name {}, but suit is invalid, skipping...", suit, name);
+		if(!isSuitValid(suit)) {
+			RevivalCore.logger.error("Attempted to add suit {} with name {}, but suit is invalid, skipping...", suit, suit.getSuitName());
 			return;
 		}
-		SUITS.put(name, suit);
+		SUITS.add(suit);
 	}
 	
 	public static AbstractSuit getSuitByName(String name)
 	{
-		if(SUITS.containsKey(name)) {
-			return SUITS.get(name);
+		if(name == null || name.isEmpty())
+			return null;
+		
+		for(AbstractSuit suit : SUITS) {
+			if(suit.getSuitName().equalsIgnoreCase(name)) {
+				return suit;
+			}
 		}
+		
 		return null;
-	}
-	
-	private static boolean canAddSuit(String name, AbstractSuit suit)
-	{
-		return !SUITS.containsKey(name) && isSuitValid(suit);
 	}
 	
 	private static boolean isSuitValid(AbstractSuit suit)

@@ -40,7 +40,7 @@ public class Registries {
 
         @SubscribeEvent
         public static void onSuitRegister(RVRegistryEvent.SuitRegistryEvent e) {
-        	e.register("debug", new SuitDebug());
+        	e.register(new SuitDebug());
         }
 
         @SubscribeEvent

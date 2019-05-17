@@ -1,13 +1,16 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
+import java.awt.Color;
+
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+
 import net.minecraft.entity.player.EntityPlayer;
 
 public class SuitDebug extends AbstractSuit
 {
 	public SuitDebug()
 	{
-		super("debug");
+		super("debug", Color.GREEN);
 	}
 	
 	@Override
