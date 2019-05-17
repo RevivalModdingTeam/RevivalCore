@@ -16,17 +16,15 @@ public class PacketSyncProcessTE implements IMessage {
     private boolean processing;
     private int craftingTime;
     private RVRecipe recipe;
-    private World dim;
 
     public PacketSyncProcessTE() {
     }
 
-    public PacketSyncProcessTE(IProcessCraftSystem te, BlockPos pos, World world) {
+    public PacketSyncProcessTE(IProcessCraftSystem te, BlockPos pos) {
         tilePos = pos;
         processing = te.isProcessing();
         craftingTime = te.getProcessTimer();
         recipe = te.getRecipe();
-        dim = world;
     }
 
     @Override

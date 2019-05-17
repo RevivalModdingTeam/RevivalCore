@@ -37,7 +37,7 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 		
 		this.setProcessing(false);
 		this.resetProcessTimer();
-		
 		te.addItemStackToInventory(getOutput(), this.getRecipe().constructResult());
+		te.writeToNBT(te.getTileData());
 	}
 }

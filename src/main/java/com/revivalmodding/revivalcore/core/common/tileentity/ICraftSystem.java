@@ -58,6 +58,8 @@ public interface ICraftSystem<R extends RVRecipe>
                 MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.constructResult()));
                 this.consumeIngredients(recipe, te);
         	}
+        	
+        	te.writeToNBT(te.getTileData());
         }
     }
 
@@ -73,16 +75,6 @@ public interface ICraftSystem<R extends RVRecipe>
     }
 
     /**
-     * @return the slot index of first slot in craft matrix
-     */
-    public int getCraftingMatrixStart();
-
-    /**
-     * @return the slot index of last slot in craft matrix
-     */
-    public int getCraftingMatrixEnd();
-
-    /**
      * @return the output slot index
      */
     public int getOutput();
@@ -91,9 +83,4 @@ public interface ICraftSystem<R extends RVRecipe>
      * @return the registry of recipes for this impl
      */
     public Set<R> getRegistry();
-    
-    default boolean isSlotInCraftMatrix(int slotIndex)
-    {
-        return slotIndex >= this.getCraftingMatrixStart() && slotIndex <= this.getCraftingMatrixEnd();
-    }
 }

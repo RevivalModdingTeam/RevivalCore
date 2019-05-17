@@ -61,18 +61,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
 
     @Override
-    public int getCraftingMatrixEnd()
-    {
-        return 21;
-    }
-
-    @Override
-    public int getCraftingMatrixStart()
-    {
-        return 1;
-    }
-
-    @Override
     public Set<RVRecipe> getRegistry()
     {
         return SuitMakerRecipeRegistry.RECIPES;
@@ -164,8 +152,8 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         return compound;
     }
 
-    public static void sync(IProcessCraftSystem te, BlockPos pos, World world) {
-        NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTE(te, pos, world));
+    public static void sync(IProcessCraftSystem te, BlockPos pos) {
+        NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTE(te, pos));
     }
 
     @Override
@@ -193,7 +181,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
             }
 
             if(this.isInvalid()) {
-                sync(this, pos, world);
+                sync(this, pos);
             }
         }
     }
