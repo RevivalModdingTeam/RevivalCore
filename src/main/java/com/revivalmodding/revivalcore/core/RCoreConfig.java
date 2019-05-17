@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Type;
 import net.minecraftforge.common.config.ConfigManager;

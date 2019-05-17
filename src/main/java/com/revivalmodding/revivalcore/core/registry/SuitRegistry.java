@@ -1,6 +1,5 @@
 package com.revivalmodding.revivalcore.core.registry;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import com.revivalmodding.revivalcore.RevivalCore;

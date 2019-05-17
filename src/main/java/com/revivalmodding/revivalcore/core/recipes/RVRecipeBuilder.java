@@ -1,14 +1,13 @@
 package com.revivalmodding.revivalcore.core.recipes;
 
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.revivalmodding.revivalcore.util.helper.IBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RVRecipeBuilder implements IBuilder<RVRecipe> {
     private ItemStack result;

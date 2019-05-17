@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.util.helper;
 import java.util.Random;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraft.util.ResourceLocation;
 
 public final class Constants

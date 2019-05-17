@@ -1,8 +1,8 @@
 package com.revivalmodding.revivalcore.util.helper;
 
-import net.minecraft.util.text.translation.I18n;
-
 import java.text.SimpleDateFormat;
+
+import net.minecraft.util.text.translation.I18n;
 
 public class StringHelper
 {

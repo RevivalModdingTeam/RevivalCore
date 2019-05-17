@@ -1,6 +1,9 @@
 package com.revivalmodding.revivalcore.network.packets;
 
+import java.util.UUID;
+
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,8 +12,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import java.util.UUID;
 
 public class PacketCapSync implements IMessage {
 

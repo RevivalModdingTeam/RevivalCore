@@ -1,6 +1,9 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
+import org.lwjgl.input.Keyboard;
+
 import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -8,7 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientEventHandler {

@@ -1,11 +1,11 @@
 package com.revivalmodding.revivalcore.core.registry;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.recipes.IRVRecipeRegistry;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class SuitMakerRecipeRegistry implements IRVRecipeRegistry<RVRecipe> {
     public static SuitMakerRecipeRegistry instance;

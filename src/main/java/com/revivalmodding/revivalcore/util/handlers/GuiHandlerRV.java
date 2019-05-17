@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.util.handlers;
 import com.revivalmodding.revivalcore.core.client.gui.GUISuitMaker;
 import com.revivalmodding.revivalcore.core.common.container.ContainerSuitMaker;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

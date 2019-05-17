@@ -1,5 +1,9 @@
 package com.revivalmodding.revivalcore.core.common.tileentity;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
@@ -14,9 +18,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSystem<RVRecipe>, ITickable
 {

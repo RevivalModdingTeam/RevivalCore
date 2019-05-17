@@ -1,14 +1,15 @@
 package com.revivalmodding.revivalcore.core.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RVRecipe
 {

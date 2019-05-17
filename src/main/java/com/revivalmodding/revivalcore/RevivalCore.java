@@ -1,5 +1,7 @@
 package com.revivalmodding.revivalcore;
 
+import org.apache.logging.log4j.Logger;
+
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.registry.Registries;
@@ -13,6 +15,7 @@ import com.revivalmodding.revivalcore.proxy.IProxy;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalmodding.revivalcore.util.handlers.client.ClientEventHandler;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -24,7 +27,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION, updateJSON = RevivalCore.UPDATEURL)
 public class RevivalCore {

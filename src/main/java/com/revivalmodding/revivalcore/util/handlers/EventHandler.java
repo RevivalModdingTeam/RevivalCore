@@ -2,7 +2,6 @@ package com.revivalmodding.revivalcore.util.handlers;
 
 import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
-import com.revivalmodding.revivalcore.core.registry.SuitRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;

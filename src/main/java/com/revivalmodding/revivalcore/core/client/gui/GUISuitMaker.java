@@ -5,6 +5,7 @@ import com.revivalmodding.revivalcore.core.common.container.ContainerSuitMaker;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;

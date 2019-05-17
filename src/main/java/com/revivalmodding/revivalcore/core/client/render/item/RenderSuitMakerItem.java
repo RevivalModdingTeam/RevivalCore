@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.core.client.render.item;
 
 import com.revivalmodding.revivalcore.core.client.models.ModelSuitMaker;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;

@@ -1,13 +1,14 @@
 package com.revivalmodding.revivalcore.core.common.tileentity;
 
+import java.util.Set;
+
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.recipes.RVIngredient;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.Set;
 
 /**
  * @author Toma1O6

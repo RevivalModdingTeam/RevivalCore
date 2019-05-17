@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core.common.container;
 
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
