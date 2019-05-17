@@ -149,6 +149,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         compound.setBoolean("isProcessing", isProcessing);
         compound.setInteger("processTime", processTime);
         compound.setString("currentRecipe", currRecipe == null ? "" : currRecipe.getName());
+        this.sync(this, pos);
         return compound;
     }
 
@@ -160,14 +161,23 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
+        String recipe = compound.hasKey("currentRecipe") ? compound.getString("currentRecipe") : "";
         setProcessing(compound.getBoolean("isProcessing"));
         setProcessTimer(compound.getInteger("processTime"));
-        setRecipe(RVRecipe.getRecipeFromName(compound.getString("currentRecipe")));
+        System.out.println(recipe);
+        if(currRecipe == null)
+        	currRecipe = recipe == null || recipe.isEmpty() ? null : RVRecipe.getRecipeFromName(recipe);
+        System.out.println(currRecipe);
+        this.sync(this, pos);
     }
 
     @Override
     public void update()
     {
+    	if(this.getRecipe() == null) {
+    		return;
+    	}
+    	
         if(this.isProcessing())
         {
         	if(world.isRemote)

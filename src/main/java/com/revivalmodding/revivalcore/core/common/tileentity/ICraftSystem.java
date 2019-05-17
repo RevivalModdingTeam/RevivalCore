@@ -58,8 +58,6 @@ public interface ICraftSystem<R extends RVRecipe>
                 MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.constructResult()));
                 this.consumeIngredients(recipe, te);
         	}
-        	
-        	te.writeToNBT(te.getTileData());
         }
     }
 
