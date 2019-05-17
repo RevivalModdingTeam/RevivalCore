@@ -32,14 +32,13 @@ public class EventHandler
             }
         }
     }
-    
-    //TODO: optimize
+
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent e) {
     	for(EntityPlayer player : e.world.playerEntities) {
     		AbstractSuit suit = AbstractSuit.getSuit(player);
     		if(suit != null)
-    			suit.tick(player);
+    			suit.handleEffects(player);
     	}
     }
 }

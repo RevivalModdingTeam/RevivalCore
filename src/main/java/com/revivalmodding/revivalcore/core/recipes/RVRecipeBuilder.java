@@ -1,6 +1,8 @@
 package com.revivalmodding.revivalcore.core.recipes;
 
 import com.google.common.base.Preconditions;
+import com.revivalmodding.revivalcore.util.helper.IBuilder;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,11 +10,12 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RVRecipeBuilder {
+public class RVRecipeBuilder implements IBuilder<RVRecipe> {
     private ItemStack result;
     private RVIngredient[] ingredients = new RVIngredient[0];
     private String name = "";
     private List<RVIngredient> recList = new ArrayList<RVIngredient>();
+    private int craftTime;
 
     private RVRecipeBuilder() {
     }
@@ -47,13 +50,21 @@ public class RVRecipeBuilder {
         recList.add(new RVIngredient(slotIndex, ing));
         return this;
     }
+    
+    public RVRecipeBuilder craftingTime(int time) {
+    	craftTime = time;
+    	return this;
+    }
 
+    @Override
     public RVRecipe build() throws IllegalArgumentException {
-        result = Preconditions.checkNotNull(result);
-        if (recList.isEmpty()) throw new IllegalArgumentException("Ingredient list cannot be empty!");
-        if (name.isEmpty()) throw new IllegalArgumentException("Name cannot be empty!");
+        checkNotNull(result);
+        checkBoolean(recList.isEmpty(), false);
+        checkBoolean(name.isEmpty(), false);
+        checkBoolean(result.isEmpty(), false);
+        checkInt(craftTime, 20, 500);
         ingredients = recList.toArray(new RVIngredient[0]);
 
-        return new RVRecipe(name, result, ingredients);
+        return new RVRecipe(name, result, craftTime, ingredients);
     }
 }

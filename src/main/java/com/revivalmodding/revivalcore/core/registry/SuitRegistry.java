@@ -38,15 +38,13 @@ public class SuitRegistry
 	
 	private static boolean isSuitValid(AbstractSuit suit)
 	{
-		boolean b = true;
 		for(int i = 0; i < suit.getSet().length; ++i) {
 			ItemSuit suitItem = suit.getSet()[i];
 			int eqSlotIndex = EntityEquipmentSlot.values().length - i - 1;
 			if(!suitItem.getEquipmentSlot().equals(EntityEquipmentSlot.values()[eqSlotIndex])) {
-				b = !b;
-				break;
+				return false;
 			}
 		}
-		return b;
+		return true;
 	}
 }

@@ -15,14 +15,16 @@ public class RVRecipe
 	private final RVIngredient[] ingredients;
 	private final ItemStack result;
 	private final String name;
+	private final int craftTime;
 	
-	protected RVRecipe(String name, ItemStack result, RVIngredient... ingredients) throws IllegalArgumentException
+	protected RVRecipe(String name, ItemStack result, int craftTime, RVIngredient... ingredients) throws IllegalArgumentException
 	{
 		this.result = result;
 		this.ingredients = ingredients;
 		if(name.isEmpty())
 			throw new IllegalArgumentException("Recipe name cannot be empty!");
 		this.name = name;
+		this.craftTime = craftTime < 0 ? Math.abs(craftTime) : craftTime;
 	}
 	
 	public RVIngredient[] getIngredients()
@@ -77,6 +79,13 @@ public class RVRecipe
 		return new ItemStack(result.getItem(), result.getCount());
 	}
 	
+	public int getCraftTime()
+	{
+		return craftTime;
+	}
+	
+	/** DO NOT USE, BROKEN **/
+	@Deprecated
 	public static NBTTagCompound writeRecipeToNBT(NBTTagCompound compound, RVRecipe recipe)
 	{
 		if(recipe != null)
@@ -85,6 +94,7 @@ public class RVRecipe
 			compound.setString("recipeName", recipe.name);
 			compound.setInteger("resultID", Item.getIdFromItem(recipe.result.getItem()));
 			compound.setInteger("resultCount", recipe.constructResult().getCount());
+			compound.setInteger("craftTime", recipe.craftTime);
 			for(RVIngredient i : recipe.getIngredients())
 			{
 				list.appendTag(i.writeIngredientNBT(compound, i));
@@ -95,9 +105,11 @@ public class RVRecipe
 		return compound;
 	}
 	
+	/** DO NOT USE, BROKEN **/
+	@Deprecated
 	public static RVRecipe readRecipeFromNBT(NBTTagCompound compound)
 	{
-		if(compound.hasKey("resultID") && compound.hasKey("resultCount") && compound.hasKey("ingredients") && compound.hasKey("recipeName"))
+		if(compound.hasKey("resultID") && compound.hasKey("resultCount") && compound.hasKey("ingredients") && compound.hasKey("recipeName") && compound.hasKey("craftTime"))
 		{
 			List<RVIngredient> ingredients = new ArrayList<RVIngredient>();
 			String name = compound.getString("recipeName");
@@ -109,11 +121,12 @@ public class RVRecipe
 				ingredients.add(RVIngredient.readIngredientFromNBT(ingC));
 			}
 			RVIngredient[] ingArr = ingredients.toArray(new RVIngredient[0]);
-			return new RVRecipe(name, result, ingArr);
+			int craftTime = compound.getInteger("craftTime");
+			return new RVRecipe(name, result, craftTime, ingArr);
 		}
 		else {
 			RevivalCore.logger.error("Attempted to load recipe from NBT, but the required NBT tag doesn't exist!");
-			return new RVRecipe("null", ItemStack.EMPTY, new RVIngredient[0]);
+			return new RVRecipe("null", ItemStack.EMPTY, 240, new RVIngredient[0]);
 		}
 	}
 }

@@ -10,20 +10,20 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 	
 	RVRecipe getRecipe();
 	
-	void setProcessTimer(short timer);
+	void setProcessTimer(int timer);
 	
 	void process();
 	
 	void resetProcessTimer();
 	
-	short getProcessTimer();
+	int getProcessTimer();
 	
 	boolean isProcessing();
 	
 	// For gui rendering
 	default float getProgressionStage()
 	{
-		float f = this.getProcessTimer() / 250f;
+		float f = this.getProcessTimer() / this.getRecipe().getCraftTime();
 		return f;
 	}
 	

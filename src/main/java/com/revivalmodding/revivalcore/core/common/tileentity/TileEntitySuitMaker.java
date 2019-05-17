@@ -23,7 +23,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public static final TextComponentTranslation NAME = new TextComponentTranslation("container.suitMaker");
     protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(21, ItemStack.EMPTY);
     private boolean isProcessing;
-    private short processTime = 0;
+    private int processTime = 0;
     @Nullable
     public RVRecipe currRecipe = null;
 
@@ -105,7 +105,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
 
     @Override
-    public short getProcessTimer()
+    public int getProcessTimer()
     {
         return processTime;
     }
@@ -135,7 +135,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
 
     @Override
-    public void setProcessTimer(short timer)
+    public void setProcessTimer(int timer)
     {
         this.processTime = timer;
     }
@@ -154,7 +154,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         if(this.getRecipe() != null)
         {
             compound.setBoolean("isProcessing", isProcessing());
-            compound.setShort("processTime", getProcessTimer());
+            compound.setInteger("processTime", getProcessTimer());
             //compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
         }
         return compound;
@@ -168,8 +168,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     	if(compound.hasKey("recipe"))
     	{
     		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
-    		setProcessTimer(compound.hasKey("processTime") ? compound.getShort("processTime") : 0);
-    		System.out.println(compound.hasKey("recipe"));
+    		setProcessTimer(compound.hasKey("processTime") ? compound.getInteger("processTime") : 0);
     		//setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
     	}
     }
@@ -184,7 +183,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         	
             this.process();
 
-            if(this.getProcessTimer() >= 250)
+            if(this.getProcessTimer() >= this.getRecipe().getCraftTime())
             {
                 this.onProcessFinished(this);
             }

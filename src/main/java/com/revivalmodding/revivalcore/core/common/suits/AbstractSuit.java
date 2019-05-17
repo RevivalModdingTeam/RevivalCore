@@ -57,12 +57,12 @@ public abstract class AbstractSuit
 	
 	public abstract ItemSuit getBoots();
 	
+	/**
+	 * Called every tick on both sides
+	 * <u>but only when is being currently worn by player</u>
+	 * @param player
+	 */
 	public abstract void handleEffects(EntityPlayer player);
-	
-	public final void tick(EntityPlayer player)
-	{
-		this.handleEffects(player);
-	}
 	
 	public final ItemSuit[] getSet()
 	{
