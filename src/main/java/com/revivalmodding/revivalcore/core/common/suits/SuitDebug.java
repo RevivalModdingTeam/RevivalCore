@@ -1,10 +1,7 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 
 public class SuitDebug extends AbstractSuit
 {
@@ -42,10 +39,6 @@ public class SuitDebug extends AbstractSuit
 	{
 		if(!isSuitComplete(player)) {
 			return;
-		}
-		
-		if(!player.world.isRemote) {
-			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 5, 10, false, false));
 		}
 	}
 }
