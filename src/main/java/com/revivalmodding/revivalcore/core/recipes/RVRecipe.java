@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -83,6 +84,17 @@ public class RVRecipe
 	public int getCraftTime()
 	{
 		return craftTime;
+	}
+	
+	public static RVRecipe getRecipeFromName(String name)
+	{
+		for(RVRecipe recipe : SuitMakerRecipeRegistry.RECIPES) {
+			if(name.equalsIgnoreCase(recipe.getName())) {
+				return recipe;
+			}
+		}
+		
+		return null;
 	}
 	
 	/** DO NOT USE, BROKEN **/

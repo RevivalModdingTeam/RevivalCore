@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
+import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTE;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -151,14 +152,9 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        // TODO: Fix - [!!!net.minecraft.nbt.NBTTagCompound@6f68d53b=>java.lang.StackOverflowError:null!!!]
-        /*if(this.getRecipe() != null)
-        {
-            compound.setBoolean("isProcessing", isProcessing());
-            compound.setInteger("processTime", getProcessTimer());
-            compound.setTag("recipe", RVRecipe.writeRecipeToNBT(compound, getRecipe()));
-            System.out.println(compound.getTag("recipe"));
-        }*/
+        compound.setBoolean("isProcessing", isProcessing);
+        compound.setInteger("processTime", processTime);
+        compound.setString("currentRecipe", currRecipe == null ? "" : currRecipe.getName());
         return compound;
     }
 
@@ -166,15 +162,10 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
-    	if(compound.hasKey("recipe"))
-    	{
-    		System.out.println("here");
-    		setProcessing(compound.hasKey("isProcessing") ? compound.getBoolean("isProcessing") : false);
-    		setProcessTimer(compound.hasKey("processTime") ? compound.getInteger("processTime") : 0);
-    		setRecipe(compound.hasKey("recipe") ? RVRecipe.readRecipeFromNBT(compound) : null);
-    		
-            System.out.println(getRecipe());
-    	}
+        setProcessing(compound.getBoolean("isProcessing"));
+        setProcessTimer(compound.getInteger("processTime"));
+        setRecipe(RVRecipe.getRecipeFromName(compound.getString("currentRecipe")));
+        //PacketSyncProcessTE.sync(this, pos);
     }
 
     @Override

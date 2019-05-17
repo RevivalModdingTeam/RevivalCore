@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.network;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
+import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTE;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -14,5 +15,6 @@ public class NetworkManager {
 
     public static void init() {
         INSTANCE.registerMessage(PacketCapSync.Handler.class, PacketCapSync.class, id++, Side.CLIENT);
+        INSTANCE.registerMessage(PacketSyncProcessTE.Handler.class, PacketSyncProcessTE.class, id++, Side.CLIENT);
     }
 }
