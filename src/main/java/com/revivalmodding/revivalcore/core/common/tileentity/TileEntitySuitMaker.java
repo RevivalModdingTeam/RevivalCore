@@ -1,14 +1,10 @@
 package com.revivalmodding.revivalcore.core.common.tileentity;
 
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
+import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTE;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -17,8 +13,13 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSystem<RVRecipe>, ITickable
 {
@@ -90,6 +91,11 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+    }
+
+    @Override
     public boolean canRenderBreaking() {
         return true;
     }
@@ -158,6 +164,10 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         return compound;
     }
 
+    public static void sync(IProcessCraftSystem te, BlockPos pos, World world) {
+        NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTE(te, pos, world));
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound compound)
     {
@@ -165,7 +175,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         setProcessing(compound.getBoolean("isProcessing"));
         setProcessTimer(compound.getInteger("processTime"));
         setRecipe(RVRecipe.getRecipeFromName(compound.getString("currentRecipe")));
-        //PacketSyncProcessTE.sync(this, pos);
     }
 
     @Override
@@ -181,6 +190,10 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
             if(this.getProcessTimer() >= this.getRecipe().getCraftTime())
             {
                 this.onProcessFinished(this);
+            }
+
+            if(this.isInvalid()) {
+                sync(this, pos, world);
             }
         }
     }
