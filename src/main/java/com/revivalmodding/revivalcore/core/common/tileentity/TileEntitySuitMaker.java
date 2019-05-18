@@ -2,8 +2,6 @@ package com.revivalmodding.revivalcore.core.common.tileentity;
 
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
-import com.revivalmodding.revivalcore.network.NetworkManager;
-import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTE;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -13,7 +11,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -148,13 +145,9 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         compound.setBoolean("isProcessing", isProcessing);
         compound.setInteger("processTime", processTime);
         compound.setString("currentRecipe", currRecipe.getName());
-        this.sync(this, pos);
         return compound;
     }
 
-    public static void sync(IProcessCraftSystem te, BlockPos pos) {
-        NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTE(te, pos));
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound compound)
@@ -166,8 +159,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         System.out.println(recipe);
         if(currRecipe == null)
         	currRecipe = recipe == null || recipe.isEmpty() ? null : RVRecipe.getRecipeFromName(recipe);
-        System.out.println(currRecipe);
-        this.sync(this, pos);
     }
 
     @Override
@@ -187,10 +178,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
             if(this.getProcessTimer() >= this.getRecipe().getCraftTime())
             {
                 this.onProcessFinished(this);
-            }
-
-            if(this.isInvalid()) {
-                sync(this, pos);
             }
         }
     }

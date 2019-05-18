@@ -1,16 +1,11 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
-import org.lwjgl.input.Keyboard;
-
 import com.revivalmodding.revivalcore.RevivalCore;
-
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientEventHandler {
@@ -29,15 +24,5 @@ public class ClientEventHandler {
         ClientRegistry.registerKeyBinding(POWER2);
         POWER3 = new KeyBinding(RevivalCore.MODID + ".keybinds.power3", Keyboard.KEY_C, RevivalCore.NAME);
         ClientRegistry.registerKeyBinding(POWER3);
-    }
-
-    @SubscribeEvent
-    public static void keyPressed(InputEvent.KeyInputEvent e) {}
-
-    @SubscribeEvent
-    public static void onModelBake(ModelBakeEvent e) {
-      /*  Item item = Item.getItemFromBlock(CoreBlocks.SUIT_MAKER);
-        ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName(), "inventory");
-        e.getModelRegistry().putObject(mrl, new BakedModelSuitMaker());*/
     }
 }
