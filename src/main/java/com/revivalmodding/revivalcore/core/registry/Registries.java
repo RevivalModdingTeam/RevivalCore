@@ -1,12 +1,17 @@
 package com.revivalmodding.revivalcore.core.registry;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
+import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 
@@ -29,6 +34,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class Registries {
+	
+	public static final HashSet<AbstractSuit> SUITS = new HashSet<>();
+	public static final HashSet<RVRecipe> SUIT_RECIPES = new HashSet<>();
 
     @EventBusSubscriber
     public static class Registry {
@@ -86,5 +94,102 @@ public class Registries {
         public static void bindEntityTEISR() {
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySuitMaker.class, new RenderSuitMaker());
         }
+    }
+    
+    public static final class SuitRegistry implements IRegistry<AbstractSuit>
+    {
+    	private static final SuitRegistry INSTANCE = new SuitRegistry();
+    	
+    	public static SuitRegistry instance()
+    	{
+    		return INSTANCE;
+    	}
+    	
+    	@Override
+    	public HashSet<AbstractSuit> getRegistry()
+    	{
+    		return Registries.SUITS;
+    	}
+    	
+    	@Override
+    	public void register(AbstractSuit toRegister) 
+    	{
+    		if(!containsObject(toRegister)) {
+    			this.getRegistry().add(toRegister);
+    		}
+    	}
+    	
+    	@Override
+    	public void registerAll(AbstractSuit[] toRegister)
+    	{
+    		for(AbstractSuit suit : toRegister) {
+    			register(suit);
+    		}
+    	}
+    	
+    	@Override
+    	public void registerAll(Collection<AbstractSuit> toRegister)
+    	{
+    		registerAll(toRegister);
+    	}
+    	
+    	@Override
+    	public boolean containsObject(AbstractSuit object)
+    	{
+    		for(AbstractSuit suit : this.getRegistry()) {
+    			if(object.getName().equalsIgnoreCase(suit.getName())) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    }
+    
+    public static final class SuitMakerRecipeRegistry implements IRegistry<RVRecipe>
+    {
+    	private static final SuitMakerRecipeRegistry INSTANCE = new SuitMakerRecipeRegistry();
+    	
+    	public static SuitMakerRecipeRegistry instance() {
+    		return INSTANCE;
+    	}
+    	
+		@Override
+		public HashSet<RVRecipe> getRegistry() {
+			return Registries.SUIT_RECIPES;
+		}
+
+		@Override
+		public void register(RVRecipe toRegister) {
+			if(!containsObject(toRegister)) {
+				this.getRegistry().add(toRegister);
+			}
+		}
+
+		@Override
+		public void registerAll(RVRecipe[] toRegister) {
+			for(RVRecipe recipe : this.getRegistry()) {
+				this.register(recipe);
+			}
+			
+		}
+
+		@Override
+		public void registerAll(Collection<RVRecipe> toRegister) {
+			for(RVRecipe recipe : this.getRegistry()) {
+				this.register(recipe);
+			}
+			
+		}
+
+		@Override
+		public boolean containsObject(RVRecipe object) {
+			for(RVRecipe recipe : this.getRegistry()) {
+				if(object.getName().equalsIgnoreCase(recipe.getName())) {
+					return true;
+				}
+			}
+			return false;
+		}
+    	
     }
 }

@@ -1,6 +1,9 @@
 package com.revivalmodding.revivalcore.core.common.tileentity;
 
+import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
+
+import net.minecraftforge.common.MinecraftForge;
 
 public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 {
@@ -38,5 +41,7 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 		this.setProcessing(false);
 		this.resetProcessTimer();
 		te.addItemStackToInventory(getOutput(), this.getRecipe().constructResult());
+		RVItemCraftedEvent event = new RVItemCraftedEvent(te.getWorld(), this.getRecipe().constructResult(), te.getPos());
+		MinecraftForge.EVENT_BUS.post(event);
 	}
 }

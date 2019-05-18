@@ -1,15 +1,18 @@
 package com.revivalmodding.revivalcore.core.recipes;
 
-import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
+import java.util.ArrayList;
+
+import com.revivalmodding.revivalcore.core.registry.IRegistry;
+import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
+import com.revivalmodding.revivalcore.core.registry.Registries;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.ArrayList;
-
-public class RVRecipe
+public class RVRecipe implements IRegistryEntry
 {
 	private final RVIngredient[] ingredients;
 	private final ItemStack result;
@@ -34,11 +37,6 @@ public class RVRecipe
 	public ItemStack getResult()
 	{
 		return this.result;
-	}
-
-	public String getName()
-	{
-		return name;
 	}
 
 	public boolean containsIngredient(ItemStack stack)
@@ -82,10 +80,22 @@ public class RVRecipe
 	{
 		return craftTime;
 	}
+	
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+	
+	@Override
+	public IRegistry getRegistry()
+	{
+		return Registries.SuitMakerRecipeRegistry.instance();
+	}
 
 	public static RVRecipe getRecipeFromName(String name)
 	{
-		for(RVRecipe recipe : SuitMakerRecipeRegistry.RECIPES) {
+		for(RVRecipe recipe : Registries.SUIT_RECIPES) {
 			if(name.equalsIgnoreCase(recipe.getName())) {
 				return recipe;
 			}

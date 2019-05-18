@@ -5,6 +5,7 @@ import java.awt.Color;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class SuitDebug extends AbstractSuit
 {
