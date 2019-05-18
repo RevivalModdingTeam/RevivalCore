@@ -1,11 +1,8 @@
 package com.revivalmodding.revivalcore.meta.capability;
 
-import javax.annotation.Nonnull;
-
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +15,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by Josia50
  * on 10/04/2019.
@@ -28,6 +27,7 @@ public class CapabilityMeta implements IMetaCap {
     private EntityPlayer player;
     private int metapowerid = -1;
     private double exhaustionlevel = 0.0;
+    private boolean isPowerEnabled = false;
 
     public CapabilityMeta() {
 
@@ -78,6 +78,16 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
+    public void setPowerEnabled(boolean enable) {
+        this.isPowerEnabled = enable;
+    }
+
+    @Override
+    public boolean isPowerEnabled() {
+        return this.isPowerEnabled;
+    }
+
+    @Override
     public void clear() {
         setMetaPower(-1);
     }
@@ -87,6 +97,7 @@ public class CapabilityMeta implements IMetaCap {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("power_id", metapowerid);
         nbt.setDouble("exhaustion", exhaustionlevel);
+        nbt.setBoolean("enabled", isPowerEnabled);
         return nbt;
     }
 
@@ -94,6 +105,7 @@ public class CapabilityMeta implements IMetaCap {
     public void deserializeNBT(NBTTagCompound nbt) {
         metapowerid = nbt.getInteger("power_id");
         exhaustionlevel = nbt.getDouble("exhaustion");
+        isPowerEnabled = nbt.getBoolean("enabled");
     }
 
 

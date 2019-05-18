@@ -19,6 +19,10 @@ public interface IMetaCap extends INBTSerializable<NBTTagCompound> {
 
     double getexhaustionLevel();
 
+    void setPowerEnabled(boolean enable);
+
+    boolean isPowerEnabled();
+
     void clear();
 
 }
