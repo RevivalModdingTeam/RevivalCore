@@ -6,7 +6,6 @@ import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTileEntity;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -69,6 +68,6 @@ public interface IProcessCraftSystem<R extends RVRecipe> extends ICraftSystem<R>
 	}
 	
 	default void sync(TileEntity te) {
-		NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTileEntity(te.getPos(), this.isProcessing(), this.getProcessTimer(), this.getRecipe()));
+		NetworkManager.INSTANCE.sendToAll(new PacketSyncProcessTileEntity(te.getPos(), this.isProcessing(), this.getProcessTimer()));
 	}
 }
