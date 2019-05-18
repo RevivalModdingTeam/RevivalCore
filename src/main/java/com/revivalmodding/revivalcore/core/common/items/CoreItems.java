@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.core.common.items;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
+import com.revivalmodding.revivalcore.util.RCMods;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -30,7 +31,7 @@ public class CoreItems {
     public static void init() {
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, false), true);
         suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
-        if (Loader.isModLoaded("shr")) {
+        if (Loader.isModLoaded(RCMods.SPEEDSTERREBORN)) {
             ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
             suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD));
             suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST));
