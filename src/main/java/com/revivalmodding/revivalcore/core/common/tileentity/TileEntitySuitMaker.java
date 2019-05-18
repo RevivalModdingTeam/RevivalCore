@@ -16,7 +16,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -148,7 +147,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         super.writeToNBT(compound);
         compound.setBoolean("isProcessing", isProcessing);
         compound.setInteger("processTime", processTime);
-        compound.setString("currentRecipe", currRecipe == null ? "" : currRecipe.getName());
+        compound.setString("currentRecipe", currRecipe.getName());
         this.sync(this, pos);
         return compound;
     }

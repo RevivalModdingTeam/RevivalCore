@@ -1,7 +1,5 @@
 package com.revivalmodding.revivalcore;
 
-import org.apache.logging.log4j.Logger;
-
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.registry.Registries;
@@ -15,7 +13,6 @@ import com.revivalmodding.revivalcore.proxy.IProxy;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalmodding.revivalcore.util.handlers.client.ClientEventHandler;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -27,14 +24,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION, updateJSON = RevivalCore.UPDATEURL)
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
-    public static final String VERSION = "0.1.3";
-    public static final String UPDATEURL = "https://raw.githubusercontent.com/revivalmodding/RevivalCore/master/update.json";
-    public static boolean run = false;
+    public static final String VERSION = "0.1.4";
+    public static final String UPDATEURL = "https://raw.githubusercontent.com/RevivalModdingTeam/RevivalModding-ModBugs/master/updatecore.json";
 
     @Instance
     public static RevivalCore instance;
