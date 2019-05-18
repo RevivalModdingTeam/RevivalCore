@@ -1,12 +1,8 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -20,6 +16,9 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mod.EventBusSubscriber
 public class CoreItems {
 
@@ -29,13 +28,10 @@ public class CoreItems {
     public static ItemSuit suit_head, suit_body, suit_legs, suit_boots;
 
     public static void init() {
-
-
-
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, false), true);
         suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
         if (Loader.isModLoaded("shr")) {
-            ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", "idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
+            ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
             suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD));
             suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST));
             suit_legs = registerItem(new ItemSuit("suit_legs", debugMat, 2, EntityEquipmentSlot.LEGS));
