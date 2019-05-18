@@ -1,16 +1,16 @@
 package com.revivalmodding.revivalcore.util.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.util.RCTeam;
-
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class ModHelper {
@@ -56,7 +56,7 @@ public class ModHelper {
 
     @SubscribeEvent
     public static void PreventNonBetaTester(PlayerEvent.PlayerLoggedInEvent e) {
-        if(!ModHelper.betaTesterCheck(e.player.getUniqueID().toString()) && !ModHelper.getIsDev()) {
+        if(!betaTesterCheck(e.player.getUniqueID().toString()) && !getIsDev() && RevivalCore.check) {
             throw new IllegalStateException("You don't have acces to this!");
         }
     }

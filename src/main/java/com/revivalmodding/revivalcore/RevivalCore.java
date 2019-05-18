@@ -33,9 +33,11 @@ public class RevivalCore {
     public static final String VERSION = "0.1.4";
     public static final String UPDATEURL = "https://raw.githubusercontent.com/RevivalModdingTeam/RevivalModding-ModBugs/master/updatecore.json";
 
+
     @Instance
     public static RevivalCore instance;
     public static final CreativeTabs coretab = new CoreTab("coretab");
+    public static final boolean check = true;
     public static Logger logger;
 
     @SidedProxy(clientSide = "com.revivalmodding.revivalcore.proxy.ClientProxy", serverSide = "com.revivalmodding.revivalcore.proxy.ServerProxy")
