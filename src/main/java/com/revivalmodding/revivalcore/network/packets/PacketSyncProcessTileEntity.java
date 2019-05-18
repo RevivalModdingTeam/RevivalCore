@@ -1,15 +1,11 @@
 package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
-import com.revivalmodding.revivalcore.core.common.tileentity.TileEntityRC;
-import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -19,15 +15,13 @@ public class PacketSyncProcessTileEntity implements IMessage
 	private BlockPos pos;
 	private boolean processing;
 	private int timeProcessed;
-	private RVRecipe recipe;
 	
 	public PacketSyncProcessTileEntity() {}
 	
-	public PacketSyncProcessTileEntity(BlockPos tePos, boolean processin, int time, RVRecipe recipe) {
+	public PacketSyncProcessTileEntity(BlockPos tePos, boolean processin, int time) {
 		this.pos = tePos;
 		this.processing = processin;
 		this.timeProcessed = time;
-		this.recipe = recipe;
 	}
 	
 	@Override
@@ -37,7 +31,6 @@ public class PacketSyncProcessTileEntity implements IMessage
 		buf.writeInt(pos.getZ());
 		buf.writeBoolean(processing);
 		buf.writeInt(timeProcessed);
-		ByteBufUtils.writeUTF8String(buf, recipe.getName());
 	}
 	
 	@Override
@@ -45,7 +38,6 @@ public class PacketSyncProcessTileEntity implements IMessage
 		pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
 		processing = buf.readBoolean();
 		timeProcessed = buf.readInt();
-		recipe = RVRecipe.getRecipeFromName(ByteBufUtils.readUTF8String(buf));
 	}
 	
 	public static class Handler implements IMessageHandler<PacketSyncProcessTileEntity, IMessage>
@@ -56,7 +48,6 @@ public class PacketSyncProcessTileEntity implements IMessage
 				IProcessCraftSystem ipcs = (IProcessCraftSystem)te;
 				ipcs.setProcessing(p.processing);
 				ipcs.setProcessTimer(p.timeProcessed);
-				ipcs.setRecipe(p.recipe);
 			}
 		}
 		
