@@ -55,7 +55,6 @@ public interface ICraftSystem<R extends RVRecipe>
         	else
         	{
         		te.addItemStackToInventory(this.getOutput(), recipe.constructResult());
-                MinecraftForge.EVENT_BUS.post(new RVItemCraftedEvent(te.getWorld(), recipe.constructResult()));
                 this.consumeIngredients(recipe, te);
         	}
         }

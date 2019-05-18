@@ -4,14 +4,16 @@ import java.awt.Color;
 
 import javax.annotation.Nullable;
 
-import com.revivalmodding.revivalcore.core.registry.SuitRegistry;
+import com.revivalmodding.revivalcore.core.registry.IRegistry;
+import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
+import com.revivalmodding.revivalcore.core.registry.Registries;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class AbstractSuit
+public abstract class AbstractSuit implements IRegistryEntry
 {
 	private final String name;
 	private final Color color;
@@ -38,7 +40,7 @@ public abstract class AbstractSuit
     			return null;
     		}
     	}
-    	for(AbstractSuit suit : SuitRegistry.SUITS) {
+    	for(AbstractSuit suit : Registries.SUITS) {
     		if(suit.isSuitComplete(player)) {
     			return suit;
     		}
@@ -84,8 +86,15 @@ public abstract class AbstractSuit
 		return color;
 	}
 	
-	public final String getSuitName()
+	@Override
+	public String getName()
 	{
 		return name;
+	}
+	
+	@Override
+	public IRegistry getRegistry()
+	{
+		return Registries.SuitRegistry.instance();
 	}
 }

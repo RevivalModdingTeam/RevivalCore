@@ -1,8 +1,13 @@
 package com.revivalmodding.revivalcore.core.common.tileentity;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
-import com.revivalmodding.revivalcore.core.registry.SuitMakerRecipeRegistry;
+import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.util.helper.RVHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -13,9 +18,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSystem<RVRecipe>, ITickable
 {
@@ -59,7 +61,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     @Override
     public Set<RVRecipe> getRegistry()
     {
-        return SuitMakerRecipeRegistry.RECIPES;
+        return Registries.SUIT_RECIPES;
     }
 
     @Override
@@ -144,7 +146,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         super.writeToNBT(compound);
         compound.setBoolean("isProcessing", isProcessing);
         compound.setInteger("processTime", processTime);
-        compound.setString("currentRecipe", currRecipe.getName());
+        compound.setString("currentRecipe", currRecipe.getName() == null ? "" : currRecipe.getName());
         return compound;
     }
 
@@ -156,7 +158,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         String recipe = compound.hasKey("currentRecipe") ? compound.getString("currentRecipe") : "";
         setProcessing(compound.getBoolean("isProcessing"));
         setProcessTimer(compound.getInteger("processTime"));
-        System.out.println(recipe);
         if(currRecipe == null)
         	currRecipe = recipe == null || recipe.isEmpty() ? null : RVRecipe.getRecipeFromName(recipe);
     }
