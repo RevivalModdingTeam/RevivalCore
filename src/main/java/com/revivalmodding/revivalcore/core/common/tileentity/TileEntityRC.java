@@ -112,6 +112,10 @@ public abstract class TileEntityRC extends TileEntity implements IInventory
     		stack.setCount(this.getInventoryStackLimit());
     	}
     }
+    
+    public boolean hasStackInSlot(ItemStack stack, int index) {
+    	return ItemStack.areItemsEqual(stack, this.getStackInSlot(index));
+    }
 
     @Override
     public int getInventoryStackLimit()

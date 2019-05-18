@@ -50,7 +50,6 @@ public interface ICraftSystem<R extends RVRecipe>
         	{
         		((IProcessCraftSystem)te).setProcessing(true);
         		((IProcessCraftSystem)te).setRecipe(recipe);
-        		this.consumeIngredients(recipe, te);
         	}
         	else
         	{

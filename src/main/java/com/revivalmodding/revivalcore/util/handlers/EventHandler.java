@@ -5,11 +5,13 @@ import java.util.Random;
 import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
+import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
@@ -27,14 +29,17 @@ public class EventHandler
     @SubscribeEvent
     public static void PlayerJoinWorld(PlayerEvent.PlayerLoggedInEvent playerEvent) {
         EntityPlayer player = playerEvent.player;
-        if (!player.world.isRemote && RCoreConfig.revivalCore.updatechecker) {
-            ForgeVersion.CheckResult version = ForgeVersion.getResult(Loader.instance().activeModContainer());
-            if (version.status.equals(ForgeVersion.Status.OUTDATED)) {
-                TextComponentString msg = new TextComponentString(TextFormatting.BLUE + "[RevivalCore] : New Update Available!");
-                msg.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://minecraft.curseforge.com/projects/revivalcore"));
-                msg.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Open Website")));
-                player.sendMessage(msg);
-            }
+        if (!player.world.isRemote) {
+        	// update checker
+        	if(RCoreConfig.revivalCore.updatechecker) {
+                ForgeVersion.CheckResult version = ForgeVersion.getResult(Loader.instance().activeModContainer());
+                if (version.status.equals(ForgeVersion.Status.OUTDATED)) {
+                    TextComponentString msg = new TextComponentString(TextFormatting.BLUE + "[RevivalCore] : New Update Available!");
+                    msg.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://minecraft.curseforge.com/projects/revivalcore"));
+                    msg.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Open Website")));
+                    player.sendMessage(msg);
+                }
+        	}
         }
     }
 

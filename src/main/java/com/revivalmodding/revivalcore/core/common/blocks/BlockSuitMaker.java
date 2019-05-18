@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
@@ -50,6 +51,8 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
         if(!playerIn.isSneaking() && !playerIn.world.isRemote)
         {
         	playerIn.openGui(RevivalCore.instance, GuiHandlerRV.GUI_SUITMAKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        	TileEntity te = worldIn.getTileEntity(pos);
+        	((IProcessCraftSystem)te).sync(te);
         }
         return true;
     }

@@ -78,7 +78,7 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
 
     @Override
     public void onLoad() {
-        super.onLoad();
+    	slotChanged(this);
     }
 
     @Override
@@ -113,7 +113,8 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     @Override
     public void process()
     {
-        ++this.processTime;
+    	if(shouldProcess(this, currRecipe))
+    		++this.processTime;
     }
 
     @Override
@@ -146,7 +147,6 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
         super.writeToNBT(compound);
         compound.setBoolean("isProcessing", isProcessing);
         compound.setInteger("processTime", processTime);
-        compound.setString("currentRecipe", currRecipe.getName() == null ? "" : currRecipe.getName());
         return compound;
     }
 
@@ -155,11 +155,8 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
-        String recipe = compound.hasKey("currentRecipe") ? compound.getString("currentRecipe") : "";
         setProcessing(compound.getBoolean("isProcessing"));
         setProcessTimer(compound.getInteger("processTime"));
-        if(currRecipe == null)
-        	currRecipe = recipe == null || recipe.isEmpty() ? null : RVRecipe.getRecipeFromName(recipe);
     }
 
     @Override
@@ -171,8 +168,9 @@ public class TileEntitySuitMaker extends TileEntityRC implements IProcessCraftSy
     	
         if(this.isProcessing())
         {
-        	if(world.isRemote)
+        	if(world.isRemote) {
         		RVHelper.spawnParticles(world, EnumParticleTypes.SMOKE_NORMAL, pos, 0.15, 4);
+        	}
         	
             this.process();
 
