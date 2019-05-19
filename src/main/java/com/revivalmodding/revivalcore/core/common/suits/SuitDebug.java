@@ -1,11 +1,9 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
-import java.awt.Color;
-
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.registries.IForgeRegistry;
+
+import java.awt.*;
 
 public class SuitDebug extends AbstractSuit
 {
