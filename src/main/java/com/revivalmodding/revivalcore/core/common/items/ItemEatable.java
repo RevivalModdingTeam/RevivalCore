@@ -37,7 +37,7 @@ public class ItemEatable extends Item {
                 if (getStackTag(stack) == null || !getStackTag(stack).hasKey("empty")) {
                     return 0F;
                 }
-                return getEmpty(stack);
+                return getEmpty(stack); // TODO FIX SOON
             });
     }
 
