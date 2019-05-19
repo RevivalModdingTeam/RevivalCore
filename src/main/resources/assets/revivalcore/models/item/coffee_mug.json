@@ -185,5 +185,19 @@
 		"fixed": {
 			"translation": [0.75, -3, -5.25]
 		}
-	}
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"empty": 0
+			},
+			"model": "revivalcore:item/coffee_mug"
+		},
+		{
+			"predicate": {
+				"empty": 1
+			},
+			"model": "revivalcore:item/suit_maker_item"
+		}
+	]
 }

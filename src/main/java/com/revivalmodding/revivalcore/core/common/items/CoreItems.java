@@ -29,7 +29,7 @@ public class CoreItems {
     public static ItemSuit suit_head, suit_body, suit_legs, suit_boots;
 
     public static void init() {
-        coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, false), true);
+        coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, true), true);
         suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
         if (Loader.isModLoaded(RCMods.SPEEDSTERREBORN)) {
             ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
