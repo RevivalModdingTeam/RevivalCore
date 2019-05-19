@@ -35,7 +35,6 @@ public class ItemLocked extends Item {
                 }
             }
         }
-
     }
 
     public static boolean isUserAllowed(EntityPlayer player) {
