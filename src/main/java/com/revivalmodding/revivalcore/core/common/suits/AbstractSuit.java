@@ -1,17 +1,12 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
-import java.awt.Color;
-
-import javax.annotation.Nullable;
-
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
 
 public abstract class AbstractSuit implements IRegistryEntry
 {
@@ -79,8 +74,6 @@ public abstract class AbstractSuit implements IRegistryEntry
 	/**
 	 * @return Color for trail
 	 */
-	@Nullable
-	@SideOnly(Side.CLIENT)
 	public final Color getTrailRGB()
 	{
 		return color;
