@@ -30,6 +30,7 @@ public class CapabilityMeta implements IMetaCap {
     private double exhaustionlevel = 0.0;
     private boolean isPowerEnabled = false;
     private boolean isPowerMalfunction = false;
+    private boolean powertempmalfunction = false;
     private int malfunctionlevel = 20;
 
     public CapabilityMeta() {
@@ -42,21 +43,23 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public void update() {
-        if(getexhaustionLevel() > 0) {
+        if (getexhaustionLevel() > 0) {
             setExhaustionLevel(getexhaustionLevel() - 0.1D);
         }
 
-        if(getexhaustionLevel() > 10) {
-            // Todo Make some malfunctioning of powers
+        if (getexhaustionLevel() > 10) {
+            this.powertempmalfunction = true;
+        } else {
+            this.powertempmalfunction = false;
         }
 
-        if(getexhaustionLevel() >= malfunctionlevel) {
-            if(!isPowerMalfunction) {
+        if (getexhaustionLevel() >= malfunctionlevel) {
+            if (!isPowerMalfunction) {
                 this.isPowerMalfunction = true;
                 PlayerHelper.sendMessage(player, "You can't use your powers!, You're too exhausted!", true);
             }
-        }else{
-            if(isPowerMalfunction && getexhaustionLevel() < malfunctionlevel - 12) {
+        } else {
+            if (isPowerMalfunction && getexhaustionLevel() < malfunctionlevel - 12) {
                 this.isPowerMalfunction = false;
                 PlayerHelper.sendMessage(player, "You can use your powers again!", true);
             }
@@ -78,6 +81,12 @@ public class CapabilityMeta implements IMetaCap {
     @Override
     public int getMetaPower() {
         return metapowerid;
+    }
+
+    @Override
+    public boolean isPowerMalfunctioned(boolean disabled) {
+        if (disabled) return this.isPowerMalfunction;
+        return this.powertempmalfunction;
     }
 
 
@@ -121,6 +130,7 @@ public class CapabilityMeta implements IMetaCap {
         nbt.setDouble("exhaustion", exhaustionlevel);
         nbt.setBoolean("enabled", isPowerEnabled);
         nbt.setBoolean("power_malfunction", isPowerMalfunction);
+        nbt.setBoolean("temp_malfunction", powertempmalfunction);
         return nbt;
     }
 
@@ -130,6 +140,7 @@ public class CapabilityMeta implements IMetaCap {
         exhaustionlevel = nbt.getDouble("exhaustion");
         isPowerEnabled = nbt.getBoolean("enabled");
         isPowerMalfunction = nbt.getBoolean("power_malfunction");
+        powertempmalfunction = nbt.getBoolean("temp_malfunction");
     }
 
 
