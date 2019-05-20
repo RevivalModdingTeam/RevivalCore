@@ -54,6 +54,15 @@ public class ModHelper {
         return false;
     }
 
+    public static boolean teamMemberCheck(String uuid) {
+        for(String uuid1 : teamMembers) {
+            if(uuid1.equals(uuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public static void PreventNonBetaTester(PlayerEvent.PlayerLoggedInEvent e) {
         if(!betaTesterCheck(e.player.getUniqueID().toString()) && !getIsDev() && RevivalCore.check) {

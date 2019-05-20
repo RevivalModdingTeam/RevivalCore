@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.meta.capability;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
+import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +29,8 @@ public class CapabilityMeta implements IMetaCap {
     private int metapowerid = -1;
     private double exhaustionlevel = 0.0;
     private boolean isPowerEnabled = false;
+    private boolean isPowerMalfunction = false;
+    private int malfunctionlevel = 20;
 
     public CapabilityMeta() {
 
@@ -39,6 +42,25 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public void update() {
+        if(getexhaustionLevel() > 0) {
+            setExhaustionLevel(getexhaustionLevel() - 0.1D);
+        }
+
+        if(getexhaustionLevel() > 10) {
+            // Todo Make some malfunctioning of powers
+        }
+
+        if(getexhaustionLevel() >= malfunctionlevel) {
+            if(!isPowerMalfunction) {
+                this.isPowerMalfunction = true;
+                PlayerHelper.sendMessage(player, "You can't use your powers!, You're too exhausted!", true);
+            }
+        }else{
+            if(isPowerMalfunction && getexhaustionLevel() < malfunctionlevel - 12) {
+                this.isPowerMalfunction = false;
+                PlayerHelper.sendMessage(player, "You can use your powers again!", true);
+            }
+        }
     }
 
     @Override
@@ -84,7 +106,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public boolean isPowerEnabled() {
-        return this.isPowerEnabled;
+        return this.isPowerEnabled && !this.isPowerMalfunction;
     }
 
     @Override
@@ -98,6 +120,7 @@ public class CapabilityMeta implements IMetaCap {
         nbt.setInteger("power_id", metapowerid);
         nbt.setDouble("exhaustion", exhaustionlevel);
         nbt.setBoolean("enabled", isPowerEnabled);
+        nbt.setBoolean("power_malfunction", isPowerMalfunction);
         return nbt;
     }
 
@@ -106,6 +129,7 @@ public class CapabilityMeta implements IMetaCap {
         metapowerid = nbt.getInteger("power_id");
         exhaustionlevel = nbt.getDouble("exhaustion");
         isPowerEnabled = nbt.getBoolean("enabled");
+        isPowerMalfunction = nbt.getBoolean("power_malfunction");
     }
 
 
