@@ -4,6 +4,7 @@ import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.util.RCMods;
+import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -27,21 +28,24 @@ public class CoreItems {
 
     public static Item coffee_mug, suit_maker;
     public static ItemSuit suit_head, suit_body, suit_legs, suit_boots;
+    public static ItemInjection emptyinjection, speedforce_injection;
 
     public static void init() {
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, true), true);
         suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
+        emptyinjection = registerItem(new ItemInjection("empty_injection", InjectionTypes.EMPTY));
         if (Loader.isModLoaded(RCMods.SPEEDSTERREBORN)) {
             ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
             suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD));
             suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST));
             suit_legs = registerItem(new ItemSuit("suit_legs", debugMat, 2, EntityEquipmentSlot.LEGS));
             suit_boots = registerItem(new ItemSuit("suit_boots", debugMat, 1, EntityEquipmentSlot.FEET));
+            speedforce_injection = registerItem(new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER));
         }
     }
 
     public static void registerRenders() {
-        for(Item item : ITEM_LIST) {
+        for (Item item : ITEM_LIST) {
             registerRender(item);
         }
     }

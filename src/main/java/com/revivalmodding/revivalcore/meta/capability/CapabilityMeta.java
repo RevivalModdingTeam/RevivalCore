@@ -85,8 +85,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public boolean isPowerMalfunctioned(boolean disabled) {
-        if (disabled) return this.isPowerMalfunction;
-        return this.powertempmalfunction;
+        return disabled ? isPowerMalfunction : powertempmalfunction;
     }
 
 
