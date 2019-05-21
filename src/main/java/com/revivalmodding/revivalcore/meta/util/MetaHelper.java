@@ -41,6 +41,10 @@ public class MetaHelper {
 
     public static void setMetaPower(EntityPlayer player, String name) {
         IMetaCap cap = CapabilityMeta.get(player);
-        cap.setMetaPower(PEnumHandler.MetaPower.valueOf(name).getID());
+        for(MetaPower power : MetaPower.values()) {
+            if(power.getName().equals(name)) {
+                cap.setMetaPower(power.getID());
+            }
+        }
     }
 }
