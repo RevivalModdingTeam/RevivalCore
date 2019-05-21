@@ -6,13 +6,14 @@ import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
+import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
+import com.revivalmodding.revivalcore.core.registry.Registries.SuitMakerRecipeRegistry;
+import com.revivalmodding.revivalcore.core.registry.Registries.SuitRegistry;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
 
-	public T registryEntry;
-	
 	public abstract void register(T entry);
 	public abstract void registerAll(T[] entries);
 	
@@ -26,7 +27,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
          */
     	@Override
         public void register(RVRecipe entry) {
-            registryEntry.getRegistry().register(entry);
+            SuitMakerRecipeRegistry.instance().register(entry);
         }
     	
     	@Override
@@ -45,7 +46,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
     	@Override
     	public void register(AbstractSuit entry)
     	{
-    		registryEntry.getRegistry().register(entry);
+    		SuitRegistry.instance().register(entry);
     	}
     	
     	@Override
@@ -63,7 +64,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
     	
     	@Override
     	public void register(AbilityBase entry) {
-    		registryEntry.getRegistry().register(entry);
+    		AbilityRegistry.instance().register(entry);
     	}
     	
     	@Override
