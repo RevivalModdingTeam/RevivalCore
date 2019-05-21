@@ -52,7 +52,7 @@ public final class ImageHelper
         else tessellator.draw();
     }
 
-    public static void drawImageWithUV(Minecraft minecraft, ResourceLocation imageLocation, int startX, int startY, double width, double height, double startU, double startV, double u, double v, boolean transparent)
+    public static void drawImageWithUV(Minecraft minecraft, ResourceLocation imageLocation, double startX, double startY, double width, double height, double startU, double startV, double u, double v, boolean transparent)
     {
         minecraft.getTextureManager().bindTexture(imageLocation);
         GlStateManager.color(1f, 1f, 1f);
