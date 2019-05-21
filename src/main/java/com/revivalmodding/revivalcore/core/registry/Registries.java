@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
@@ -37,6 +38,7 @@ public class Registries {
 	
 	public static final HashSet<AbstractSuit> SUITS = new HashSet<>();
 	public static final HashSet<RVRecipe> SUIT_RECIPES = new HashSet<>();
+	public static final HashSet<AbilityBase> ABILITIES = new HashSet<>();
 
     @EventBusSubscriber
     public static class Registry {
@@ -190,6 +192,49 @@ public class Registries {
 			}
 			return false;
 		}
+    }
+    
+    public static final class AbilityRegistry implements IRegistry<AbilityBase> {
     	
+    	private static final AbilityRegistry INSTANCE = new AbilityRegistry();
+    	
+    	public static AbilityRegistry instance() {
+    		return INSTANCE;
+    	}
+    	
+    	@Override
+    	public HashSet<AbilityBase> getRegistry() {
+    		return Registries.ABILITIES;
+    	}
+    	
+    	@Override
+    	public void register(AbilityBase toRegister) {
+    		if(!containsObject(toRegister)) {
+    			this.getRegistry().add(toRegister);
+    		}
+    	}
+    	
+    	@Override
+    	public void registerAll(AbilityBase[] toRegister) {
+    		for(AbilityBase base : toRegister) {
+    			register(base);
+    		}
+    		
+    	}
+    	
+    	@Override
+    	public void registerAll(Collection<AbilityBase> toRegister) {
+    		registerAll(toRegister);
+    	}
+    	
+    	@Override
+    	public boolean containsObject(AbilityBase object) {
+    		for(AbilityBase ability : this.getRegistry()) {
+    			if(object.getName().equalsIgnoreCase(ability.getName())) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
     }
 }

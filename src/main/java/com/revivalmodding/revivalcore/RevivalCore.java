@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore;
 
+import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.registry.Registries;
@@ -49,6 +50,7 @@ public class RevivalCore {
         Registries.TileRegistry.init();
         CoreItems.init();
         CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
+        CapabilityManager.INSTANCE.register(IAbilityCap.class, new IAbilityCap.Storage(), IAbilityCap.Impl::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
         ModHelper.startupChecks();
     }
@@ -56,6 +58,7 @@ public class RevivalCore {
     @EventHandler
     public static void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitMakerRecipeRegistryEvent());
+        MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.AbilityRegistryEvent());
         proxy.init(event);
     }
 
