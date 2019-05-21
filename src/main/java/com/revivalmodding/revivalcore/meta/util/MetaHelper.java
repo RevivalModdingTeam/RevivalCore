@@ -29,8 +29,9 @@ public class MetaHelper {
 
     public static boolean hasPower(EntityPlayer player, String name) {
         IMetaCap cap = CapabilityMeta.get(player);
-        if (PEnumHandler.MetaPower.valueOf(name).getID() == cap.getMetaPower()) {
-            return true;
+        for(MetaPower power : MetaPower.values()) {
+            if(power.getName().equals(name))
+                return true;
         }
         return false;
     }
