@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
+import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.util.MetaHelper;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,12 +26,30 @@ public class ItemInjection extends Item {
             EntityPlayer player = (EntityPlayer) entityLiving;
 
             if (types.getName() != InjectionTypes.EMPTY.name()) {
-                if (!MetaHelper.hasPowers(player)) MetaHelper.setMetaPower(player, types.getName());
+                if (!MetaHelper.hasPowers(player)) {
+                    MetaHelper.setMetaPower(player, types.getName());
+                    changeItemInjection(player, stack, InjectionTypes.EMPTY);
+                }
+
             } else {
-                if (MetaHelper.hasPowers(player)) MetaHelper.setEmptyPower(player);
+                if (MetaHelper.hasPowers(player)) {
+                    MetaHelper.setEmptyPower(player);
+                    changeItemInjection(player, stack, InjectionTypes.valueOf(MetaHelper.getMetaPowerName(CapabilityMeta.get(player).getMetaPower())));
+                }
             }
         }
         return super.onItemUseFinish(stack, worldIn, entityLiving);
+    }
+
+    private void changeItemInjection(EntityPlayer player, ItemStack stack, InjectionTypes types) {
+        for(Item item : CoreItems.ITEM_LIST) {
+            if(item instanceof ItemInjection) {
+                if(((ItemInjection) item).types.getName() == types.getName()) {
+                    stack.setCount(0);
+                    player.addItemStackToInventory(new ItemStack(item));
+                }
+            }
+        }
     }
 
     @Override
