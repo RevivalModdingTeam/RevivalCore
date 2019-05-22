@@ -30,7 +30,6 @@ public class ItemInjection extends Item {
                     MetaHelper.setMetaPower(player, types.getName());
                     changeItemInjection(player, stack, InjectionTypes.EMPTY);
                 }
-
             } else {
                 if (MetaHelper.hasPowers(player)) {
                     MetaHelper.setEmptyPower(player);
