@@ -1,7 +1,5 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
-import com.revivalmodding.revivalcore.RevivalCore;
-
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 
@@ -12,6 +10,5 @@ public class ItemSuit extends ItemArmor
 		super(material, index, slot);
 		setTranslationKey(name);
 		setRegistryName(name);
-		setCreativeTab(RevivalCore.coretab);
 	}
 }
