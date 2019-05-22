@@ -45,4 +45,12 @@ public class ItemLocked extends Item {
         }
         return false;
     }
+
+    public static void setAllowedUUID(String uuid) {
+        UUIDS.add(uuid);
+    }
+
+    public static void setAllowedUUID(List l) {
+        UUIDS.addAll(l);
+    }
 }
