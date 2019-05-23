@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.proxy;
 
 import com.revivalmodding.revivalcore.core.registry.Registries;
+import com.revivalmodding.revivalcore.util.handlers.client.Keybinds;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -14,6 +15,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void init(FMLInitializationEvent e) {
+    	Keybinds.init();
     }
 
     @Override

@@ -4,6 +4,11 @@ itemGroup.coretab=Revival Core
 
 item.coffee_mug.name=Coffee Mug
 
+revivalcore.keybinds.enable=Enable Power
+revivalcore.keybinds.power1=1.Ability
+revivalcore.keybinds.power2=2.Ability
+revivalcore.keybinds.power3=3.Ability
+
 
 
 

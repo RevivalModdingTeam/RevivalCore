@@ -2,6 +2,8 @@ package com.revivalmodding.revivalcore.core.abilities;
 
 import java.util.ArrayList;
 
+import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +14,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 
+//TODO: attach to player when it's ready
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void setAbilities(AbilityBase[] abilities);
@@ -23,6 +26,16 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	void removeAbility(AbilityBase ability, EntityPlayer player);
 	
 	boolean hasAbility(AbilityBase ability, EntityPlayer player);
+	
+	void setUnlockedAbilities(String[] abilityKeys);
+	
+	void unlockAbility(String key);
+	
+	void lockAbilities();
+	
+	AbilityBase[] getUnlockedAbilities(String[] keys);
+	
+	String[] getUnlockedAbilityKeys();
 	
 	public class Storage implements IStorage<IAbilityCap> {
 		
@@ -39,7 +52,11 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	public class Impl implements IAbilityCap {
 		
+		// all curently active abilities
 		private AbilityBase[] abilities = new AbilityBase[0];
+		
+		// all abilities player can unlock
+		private String[] unlockedAbilities = new String[0];
 		
 		@Override
 		public void addAbility(AbilityBase ability, EntityPlayer player) {
@@ -82,6 +99,40 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 				
 				this.setAbilities(list.toArray(new AbilityBase[0]));
 			}
+		}
+		
+		@Override
+		public AbilityBase[] getUnlockedAbilities(String[] keys) {
+			ArrayList<AbilityBase> list = new ArrayList<>();
+			for(String s : keys) {
+				AbilityBase base = AbilityBase.getAbilityFromKey(s);
+				if(base != null) {
+					list.add(base);
+				}
+			}
+			return list.toArray(new AbilityBase[0]);
+		}
+		
+		@Override
+		public void unlockAbility(String key) {
+			if(AbilityBase.getAbilityFromKey(key) != null) {
+				unlockedAbilities[unlockedAbilities.length] = key;
+			} else RevivalCore.logger.error("Couldn't unlock ability from key '{}', ability doesn't exist!", key);
+		}
+		
+		@Override
+		public String[] getUnlockedAbilityKeys() {
+			return unlockedAbilities;
+		}
+		
+		@Override
+		public void lockAbilities() {
+			this.unlockedAbilities = new String[0];
+		}
+		
+		@Override
+		public void setUnlockedAbilities(String[] abilityKeys) {
+			this.unlockedAbilities = abilityKeys;
 		}
 		
 		@Override

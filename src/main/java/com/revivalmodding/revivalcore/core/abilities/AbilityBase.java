@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.core.abilities;
 
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
+import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +38,15 @@ public abstract class AbilityBase implements IRegistryEntry
 	}
 	
 	public static final <T extends AbilityBase> T getAbility(EntityPlayer player) {
+		return null;
+	}
+	
+	public static final AbilityBase getAbilityFromKey(String key) {
+		for(AbilityBase base : Registries.ABILITIES) {
+			if(base.getName().equalsIgnoreCase(key)) {
+				return base;
+			}
+		}
 		return null;
 	}
 	
