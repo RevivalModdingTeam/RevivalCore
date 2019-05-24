@@ -9,10 +9,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketSetPowerEnabled implements IMessage {
+public class PacketSetPower implements IMessage {
 
 
-    public PacketSetPowerEnabled() {
+    public PacketSetPower() {
     }
 
     @Override
@@ -25,9 +25,9 @@ public class PacketSetPowerEnabled implements IMessage {
 
     }
 
-    public static class Handler implements IMessageHandler<PacketSetPowerEnabled, IMessage> {
+    public static class Handler implements IMessageHandler<PacketSetPower, IMessage> {
         @Override
-        public IMessage onMessage(PacketSetPowerEnabled message, MessageContext ctx) {
+        public IMessage onMessage(PacketSetPower message, MessageContext ctx) {
             ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
                 EntityPlayer player = ctx.getServerHandler().player;
                 IMetaCap data = CapabilityMeta.get(player);

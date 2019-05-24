@@ -3,6 +3,8 @@ package com.revivalmodding.revivalcore.util.handlers.client;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
+import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.network.packets.PacketSetPower;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -39,7 +41,10 @@ public class Keybinds {
         public static void keyPressed(InputEvent.KeyInputEvent e) {
             IMetaCap metaCap = CapabilityMeta.get(Minecraft.getMinecraft().player);
 
-            if (Keybinds.ENABLE.isPressed()) {
+            if (metaCap.hasMetaPowers()) {
+                if (Keybinds.ENABLE.isPressed()) {
+                    NetworkManager.INSTANCE.sendToServer(new PacketSetPower());
+                }
             }
         }
     }
