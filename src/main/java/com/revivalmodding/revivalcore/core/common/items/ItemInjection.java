@@ -4,7 +4,6 @@ import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.util.MetaHelper;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -18,6 +17,7 @@ public class ItemInjection extends Item {
     public ItemInjection(String name, InjectionTypes injectionType) {
         setTranslationKey(name);
         setRegistryName(name);
+        setMaxStackSize(1);
         this.types = injectionType;
     }
 
@@ -36,26 +36,21 @@ public class ItemInjection extends Item {
             }
         }
         return super.onItemRightClick(worldIn, player, handIn);
-}
+    }
 
-    private void changeItemInjection(EntityPlayer player, ItemStack stack, InjectionTypes types) {
+    private void changeItemInjection(EntityPlayer player, ItemStack stack, InjectionTypes type) {
         for (Item item : CoreItems.ITEM_LIST) {
+            if (player.isCreative()) return;
+
             if (item instanceof ItemInjection) {
-                if (((ItemInjection) item).types.getName() == types.getName()) {
-                    stack.setCount(0);
+                if (((ItemInjection) item).types.getName() == this.types.getName()) {
+                    stack.shrink(1);
+                }
+
+                if (((ItemInjection) item).types.getName() == type.getName()) {
                     player.addItemStackToInventory(new ItemStack(item));
                 }
             }
         }
-    }
-
-    @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 30;
-    }
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
     }
 }
