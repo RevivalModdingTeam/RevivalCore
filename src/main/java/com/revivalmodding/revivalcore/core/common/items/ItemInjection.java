@@ -28,12 +28,14 @@ public class ItemInjection extends Item {
         if (!injectionTypes.getName().equals(InjectionTypes.EMPTY.getName())) {
             if (!MetaHelper.hasPowers(player)) {
                 MetaHelper.setMetaPower(player, injectionTypes.getName());
+                CapabilityMeta.get(player).setPowerEnabled(true);
                 changeItemInjection(player, stack, InjectionTypes.EMPTY);
             }
         }else{
             if (MetaHelper.hasPowers(player)) {
                 changeItemInjection(player, stack, MetaHelper.getMetaEnum(MetaHelper.getMetaPowerName(CapabilityMeta.get(player).getMetaPower())));
                 MetaHelper.setEmptyPower(player);
+                CapabilityMeta.get(player).setPowerEnabled(false);
             }
         }
         return super.onItemRightClick(worldIn, player, handIn);

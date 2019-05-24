@@ -35,12 +35,12 @@ public class CoreItems {
         emptyinjection = registerItem(new ItemInjection("empty_injection", InjectionTypes.EMPTY), true);
         if (RCMods.Mods.SPEEDSTERREBORN.isLoaded()) {
             ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
-            suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD),true);
-            suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST),true);
-            suit_legs = registerItem(new ItemSuit("suit_legs", debugMat, 2, EntityEquipmentSlot.LEGS),true);
-            suit_boots = registerItem(new ItemSuit("suit_boots", debugMat, 1, EntityEquipmentSlot.FEET),true);
+            speedforce_injection = registerItem(new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER), true);
+            suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD), true);
+            suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST), true);
+            suit_legs = registerItem(new ItemSuit("suit_legs", debugMat, 2, EntityEquipmentSlot.LEGS), true);
+            suit_boots = registerItem(new ItemSuit("suit_boots", debugMat, 1, EntityEquipmentSlot.FEET), true);
         }
-        speedforce_injection = registerItem(new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER), true);
     }
 
     public static void registerRenders() {
@@ -50,7 +50,7 @@ public class CoreItems {
     }
 
     public static <T extends Item> T registerItem(T item) {
-       CoreItems.ITEM_LIST.add(item);
+        CoreItems.ITEM_LIST.add(item);
         return item;
     }
 
