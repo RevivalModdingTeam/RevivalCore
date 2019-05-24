@@ -200,6 +200,6 @@ public class CapabilityMeta implements IMetaCap {
         if (player.hasCapability(CapMetaStorage.CAPABILITY, null)) {
             return player.getCapability(CapMetaStorage.CAPABILITY, null);
         }
-        throw new IllegalStateException("Missing Cap - SpeedsterHeroesReborn");
+        throw new IllegalStateException("Missing Cap - RevivalCore");
     }
 }
