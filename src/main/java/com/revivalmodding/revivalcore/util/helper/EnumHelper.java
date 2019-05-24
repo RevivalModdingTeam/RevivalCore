@@ -5,9 +5,6 @@ import net.minecraft.util.IStringSerializable;
 
 public class EnumHelper {
 
-
-    ;
-
     public enum InjectionTypes implements IStringSerializable {
         EMPTY("none"),
         SPEEDSTER(MetaPowerStrings.SPEEDSTER);

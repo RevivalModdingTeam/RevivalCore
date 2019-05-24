@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,14 +33,14 @@ public class CoreItems {
         coffee_mug = registerItem(new ItemEatable("coffee_mug", 3, 0f, true), true);
         suit_maker = registerItem(new ItemSuitMaker(CoreBlocks.SUIT_MAKER), true);
         emptyinjection = registerItem(new ItemInjection("empty_injection", InjectionTypes.EMPTY), true);
-        if (Loader.isModLoaded(RCMods.SPEEDSTERREBORN)) {
+        if (RCMods.Mods.SPEEDSTERREBORN.isLoaded()) {
             ArmorMaterial debugMat = EnumHelper.addArmorMaterial("debug", RevivalCore.MODID + ":idk", 100, new int[]{1, 1, 1, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0F);
             suit_head = registerItem(new ItemSuit("suit_head", debugMat, 1, EntityEquipmentSlot.HEAD),true);
             suit_body = registerItem(new ItemSuit("suit_body", debugMat, 1, EntityEquipmentSlot.CHEST),true);
             suit_legs = registerItem(new ItemSuit("suit_legs", debugMat, 2, EntityEquipmentSlot.LEGS),true);
             suit_boots = registerItem(new ItemSuit("suit_boots", debugMat, 1, EntityEquipmentSlot.FEET),true);
-            speedforce_injection = registerItem(new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER), true);
         }
+        speedforce_injection = registerItem(new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER), true);
     }
 
     public static void registerRenders() {

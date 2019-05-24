@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.meta.util;
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.meta.util.PEnumHandler.MetaPower;
+import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Random;
@@ -21,6 +22,15 @@ public class MetaHelper {
             return "none";
         }
         return MetaPower.values()[id].getName();
+    }
+
+    public static InjectionTypes getMetaEnum(String name) {
+        for(InjectionTypes it : InjectionTypes.values()) {
+            if(it.getName().equals(name)) {
+                return it;
+            }
+        }
+        return InjectionTypes.EMPTY;
     }
 
     public static boolean hasPowers(EntityPlayer player) {
