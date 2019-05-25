@@ -31,14 +31,22 @@ public class ItemEatable extends Item {
         this.isDrink = isDrink;
         setTranslationKey(name);
         setRegistryName(name);
+
+        if(isDrink)
         setMaxStackSize(1);
+
         this.setCreativeTab(CreativeTabs.FOOD);
-            addPropertyOverride(new ResourceLocation("open"), (stack, worldIn, entityIn) -> {
-                if (getStackTag(stack) == null || !getStackTag(stack).hasKey("empty")) {
-                    return 0F;
-                }
-                return getEmpty(stack); // TODO FIX SOON
-            });
+        addPropertyOverride(new ResourceLocation("empty"), (stack, worldIn, entityIn) -> {
+            if (getStackTag(stack) == null) {
+                return 0F;
+            }
+
+            if (getEmpty(stack) == 1) {
+                return 1F;
+            }
+
+            return 0F;
+        });
     }
 
 
@@ -64,8 +72,15 @@ public class ItemEatable extends Item {
         if (entityLiving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityLiving;
             if (getEmpty(stack) == 0) {
-                worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
                 this.onFoodEaten(stack, worldIn, entityplayer);
+                entityplayer.getFoodStats().setFoodLevel(entityplayer.getFoodStats().getFoodLevel() + healAmount);
+
+                if (this.isDrink) {
+                    setEmpty(stack, 1);
+                    worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+                }else{
+                    worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+                }
 
                 entityplayer.addStat(StatList.getObjectUseStats(this));
                 entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
@@ -74,10 +89,12 @@ public class ItemEatable extends Item {
                     CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) entityplayer, stack);
                 }
 
+            }else{
+                return stack;
             }
         }
-            if (!this.isDrink)
-                stack.shrink(1);
+        if (!this.isDrink)
+            stack.shrink(1);
 
         return stack;
     }
