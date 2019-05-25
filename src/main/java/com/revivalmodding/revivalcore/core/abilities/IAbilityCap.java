@@ -233,7 +233,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 	}
 	
-	@EventBusSubscriber
+	//@EventBusSubscriber
 	public static class Events {
 		
 		@SubscribeEvent
