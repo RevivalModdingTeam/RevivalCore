@@ -23,7 +23,9 @@ public abstract class AbilityBase implements IRegistryEntry
 		this.maxCooldown = cooldown;
 	}
 	
-	public abstract void onAbilityActivated();
+	public AbilityBase(String name) {
+		this(name, 0);
+	}
 	
 	public void update() {
 		if(hasCooldown()) {
@@ -31,15 +33,31 @@ public abstract class AbilityBase implements IRegistryEntry
 		}
 	}
 	
+	public void toggleAbility() {
+		active = !active;
+	}
+	
 	public boolean hasCooldown() {
 		return currentCooldown > 0;
 	}
 	
-	public static final boolean hasAbility(EntityPlayer player) {
+	public boolean isActive() {
+		return active;
+	}
+	
+	public static final boolean hasAbility(EntityPlayer player, String abilityName) {
 		return false;
 	}
 	
-	public static final <T extends AbilityBase> T getAbility(EntityPlayer player) {
+	public static final AbilityBase getAbility(EntityPlayer player, int powerKeybind) {
+		if(powerKeybind > 2) {
+			return null;
+		}
+		IAbilityCap abilities = IAbilityCap.Impl.get(player);
+		AbilityBase[] active = abilities.getAbilities(player);
+		if(powerKeybind <= active.length - 1) {
+			return active[powerKeybind];
+		}
 		return null;
 	}
 	

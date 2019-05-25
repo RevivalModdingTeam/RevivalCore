@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.network;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
 import com.revivalmodding.revivalcore.network.packets.PacketSetPower;
 import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTileEntity;
@@ -17,5 +18,6 @@ public class NetworkManager {
         INSTANCE.registerMessage(PacketCapSync.Handler.class, PacketCapSync.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(PacketSyncProcessTileEntity.Handler.class, PacketSyncProcessTileEntity.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(PacketSetPower.Handler.class, PacketSetPower.class, id++, Side.SERVER);
+        INSTANCE.registerMessage(IAbilityCap.PacketSync.Handler.class, IAbilityCap.PacketSync.class, id++, Side.CLIENT);
     }
 }
