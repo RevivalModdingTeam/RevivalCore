@@ -1,18 +1,22 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 //TODO: attach to player when it's ready
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
@@ -137,13 +141,51 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		
 		@Override
 		public NBTTagCompound serializeNBT() {
-			// TODO
-			return new NBTTagCompound();
+			NBTTagCompound c = new NBTTagCompound();
+			NBTTagList active = new NBTTagList();
+			NBTTagList unlocked = new NBTTagList();
+			
+			for(String unl : unlockedAbilities) {
+				unlocked.appendTag(AbilityBase.writeNBT(unl));
+			}
+			
+			for(AbilityBase act : abilities) {
+				active.appendTag(AbilityBase.writeNBT(act.getName()));
+			}
+			
+			c.setTag("activeAbilities", active);
+			c.setTag("unlockedAbilities", unlocked);
+			return c;
 		}
 		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
-			// TODO
+			if(nbt.hasKey("activeAbilities") && nbt.hasKey("unlockedAbilities")) {
+				NBTTagList active = nbt.getTagList("activeAbilities", Constants.NBT.TAG_COMPOUND);
+				NBTTagList unlocked = nbt.getTagList("unlockedAbilities", Constants.NBT.TAG_COMPOUND);
+				abilities = new AbilityBase[0];
+				unlockedAbilities = new String[0];
+				
+				for(int a = 0; a < active.tagCount(); a++) {
+					abilities[abilities.length] = AbilityBase.getAbilityFromKey(active.getCompoundTagAt(a).getString("name"));
+				}
+				
+				for(int u = 0; u < unlocked.tagCount(); u++) {
+					unlockedAbilities[unlockedAbilities.length] = unlocked.getCompoundTagAt(u).getString("name");
+				}
+			}
+			else {
+				abilities = new AbilityBase[0];
+				unlockedAbilities = new String[0];
+				RevivalCore.logger.error("Couldn't load ability data from NBT");
+			}
+		}
+		
+		public static IAbilityCap get(EntityPlayer player) {
+			if(player.hasCapability(IAbilityCap.Provider.ABILITIES, null)) {
+				return player.getCapability(IAbilityCap.Provider.ABILITIES, null);
+			}
+			return null;
 		}
 	}
 	
@@ -173,5 +215,9 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		public void deserializeNBT(NBTTagCompound nbt) {
 			ABILITIES.getStorage().readNBT(ABILITIES, this.instance, null, nbt);
 		}
+	}
+	
+	public static class Events {
+		
 	}
 }

@@ -6,15 +6,17 @@ import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * <b>WIP</b>
  */
 public abstract class AbilityBase implements IRegistryEntry
 {
-	private final String name;
 	public final int maxCooldown;
 	public int currentCooldown;
+	private final String name;
+	private boolean active;
 	
 	public AbilityBase(String name, int cooldown) {
 		this.name = name;
@@ -48,6 +50,19 @@ public abstract class AbilityBase implements IRegistryEntry
 			}
 		}
 		return null;
+	}
+	
+	public static NBTTagCompound writeNBT(String name) {
+		NBTTagCompound comp = new NBTTagCompound();
+		comp.setString("name", name);
+		return comp;
+	}
+	
+	public static AbilityBase readNBT(NBTTagCompound comp) {
+		if(!comp.hasKey("name"))
+			return null;
+		
+		return getAbilityFromKey(comp.getString("name"));
 	}
 	
 	@Override
