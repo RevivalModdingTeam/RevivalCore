@@ -41,7 +41,7 @@ public class Keybinds {
         public static void keyPressed(InputEvent.KeyInputEvent e) {
             IMetaCap metaCap = CapabilityMeta.get(Minecraft.getMinecraft().player);
 
-            if (metaCap.hasMetaPowers()) {
+        if (metaCap.hasMetaPowers() || metaCap.isPowerEnabled()) {
                 if (Keybinds.ENABLE.isPressed()) {
                     NetworkManager.INSTANCE.sendToServer(new PacketSetPower());
                 }
