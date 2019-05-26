@@ -2,6 +2,8 @@ package com.revivalmodding.revivalcore.core.abilities;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
@@ -10,6 +12,9 @@ import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AbilityBase implements IRegistryEntry
 {
@@ -26,6 +31,10 @@ public abstract class AbilityBase implements IRegistryEntry
 	public AbilityBase(String name) {
 		this(name, 0);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Nonnull
+	public abstract ResourceLocation getIcon();
 	
 	public void update(EntityPlayer player) {
 		if(hasCooldown()) {

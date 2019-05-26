@@ -13,5 +13,6 @@ public final class Constants
 	public static final class Textures
 	{
 		public static final ResourceLocation SUITMAKER_ARROW = new ResourceLocation(RevivalCore.MODID + ":textures/gui/sm_arrow.png");
+		public static final ResourceLocation ABILITY_GUI = new ResourceLocation(RevivalCore.MODID + ":textures/gui/abilitygui.png");
 	}
 }
