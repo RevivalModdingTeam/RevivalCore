@@ -8,9 +8,6 @@ import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-/**
- * <b>WIP</b>
- */
 public abstract class AbilityBase implements IRegistryEntry
 {
 	public final int maxCooldown;
@@ -27,7 +24,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		this(name, 0);
 	}
 	
-	public void update() {
+	public void update(EntityPlayer player) {
 		if(hasCooldown()) {
 			--currentCooldown;
 		}
@@ -46,6 +43,14 @@ public abstract class AbilityBase implements IRegistryEntry
 	}
 	
 	public static final boolean hasAbility(EntityPlayer player, String abilityName) {
+		IAbilityCap cap = IAbilityCap.Impl.get(player);
+		if(cap != null) {
+			for(AbilityBase base : cap.getAbilities(player)) {
+				if(base.getName().equalsIgnoreCase(abilityName)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	

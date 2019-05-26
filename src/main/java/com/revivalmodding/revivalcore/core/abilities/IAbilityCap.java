@@ -7,27 +7,30 @@ import com.revivalmodding.revivalcore.network.NetworkManager;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-//TODO: attach to player when it's ready
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void setAbilities(AbilityBase[] abilities);
@@ -233,7 +236,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 	}
 	
-	//@EventBusSubscriber
+	@EventBusSubscriber
 	public static class Events {
 		
 		@SubscribeEvent
@@ -256,6 +259,23 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			if(e.player instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP)e.player;
 				IAbilityCap.Impl.get(player).sync(player);
+			}
+		}
+		
+		@SubscribeEvent
+		public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
+			IAbilityCap cap = IAbilityCap.Impl.get(e.player);
+			if(cap != null) {
+				for(AbilityBase activeAbility : cap.getAbilities(e.player)) {
+					activeAbility.update(e.player);
+				}
+			}
+		}
+		
+		@SubscribeEvent
+		public static void attachAbility(AttachCapabilitiesEvent<Entity> e) {
+			if(e.getObject() instanceof EntityPlayer) {
+				e.addCapability(new ResourceLocation(RevivalCore.MODID, "abilityCap"), new IAbilityCap.Provider());
 			}
 		}
 	}
