@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
@@ -33,9 +34,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
-	void setAbilities(AbilityBase[] abilities);
+	void setAbilities(List<AbilityBase> abilities);
 	
-	AbilityBase[] getAbilities(EntityPlayer player);
+	List<AbilityBase> getAbilities(EntityPlayer player);
 	
 	void addAbility(AbilityBase ability, EntityPlayer player);
 	
@@ -43,15 +44,13 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	boolean hasAbility(AbilityBase ability, EntityPlayer player);
 	
-	void setUnlockedAbilities(String[] abilityKeys);
+	void setUnlockedAbilities(List<AbilityBase> abilityKeys);
 	
 	void unlockAbility(String key);
 	
 	void lockAbilities();
 	
-	AbilityBase[] getUnlockedAbilities(String[] keys);
-	
-	String[] getUnlockedAbilityKeys();
+	List<AbilityBase> getUnlockedAbilities();
 	
 	void sync(EntityPlayerMP player);
 	
@@ -71,27 +70,25 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	public class Impl implements IAbilityCap {
 		
 		// all curently active abilities
-		private AbilityBase[] abilities = new AbilityBase[0];
+		private List<AbilityBase> abilities = new ArrayList<>();
 		
 		// all abilities player can unlock
-		private String[] unlockedAbilities = new String[0];
+		private List<AbilityBase> unlockedAbilities = new ArrayList<>();
 		
 		@Override
 		public void addAbility(AbilityBase ability, EntityPlayer player) {
 			if(!this.hasAbility(ability, player)) {
-				AbilityBase[] abilities = this.getAbilities(player);
-				abilities[abilities.length] = ability;
-				this.setAbilities(abilities);
+				abilities.add(ability);
 			}
 		}
 		
 		@Override
-		public void setAbilities(AbilityBase[] abilities) {
+		public void setAbilities(List<AbilityBase> abilities) {
 			this.abilities = abilities;
 		}
 		
 		@Override
-		public AbilityBase[] getAbilities(EntityPlayer player) {
+		public List<AbilityBase> getAbilities(EntityPlayer player) {
 			return abilities;
 		}
 		
@@ -108,49 +105,30 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		@Override
 		public void removeAbility(AbilityBase ability, EntityPlayer player) {
 			if(this.hasAbility(ability, player)) {
-				ArrayList<AbilityBase> list = new ArrayList<>();
-				for(AbilityBase a : this.getAbilities(player)) {
-					if(!ability.getName().equalsIgnoreCase(a.getName())) {
-						list.add(a);
-					}
-				}
-				
-				this.setAbilities(list.toArray(new AbilityBase[0]));
+				abilities.remove(abilities.indexOf(ability));
 			}
 		}
 		
 		@Override
-		public AbilityBase[] getUnlockedAbilities(String[] keys) {
-			ArrayList<AbilityBase> list = new ArrayList<>();
-			for(String s : keys) {
-				AbilityBase base = AbilityBase.getAbilityFromKey(s);
-				if(base != null) {
-					list.add(base);
-				}
-			}
-			return list.toArray(new AbilityBase[0]);
+		public List<AbilityBase> getUnlockedAbilities() {
+			return unlockedAbilities;
 		}
 		
 		@Override
 		public void unlockAbility(String key) {
 			if(AbilityBase.getAbilityFromKey(key) != null) {
-				unlockedAbilities[unlockedAbilities.length] = key;
+				unlockedAbilities.add(AbilityBase.getAbilityFromKey(key));
 			} else RevivalCore.logger.error("Couldn't unlock ability from key '{}', ability doesn't exist!", key);
 		}
 		
 		@Override
-		public String[] getUnlockedAbilityKeys() {
-			return unlockedAbilities;
-		}
-		
-		@Override
 		public void lockAbilities() {
-			this.unlockedAbilities = new String[0];
+			this.unlockedAbilities.clear();
 		}
 		
 		@Override
-		public void setUnlockedAbilities(String[] abilityKeys) {
-			this.unlockedAbilities = abilityKeys;
+		public void setUnlockedAbilities(List<AbilityBase> abilities) {
+			this.unlockedAbilities = abilities;
 		}
 		
 		@Override
@@ -164,12 +142,20 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			NBTTagList active = new NBTTagList();
 			NBTTagList unlocked = new NBTTagList();
 			
-			for(String unl : unlockedAbilities) {
-				unlocked.appendTag(AbilityBase.writeNBT(unl));
+			if(!unlockedAbilities.isEmpty()) {
+				for(AbilityBase unl : unlockedAbilities) {
+					if(unl != null) {
+						unlocked.appendTag(AbilityBase.writeNBT(unl.getName()));
+					}
+				}
 			}
 			
-			for(AbilityBase act : abilities) {
-				active.appendTag(AbilityBase.writeNBT(act.getName()));
+			if(!abilities.isEmpty()) {
+				for(AbilityBase act : abilities) {
+					if(act != null) {
+						active.appendTag(AbilityBase.writeNBT(act.getName()));
+					}
+				}
 			}
 			
 			c.setTag("activeAbilities", active);
@@ -182,20 +168,16 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			if(nbt.hasKey("activeAbilities") && nbt.hasKey("unlockedAbilities")) {
 				NBTTagList active = nbt.getTagList("activeAbilities", Constants.NBT.TAG_COMPOUND);
 				NBTTagList unlocked = nbt.getTagList("unlockedAbilities", Constants.NBT.TAG_COMPOUND);
-				abilities = new AbilityBase[0];
-				unlockedAbilities = new String[0];
 				
 				for(int a = 0; a < active.tagCount(); a++) {
-					abilities[abilities.length] = AbilityBase.getAbilityFromKey(active.getCompoundTagAt(a).getString("name"));
+					abilities.add(AbilityBase.getAbilityFromKey(active.getCompoundTagAt(a).getString("abilityID")));
 				}
 				
 				for(int u = 0; u < unlocked.tagCount(); u++) {
-					unlockedAbilities[unlockedAbilities.length] = unlocked.getCompoundTagAt(u).getString("name");
+					unlockedAbilities.add(AbilityBase.getAbilityFromKey(unlocked.getCompoundTagAt(u).getString("abilityID")));
 				}
 			}
 			else {
-				abilities = new AbilityBase[0];
-				unlockedAbilities = new String[0];
 				RevivalCore.logger.error("Couldn't load ability data from NBT");
 			}
 		}
@@ -265,9 +247,11 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		@SubscribeEvent
 		public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
 			IAbilityCap cap = IAbilityCap.Impl.get(e.player);
-			if(cap != null) {
+			if(cap != null && !cap.getAbilities(e.player).isEmpty()) {
 				for(AbilityBase activeAbility : cap.getAbilities(e.player)) {
-					activeAbility.update(e.player);
+					if(activeAbility != null) {
+						activeAbility.update(e.player);
+					}
 				}
 			}
 		}

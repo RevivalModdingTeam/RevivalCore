@@ -1,5 +1,8 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
+import java.util.List;
+
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
@@ -59,9 +62,9 @@ public abstract class AbilityBase implements IRegistryEntry
 			return null;
 		}
 		IAbilityCap abilities = IAbilityCap.Impl.get(player);
-		AbilityBase[] active = abilities.getAbilities(player);
-		if(powerKeybind <= active.length - 1) {
-			return active[powerKeybind];
+		List<AbilityBase> active = abilities.getAbilities(player);
+		if(powerKeybind <= active.size() - 1) {
+			return active.get(powerKeybind);
 		}
 		return null;
 	}
@@ -72,20 +75,21 @@ public abstract class AbilityBase implements IRegistryEntry
 				return base;
 			}
 		}
+		RevivalCore.logger.error("Couldn't find ability with key {}, skipping...", key.toUpperCase());
 		return null;
 	}
 	
 	public static NBTTagCompound writeNBT(String name) {
 		NBTTagCompound comp = new NBTTagCompound();
-		comp.setString("name", name);
+		comp.setString("abilityID", name);
 		return comp;
 	}
 	
 	public static AbilityBase readNBT(NBTTagCompound comp) {
-		if(!comp.hasKey("name"))
+		if(!comp.hasKey("abilityID"))
 			return null;
 		
-		return getAbilityFromKey(comp.getString("name"));
+		return getAbilityFromKey(comp.getString("abilityID"));
 	}
 	
 	@Override
