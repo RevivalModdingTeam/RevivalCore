@@ -71,6 +71,11 @@ public abstract class AbstractSuit implements IRegistryEntry
 				player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == this.getBoots();
 	}
 	
+	/** Additional xp player will get when wearing this suit **/
+	public double getXPBonus() {
+		return 0.001d;
+	}
+	
 	/**
 	 * @return Color for trail
 	 */

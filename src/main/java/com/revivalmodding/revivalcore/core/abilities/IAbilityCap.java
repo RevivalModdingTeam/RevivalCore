@@ -45,6 +45,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	boolean hasAbility(AbilityBase ability);
 	
+	boolean containsAbility(List<AbilityBase> list, AbilityBase ability);
+	
 	void setUnlockedAbilities(List<AbilityBase> abilityKeys);
 	
 	void unlockAbility(String key);
@@ -57,9 +59,15 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void setXP(double xp);
 	
+	void addXP(double amount);
+	
 	int getLevel();
 	
 	double getXP();
+	
+	void reset(boolean unlocked, boolean active, boolean xp, boolean level);
+	
+	void resetAll();
 	
 	void sync(EntityPlayerMP player);
 	
@@ -162,6 +170,49 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
+		public void addXP(double amount) {
+			this.xp += amount;
+		}
+		
+		@Override
+		public boolean containsAbility(List<AbilityBase> list, AbilityBase ability) {
+			if(list.isEmpty()) {
+				return false;
+			}
+			
+			for(AbilityBase ab : list) {
+				if(ab != null && ab.getName().equalsIgnoreCase(ability.getName())) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public void reset(boolean unlocked, boolean active, boolean xp, boolean level) {
+			if(unlocked) {
+				unlockedAbilities.clear();
+			}
+			if(active) {
+				abilities.clear();
+			}
+			if(xp) {
+				this.xp = 0;
+			}
+			if(level) {
+				this.level = 0;
+			}
+		}
+		
+		@Override
+		public void resetAll() {
+			abilities.clear();
+			unlockedAbilities.clear();
+			xp = 0;
+			level = 0;
+		}
+		
+		@Override
 		public void sync(EntityPlayerMP player) {
 			NetworkManager.INSTANCE.sendTo(new PacketSync(this.serializeNBT()), player);
 		}
@@ -197,6 +248,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		
 		@Override
 		public void deserializeNBT(NBTTagCompound nbt) {
+			abilities.clear();
+			unlockedAbilities.clear();
 			if(nbt.hasKey("activeAbilities") && nbt.hasKey("unlockedAbilities")) {
 				NBTTagList active = nbt.getTagList("activeAbilities", Constants.NBT.TAG_COMPOUND);
 				NBTTagList unlocked = nbt.getTagList("unlockedAbilities", Constants.NBT.TAG_COMPOUND);
@@ -258,7 +311,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	@EventBusSubscriber
 	public static class Events {
-		
+
 		@SubscribeEvent
 		public static void onRespawn(PlayerEvent.PlayerRespawnEvent e) {
 			if(e.player instanceof EntityPlayerMP) {

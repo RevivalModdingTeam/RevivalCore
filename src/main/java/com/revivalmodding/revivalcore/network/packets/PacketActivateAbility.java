@@ -2,51 +2,46 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
-import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketToggleAbility implements IMessage {
+public class PacketActivateAbility implements IMessage {
 	
-	int id;
+	private AbilityBase ability;
 	
-	public PacketToggleAbility() {
-	}
+	public PacketActivateAbility() {}
 	
-	public PacketToggleAbility(int keyID) {
-		this.id = keyID;
+	public PacketActivateAbility(AbilityBase ability) {
+		this.ability = ability;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(id);
+		ByteBufUtils.writeUTF8String(buf, ability.getName());
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		id = buf.readInt();
+		ability = AbilityBase.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
 	}
 	
-	public static class Handler implements IMessageHandler<PacketToggleAbility, IMessage> {
+	public static class Handler implements IMessageHandler<PacketActivateAbility, IMessage> {
 		
 		@Override
-		public IMessage onMessage(PacketToggleAbility message, MessageContext ctx) {
+		public IMessage onMessage(PacketActivateAbility message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
-				if(message.id < cap.getAbilities().size()) {
-					AbilityBase ability = cap.getAbilities().get(message.id);
-					if(ability != null) {
-						ability.toggleAbility();
-					}
-				} else {
-					PlayerHelper.sendMessage(player, TextFormatting.RED + "No active ability for slot " + message.id, true);
+				AbilityBase ability = message.ability;
+				if(cap.getAbilities().size() < 3) {
+					cap.addAbility(ability);
 				}
+				cap.sync(player);
 			});
 			return null;
 		}

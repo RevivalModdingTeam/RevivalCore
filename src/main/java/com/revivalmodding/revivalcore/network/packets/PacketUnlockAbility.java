@@ -6,47 +6,47 @@ import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketToggleAbility implements IMessage {
+public class PacketUnlockAbility implements IMessage {
 	
-	int id;
+	private AbilityBase ability;
 	
-	public PacketToggleAbility() {
+	public PacketUnlockAbility() {
 	}
 	
-	public PacketToggleAbility(int keyID) {
-		this.id = keyID;
+	public PacketUnlockAbility(AbilityBase ability) {
+		this.ability = ability;
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(id);
+		ByteBufUtils.writeUTF8String(buf, ability.getName());
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		id = buf.readInt();
+		ability = AbilityBase.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
 	}
 	
-	public static class Handler implements IMessageHandler<PacketToggleAbility, IMessage> {
+	public static class Handler implements IMessageHandler<PacketUnlockAbility, IMessage> {
 		
 		@Override
-		public IMessage onMessage(PacketToggleAbility message, MessageContext ctx) {
+		public IMessage onMessage(PacketUnlockAbility message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
-				if(message.id < cap.getAbilities().size()) {
-					AbilityBase ability = cap.getAbilities().get(message.id);
-					if(ability != null) {
-						ability.toggleAbility();
+				AbilityBase ability = message.ability;
+				if(!cap.containsAbility(cap.getUnlockedAbilities(), ability)) {
+					if(cap.getLevel() >= ability.getAbilityPrice()) {
+						cap.setLevel(cap.getLevel() - ability.getAbilityPrice());
+						cap.unlockAbility(ability.getName());
 					}
-				} else {
-					PlayerHelper.sendMessage(player, TextFormatting.RED + "No active ability for slot " + message.id, true);
 				}
+				cap.sync(player);
 			});
 			return null;
 		}

@@ -1,22 +1,23 @@
 package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketAbilityToggled implements IMessage {
+public class PacketDeactivateAbility implements IMessage {
 	
 	private AbilityBase ability;
 	
-	public PacketAbilityToggled() {
+	public PacketDeactivateAbility() {
 	}
 	
-	public PacketAbilityToggled(AbilityBase ability) {
+	public PacketDeactivateAbility(AbilityBase ability) {
 		this.ability = ability;
 	}
 	
@@ -28,18 +29,21 @@ public class PacketAbilityToggled implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		ability = AbilityBase.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
-		if(ability == null) {
-			throw new IllegalArgumentException("Received null ability");
-		}
 	}
 	
-	public static class Handler implements IMessageHandler<PacketAbilityToggled, IMessage> {
+	public static class Handler implements IMessageHandler<PacketDeactivateAbility, IMessage> {
 		
 		@Override
-		public IMessage onMessage(PacketAbilityToggled message, MessageContext ctx) {
-			if(ctx.side.isClient()) {
-				Minecraft.getMinecraft().addScheduledTask(() -> message.ability.toggleAbility());
-			}
+		public IMessage onMessage(PacketDeactivateAbility message, MessageContext ctx) {
+			EntityPlayerMP player = ctx.getServerHandler().player;
+			player.getServer().addScheduledTask(() -> {
+				IAbilityCap cap = IAbilityCap.Impl.get(player);
+				AbilityBase ability = message.ability;
+				if(cap.containsAbility(cap.getAbilities(), ability)) {
+					cap.removeAbility(ability);
+				}
+				cap.sync(player);
+			});
 			return null;
 		}
 	}

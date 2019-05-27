@@ -6,22 +6,22 @@ import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class DebugAbility0 extends AbilityBase {
+public class DebugAbility2 extends AbilityBase {
 	
 	private static final ResourceLocation RL = new ResourceLocation(RevivalCore.MODID, "icon.png");
 	
-	public DebugAbility0() {
-		super("debug0");
+	public DebugAbility2() {
+		super("debug2");
 	}
 	
 	@Override
 	public int getAbilityPrice() {
-		return 1;
+		return 3;
 	}
 	
 	@Override
 	public String getFullName() {
-		return "Debug Ability";
+		return "Debug Ability 2";
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class DebugAbility0 extends AbilityBase {
 	@Override
 	public void update(EntityPlayer player) {
 		if(isActive()) {
-			PlayerHelper.sendMessage(player, "Ability Debug 0 is Active", false);
+			PlayerHelper.sendMessage(player, "Ability Debug 2 is Active", false);
 		}
 	}
 }

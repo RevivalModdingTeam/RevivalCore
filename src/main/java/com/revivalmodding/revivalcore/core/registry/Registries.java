@@ -6,6 +6,9 @@ import java.util.HashSet;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.DebugAbility0;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility1;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility2;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility3;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
@@ -59,6 +62,9 @@ public class Registries {
         @SubscribeEvent
         public static void registerAbility(RVRegistryEvent.AbilityRegistryEvent e) {
         	e.register(new DebugAbility0());
+        	e.register(new DebugAbility1());
+        	e.register(new DebugAbility2());
+        	e.register(new DebugAbility3());
         }
 
         @SubscribeEvent

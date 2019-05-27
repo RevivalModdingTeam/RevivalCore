@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.util.handlers;
 import java.util.Random;
 
 import com.revivalmodding.revivalcore.core.RCoreConfig;
+import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
@@ -47,8 +48,10 @@ public class EventHandler
     public static void onWorldTick(TickEvent.WorldTickEvent e) {
     	for(EntityPlayer player : e.world.playerEntities) {
     		AbstractSuit suit = AbstractSuit.getSuit(player);
-    		if(suit != null)
+    		if(suit != null) {
     			suit.handleEffects(player);
+    			IAbilityCap.Impl.get(player).addXP(suit.getXPBonus());
+    		}
     	}
     }
     

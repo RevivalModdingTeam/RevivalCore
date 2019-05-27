@@ -59,6 +59,7 @@ public abstract class AbilityBase implements IRegistryEntry
 	 *  Called first on server, then is sent to client.
 	 */
 	public void toggleAbility() {
+		System.out.println("Toggled");
 		active = !active;
 	}
 	

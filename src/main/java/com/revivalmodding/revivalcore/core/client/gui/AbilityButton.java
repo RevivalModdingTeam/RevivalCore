@@ -16,30 +16,31 @@ import net.minecraft.util.ResourceLocation;
 public class AbilityButton extends GuiButton {
 	
 	private final AbilityBase ability;
-	private final IAbilityCap cap;
 	private EnumButtonState state = EnumButtonState.INACTIVE;
 	private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(RevivalCore.MODID + ":textures/gui/abilitybutton.png");
 	
-	public AbilityButton(AbilityBase ability, int id, IAbilityCap cap, int left, int top) {
-		super(id, left + 9, top + 21*(id+1), 150, 20, ability.getName());
+	public AbilityButton(AbilityBase ability, int id, int left, int top) {
+		super(id, left + 9, top + 1 + 20*(id+1), 150, 20, ability.getName());
 		this.ability = ability;
-		this.cap = cap;
 	}
 	
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
 		
+		IAbilityCap cap = IAbilityCap.Impl.get(mc.player);
 		this.updateState(mouseX, mouseY);
-		ImageHelper.drawImageWithUV(mc, BUTTON_TEXTURE, x, y, width, height, 0, 0.16666666666*state.ordinal(), 1, 0.16666666666*state.ordinal()+0.16666666666, true);
+		ImageHelper.drawImageWithUV(mc, BUTTON_TEXTURE, x, y, width, height, 0, 0.14285714285*state.ordinal(), 1, 0.14285714285*state.ordinal()+0.14285714285, true);
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		ImageHelper.drawCustomSizedImage(mc, ability.getIcon(), this.x + 3, this.y + 2, 16, 16, true);
 		mc.fontRenderer.drawStringWithShadow(ability.getFullName(), this.x + 20, this.y + 6, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow(ability.getAbilityPrice()+"", this.x + 140, this.y + 6, 0xFFFFFF);
 	}
 	
 	private void updateState(int mouseX, int mouseY) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 		if(!AbilityBase.hasUnlockedAbility(player, ability.getName())) {
 			if(cap.getLevel() >= ability.getAbilityPrice()) {
@@ -51,13 +52,17 @@ public class AbilityButton extends GuiButton {
 				state = EnumButtonState.INACTIVE;
 			}
 		} else {
+			// already unlocked abilities
 			boolean b = containsAbility(ability.getName(), cap.getAbilities());
+			// active and not hovered
 			if(b && !hovered) {
 				state = EnumButtonState.ACTIVE;
-			} else if(b && hovered) {
+			} else if(b && hovered) { // active and hovered
 				state = EnumButtonState.READY_TO_REMOVE;
-			} else if(!b && hovered) {
+			} else if(!b && hovered && cap.getAbilities().size() < 3) { // inactive and hovered
 				state = EnumButtonState.AVAILABLE;
+			} else {
+				state = EnumButtonState.READY_TO_ACTIVATE;
 			}
 		}
 	}
@@ -69,5 +74,17 @@ public class AbilityButton extends GuiButton {
 			}
 		}
 		return false;
+	}
+	
+	public AbilityBase getAbility() {
+		return ability;
+	}
+	
+	public EnumButtonState getButtonState() {
+		return state;
+	}
+	
+	public boolean isActiveButton() {
+		return state != EnumButtonState.INACTIVE;
 	}
 }
