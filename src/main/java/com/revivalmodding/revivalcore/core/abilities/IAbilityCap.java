@@ -52,6 +52,14 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	List<AbilityBase> getUnlockedAbilities();
 	
+	void setLevel(int level);
+	
+	void setXP(double xp);
+	
+	int getLevel();
+	
+	double getXP();
+	
 	void sync(EntityPlayerMP player);
 	
 	public class Storage implements IStorage<IAbilityCap> {
@@ -71,9 +79,10 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		
 		// all curently active abilities
 		private List<AbilityBase> abilities = new ArrayList<>();
-		
 		// all abilities player can unlock
 		private List<AbilityBase> unlockedAbilities = new ArrayList<>();
+		private int level;
+		private double xp;
 		
 		@Override
 		public void addAbility(AbilityBase ability, EntityPlayer player) {
@@ -132,6 +141,26 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
+		public void setLevel(int level) {
+			this.level = level;
+		}
+		
+		@Override
+		public void setXP(double xp) {
+			this.xp = xp;
+		}
+		
+		@Override
+		public int getLevel() {
+			return level;
+		}
+		
+		@Override
+		public double getXP() {
+			return xp;
+		}
+		
+		@Override
 		public void sync(EntityPlayerMP player) {
 			NetworkManager.INSTANCE.sendTo(new PacketSync(this.serializeNBT()), player);
 		}
@@ -160,6 +189,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			
 			c.setTag("activeAbilities", active);
 			c.setTag("unlockedAbilities", unlocked);
+			c.setInteger("capLevel", level);
+			c.setDouble("capXP", xp);
 			return c;
 		}
 		
@@ -180,6 +211,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			else {
 				RevivalCore.logger.error("Couldn't load ability data from NBT");
 			}
+			level = nbt.getInteger("capLevel");
+			xp = nbt.getDouble("capXP");
 		}
 		
 		public static IAbilityCap get(EntityPlayer player) {

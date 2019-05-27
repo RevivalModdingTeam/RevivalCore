@@ -32,6 +32,9 @@ public abstract class AbilityBase implements IRegistryEntry
 		this(name, 0);
 	}
 	
+	/**
+	 * Icon into ability gui
+	 */
 	@SideOnly(Side.CLIENT)
 	@Nonnull
 	public abstract ResourceLocation getIcon();
@@ -42,6 +45,9 @@ public abstract class AbilityBase implements IRegistryEntry
 		}
 	}
 	
+	/**
+	 *  Called first on server, then is sent to client.
+	 */
 	public void toggleAbility() {
 		active = !active;
 	}

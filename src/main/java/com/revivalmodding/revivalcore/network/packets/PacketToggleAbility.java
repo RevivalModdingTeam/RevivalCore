@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -46,6 +47,7 @@ public class PacketToggleAbility implements IMessage {
 				if(ability != null) {
 					ability.toggleAbility();
 				}
+				NetworkManager.INSTANCE.sendTo(new PacketAbilityToggled(ability), player);
 			});
 			return null;
 		}
