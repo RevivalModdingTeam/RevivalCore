@@ -45,11 +45,12 @@ public class AbilityGUI extends GuiScreen {
 	public void initGui() {
 		this.initGuiParameters();
 		displayedAbilities.clear();
+		buttonList.clear();
 		for(int i = scrollAmount; i < scrollAmount + 6; i++) {
 			addAbilityToList(displayedAbilities, i);
 		}
 		for(int i = 0; i < displayedAbilities.size(); i++) {
-			this.buttonList.add(new AbilityButton(displayedAbilities.get(i), i, abilities));
+			this.buttonList.add(new AbilityButton(displayedAbilities.get(i), i, abilities, left, top));
 		}
 	}
 	
@@ -58,6 +59,8 @@ public class AbilityGUI extends GuiScreen {
 		ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left, top, xSize, ySize, 0, 0, 0.6862745098, 0.66715625, false);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawForeground();
+		abilities.setLevel(3);
+		abilities.setXP(31);
 	}
 	
 	@Override

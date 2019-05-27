@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility0;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
@@ -53,6 +54,11 @@ public class Registries {
         			.addIngredient(Items.DIAMOND, 2)
         			.craftingTime(250)
         			.build());
+        }
+        
+        @SubscribeEvent
+        public static void registerAbility(RVRegistryEvent.AbilityRegistryEvent e) {
+        	e.register(new DebugAbility0());
         }
 
         @SubscribeEvent

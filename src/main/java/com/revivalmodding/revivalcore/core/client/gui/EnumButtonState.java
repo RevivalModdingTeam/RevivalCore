@@ -6,7 +6,8 @@ public enum EnumButtonState {
 	READY_TO_REMOVE(0xFFFFFF),
 	ACTIVE(0xFFFFFF),
 	PURCHASABLE(0xFFFFFF),
-	INACTIVE(0xFFFFFF);
+	INACTIVE(0xFFFFFF),
+	PURCHASABLE_HOVERED(0xFFFFFF);
 	
 	public final int color;
 	
