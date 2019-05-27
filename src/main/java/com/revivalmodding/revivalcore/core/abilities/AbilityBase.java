@@ -39,6 +39,16 @@ public abstract class AbilityBase implements IRegistryEntry
 	@Nonnull
 	public abstract ResourceLocation getIcon();
 	
+	/**
+	 * Amount of levels to buy this unlock the ability
+	 */
+	public abstract int getAbilityPrice();
+	
+	/**
+	 * Name for displaying on GUI buttons
+	 */
+	public abstract String getFullName();
+	
 	public void update(EntityPlayer player) {
 		if(hasCooldown()) {
 			--currentCooldown;
@@ -63,7 +73,19 @@ public abstract class AbilityBase implements IRegistryEntry
 	public static final boolean hasAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
-			for(AbilityBase base : cap.getAbilities(player)) {
+			for(AbilityBase base : cap.getAbilities()) {
+				if(base.getName().equalsIgnoreCase(abilityName)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static final boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
+		IAbilityCap cap = IAbilityCap.Impl.get(player);
+		if(cap != null) {
+			for(AbilityBase base : cap.getUnlockedAbilities()) {
 				if(base.getName().equalsIgnoreCase(abilityName)) {
 					return true;
 				}
@@ -77,7 +99,7 @@ public abstract class AbilityBase implements IRegistryEntry
 			return null;
 		}
 		IAbilityCap abilities = IAbilityCap.Impl.get(player);
-		List<AbilityBase> active = abilities.getAbilities(player);
+		List<AbilityBase> active = abilities.getAbilities();
 		if(powerKeybind <= active.size() - 1) {
 			return active.get(powerKeybind);
 		}

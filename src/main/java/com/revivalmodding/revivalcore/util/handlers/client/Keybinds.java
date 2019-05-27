@@ -57,7 +57,7 @@ public class Keybinds {
             	NetworkManager.INSTANCE.sendToServer(new PacketToggleAbility(2));
             }
             if(Keybinds.ABILITYGUI.isPressed()) {
-            	Minecraft.getMinecraft().displayGuiScreen(new AbilityGUI());
+            	Minecraft.getMinecraft().displayGuiScreen(new AbilityGUI(Minecraft.getMinecraft().player));
             }
             
             if (metaCap.hasMetaPowers() || metaCap.isPowerEnabled()) {

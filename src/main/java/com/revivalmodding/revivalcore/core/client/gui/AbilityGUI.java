@@ -31,8 +31,8 @@ public class AbilityGUI extends GuiScreen {
 	private int scrollAmount, maxScrollAmount;
 	private List<AbilityBase> displayedAbilities = new ArrayList<>();
 	
-	public AbilityGUI() {
-		abilities = IAbilityCap.Impl.get(mc.player);
+	public AbilityGUI(EntityPlayer player) {
+		abilities = IAbilityCap.Impl.get(player);
 		
 		if(abilities == null) {
 			mc.player.closeScreen();
@@ -49,7 +49,7 @@ public class AbilityGUI extends GuiScreen {
 			addAbilityToList(displayedAbilities, i);
 		}
 		for(int i = 0; i < displayedAbilities.size(); i++) {
-			this.buttonList.add(new AbilityButton(i, displayedAbilities.get(i)));
+			this.buttonList.add(new AbilityButton(displayedAbilities.get(i), i, abilities));
 		}
 	}
 	
@@ -81,21 +81,38 @@ public class AbilityGUI extends GuiScreen {
 	
 	private void drawForeground() {
 		mc.fontRenderer.drawStringWithShadow(mc.player.getName(), left + 10, top + 8, 0xFFFFFF);
+		this.drawLevelStuff();
+		this.drawScrollbar();
 		if(displayedAbilities.isEmpty()) {
-			mc.fontRenderer.drawStringWithShadow("NO ABILITIES, WTH", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
+			mc.fontRenderer.drawStringWithShadow("NO ABILITIES, SMH", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
 			return;
 		}
 	}
 	
 	private void drawLevelStuff() {
-	}
-	
-	private void drawAbilities() {
-		
+		float progress = (float)(abilities.getXP() / IAbilityCap.Impl.getRequiredXPForNewLevel(abilities));
+		int guiX = left + xSize;
+		fontRenderer.drawStringWithShadow(abilities.getLevel()+"", abilities.getLevel() < 10 ? left+80.5f : left+77, top + 8, 0xE22C00);
+		fontRenderer.drawStringWithShadow(abilities.getLevel()+1+"", abilities.getLevel()+1 < 10 ? guiX-13.5f : guiX-17, top + 8, 0x36FF3B);
+		ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left+92, top+9, 63*progress, 5, 0.68819607843, 0, 0.9294117647, 0.01960784313, false);
 	}
 	
 	private void drawScrollbar() {
-		
+		int state = displayedAbilities.size() <= 6 ? 0 : scrollAmount == maxScrollAmount ? 1 : 2;
+		switch(state) {
+			case 0: {
+				ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left+160, top+20, 9, 120, 0.68819607843, 0.02260784313, 0.72849019607, 0.14509803921, false);
+				break;
+			}
+			case 1: {
+				int parts = ABILITY_LIST.length - 6;
+				int length = 120 / (int)(parts*1.25);
+				break;
+			}
+			case 2: {
+				break;
+			}
+		}
 	}
 	
 	private void initGuiParameters() {
@@ -109,52 +126,6 @@ public class AbilityGUI extends GuiScreen {
 	private static void addAbilityToList(List<AbilityBase> list, int i) {
 		if(Registries.ABILITIES.size() > i) {
 			list.add(ABILITY_LIST[i]);
-		}
-	}
-	
-	public class AbilityButton extends GuiButton {
-		
-		private final ResourceLocation icon;
-		
-		public AbilityButton(int buttonId, AbilityBase ability) {
-			super(buttonId, 7, 21 * buttonId, 150, 20, ability.getName());
-			this.icon = ability.getIcon();
-		}
-		
-		@Override
-		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-	        if (this.visible)
-	        {
-	            FontRenderer fontrenderer = mc.fontRenderer;
-	            int i = this.getHoverState(this.hovered);
-	            int j = 14737632;
-	        	ImageHelper.drawCustomSizedImage(mc, icon, x + 2, y + 2, 16, 16, true);
-	            mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
-	            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-	            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-	            GlStateManager.enableBlend();
-	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-	            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-	            this.drawTexturedModalRect(this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
-	            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
-	            this.mouseDragged(mc, mouseX, mouseY);
-
-	            if (packedFGColour != 0)
-	            {
-	                j = packedFGColour;
-	            }
-	            else
-	            if (!this.enabled)
-	            {
-	                j = 10526880;
-	            }
-	            else if (this.hovered)
-	            {
-	                j = 16777120;
-	            }
-
-	            this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);
-	        }
 		}
 	}
 }

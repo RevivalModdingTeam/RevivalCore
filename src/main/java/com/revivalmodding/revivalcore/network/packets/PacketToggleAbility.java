@@ -40,10 +40,10 @@ public class PacketToggleAbility implements IMessage {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
-				if(message.id > cap.getAbilities(player).size()) {
+				if(message.id > cap.getAbilities().size()) {
 					PlayerHelper.sendMessage(player, TextFormatting.RED + "No active ability for slot " + message.id, true);
 				}
-				AbilityBase ability = cap.getAbilities(player).size() > message.id ? cap.getAbilities(player).get(message.id) : null;
+				AbilityBase ability = cap.getAbilities().size() > message.id ? cap.getAbilities().get(message.id) : null;
 				if(ability != null) {
 					ability.toggleAbility();
 				}

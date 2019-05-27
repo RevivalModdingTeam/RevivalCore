@@ -76,6 +76,30 @@ public final class ImageHelper
         else tessellator.draw();
     }
     
+    public static void drawImageWithUV(Minecraft minecraft, ResourceLocation imageLocation, int startX, int startY, double width, double height, double startU, double startV, double u, double v, boolean transparent)
+    {
+        minecraft.getTextureManager().bindTexture(imageLocation);
+        GlStateManager.color(1f, 1f, 1f);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        if(u > 1) u = 1;
+        if(v > 1) v = 1;
+
+        prepareShape(buffer, startX, startY, width, height, startU, startV, u, v);
+
+        if(transparent)
+        {
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            tessellator.draw();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
+        }
+
+        else tessellator.draw();
+    }
+    
     public static void drawProgressionBarHorizontally(Minecraft mc, ResourceLocation img, int x, int y, double width, double height, float progress, boolean transparent)
     {
         mc.getTextureManager().bindTexture(img);

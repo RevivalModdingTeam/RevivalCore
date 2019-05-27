@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -36,13 +37,13 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void setAbilities(List<AbilityBase> abilities);
 	
-	List<AbilityBase> getAbilities(EntityPlayer player);
+	List<AbilityBase> getAbilities();
 	
-	void addAbility(AbilityBase ability, EntityPlayer player);
+	void addAbility(AbilityBase ability);
 	
-	void removeAbility(AbilityBase ability, EntityPlayer player);
+	void removeAbility(AbilityBase ability);
 	
-	boolean hasAbility(AbilityBase ability, EntityPlayer player);
+	boolean hasAbility(AbilityBase ability);
 	
 	void setUnlockedAbilities(List<AbilityBase> abilityKeys);
 	
@@ -85,8 +86,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		private double xp;
 		
 		@Override
-		public void addAbility(AbilityBase ability, EntityPlayer player) {
-			if(!this.hasAbility(ability, player)) {
+		public void addAbility(AbilityBase ability) {
+			if(!this.hasAbility(ability)) {
 				abilities.add(ability);
 			}
 		}
@@ -97,13 +98,13 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
-		public List<AbilityBase> getAbilities(EntityPlayer player) {
+		public List<AbilityBase> getAbilities() {
 			return abilities;
 		}
 		
 		@Override
-		public boolean hasAbility(AbilityBase ability, EntityPlayer player) {
-			for(AbilityBase a : this.getAbilities(player)) {
+		public boolean hasAbility(AbilityBase ability) {
+			for(AbilityBase a : this.getAbilities()) {
 				if(ability.getName().equalsIgnoreCase(a.getName())) {
 					return true;
 				}
@@ -112,8 +113,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
-		public void removeAbility(AbilityBase ability, EntityPlayer player) {
-			if(this.hasAbility(ability, player)) {
+		public void removeAbility(AbilityBase ability) {
+			if(this.hasAbility(ability)) {
 				abilities.remove(abilities.indexOf(ability));
 			}
 		}
@@ -221,6 +222,10 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			}
 			return null;
 		}
+		
+		public static int getRequiredXPForNewLevel(IAbilityCap cap) {
+			return 100 + (cap.getLevel()+1)*10;
+		}
 	}
 	
 	public class Provider implements ICapabilitySerializable<NBTTagCompound> {
@@ -280,11 +285,16 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		@SubscribeEvent
 		public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
 			IAbilityCap cap = IAbilityCap.Impl.get(e.player);
-			if(cap != null && !cap.getAbilities(e.player).isEmpty()) {
-				for(AbilityBase activeAbility : cap.getAbilities(e.player)) {
+			if(cap != null && !cap.getAbilities().isEmpty()) {
+				for(AbilityBase activeAbility : cap.getAbilities()) {
 					if(activeAbility != null) {
 						activeAbility.update(e.player);
 					}
+				}
+				if(cap.getXP() >= Impl.getRequiredXPForNewLevel(cap)) {
+					cap.setXP(0);
+					cap.setLevel(cap.getLevel() + 1);
+					PlayerHelper.sendMessage(e.player, "You are now level " + cap.getLevel(), true);
 				}
 			}
 		}
