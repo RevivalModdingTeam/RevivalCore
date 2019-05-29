@@ -16,8 +16,10 @@ import com.revivalmodding.revivalcore.network.packets.PacketUnlockAbility;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class AbilityGUI extends GuiScreen {
@@ -33,20 +35,6 @@ public class AbilityGUI extends GuiScreen {
 	
 	public AbilityGUI(EntityPlayer player) {
 		this.initGui();
-	}
-	
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		if(mouseButton == 0) {
-			for(AbilityButton button : this.buttonListA) {
-				if(button.mousePressed(mc, mouseX, mouseY)) {
-					if(button.isActiveButton()) {
-						button.playPressSound(mc.getSoundHandler());
-						this.onAbilityButtonPressed(button);
-					}
-				}
-			}
-		}
 	}
 	
 	public void onAbilityButtonPressed(AbilityButton button) {
@@ -81,11 +69,15 @@ public class AbilityGUI extends GuiScreen {
 		buttonListA.clear();
 		buttonList.clear();
 		
-		buttonList.add(new ButtonChangePage(0, left + 103, top + 140, 10, 15, false));
-		buttonList.add(new ButtonChangePage(1, left + 150, top + 140, 10, 15, true));
+		buttonList.add(new ButtonChangePage(7, left + 65, top + 145, 10, 15, false));
+		buttonList.add(new ButtonChangePage(8, left + 115, top + 145, 10, 15, true));
+		buttonList.add(new GuiButton(9, left+xSize-45, top + 143, 40, 20, "Close"));
+		
 		if(scrollAmount == 0) {
 			((ButtonChangePage)buttonList.get(0)).update(false);
-		} else if(scrollAmount == maxScrollAmount) {
+		}
+		
+		if(scrollAmount == maxScrollAmount || maxScrollAmount == 0) {
 			((ButtonChangePage)buttonList.get(1)).update(false);
 		}
 		
@@ -99,7 +91,6 @@ public class AbilityGUI extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		initGui();
 		ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left, top, xSize, ySize, 0, 0, 0.6862745098, 0.66715625, false);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawForeground();
@@ -127,9 +118,50 @@ public class AbilityGUI extends GuiScreen {
 		return false;
 	}
 	
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		if(mouseButton == 0) {
+			for(AbilityButton button : this.buttonListA) {
+				if(button.mousePressed(mc, mouseX, mouseY)) {
+					if(button.isActiveButton()) {
+						button.playPressSound(mc.getSoundHandler());
+						this.onAbilityButtonPressed(button);
+						return;
+					}
+				}
+			}
+			for(GuiButton button : buttonList) {
+				if(button.mousePressed(mc, mouseX, mouseY) && button.visible) {
+					button.playPressSound(mc.getSoundHandler());
+					this.actionPerformed(button);
+					break;
+				}
+			}
+		}
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException {
+		if(button instanceof ButtonChangePage) {
+			ButtonChangePage btn = (ButtonChangePage)button;
+			if(btn.visible) {
+				if(btn.isRightArrow() && scrollAmount < maxScrollAmount) {
+					++this.scrollAmount;
+				} else if(!btn.isRightArrow() && scrollAmount > 0) {
+					--this.scrollAmount;
+				}
+			}
+			this.initGui();
+		}
+		
+		if(button.id == 9) {
+			mc.displayGuiScreen(null);
+		}
+	}
+	
 	private void drawForeground() {
 		fontRenderer.drawStringWithShadow(mc.player.getName(), left + 10, top + 8, 0xFFFFFF);
-		fontRenderer.drawStringWithShadow("Page " + (scrollAmount+1), left + 115, top + 143, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow("Page " + (scrollAmount+1), left + 78, top + 148, 0xFFFFFF);
 		this.drawLevelStuff();
 		this.drawScrollbar();
 		if(displayedAbilities.isEmpty()) {
