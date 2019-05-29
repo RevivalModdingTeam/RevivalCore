@@ -40,7 +40,7 @@ public abstract class AbilityBase implements IRegistryEntry
 	public abstract ResourceLocation getIcon();
 	
 	/**
-	 * Amount of levels to buy this unlock the ability
+	 * Amount of levels to buy this the ability
 	 */
 	public abstract int getAbilityPrice();
 	
@@ -54,12 +54,19 @@ public abstract class AbilityBase implements IRegistryEntry
 			--currentCooldown;
 		}
 	}
+
+	/**
+	 * Ability won't be activated unless this returns true. 
+	 */
+	public boolean canActivateAbility(EntityPlayer player) {
+		return true;
+	}
 	
 	/**
 	 *  Called first on server, then is sent to client.
+	 *  TODO: Not sure if this ^^ is good idea.
 	 */
 	public void toggleAbility() {
-		System.out.println("Toggled");
 		active = !active;
 	}
 	

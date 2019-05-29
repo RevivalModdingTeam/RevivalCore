@@ -38,7 +38,7 @@ public class PacketActivateAbility implements IMessage {
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
 				AbilityBase ability = message.ability;
-				if(cap.getAbilities().size() < 3) {
+				if(cap.getAbilities().size() < 3 && ability.canActivateAbility(player)) {
 					cap.addAbility(ability);
 				}
 				cap.sync(player);

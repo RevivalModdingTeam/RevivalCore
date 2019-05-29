@@ -16,6 +16,7 @@ import com.revivalmodding.revivalcore.network.packets.PacketUnlockAbility;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -57,7 +58,7 @@ public class AbilityGUI extends GuiScreen {
 				break;
 			}
 			case AVAILABLE: {
-				if(abilities.getAbilities().size() < 3) {
+				if(abilities.getAbilities().size() < 3 && button.getAbility().canActivateAbility(mc.player)) {
 					NetworkManager.INSTANCE.sendToServer(new PacketActivateAbility(button.getAbility()));
 				}
 				break;
@@ -78,6 +79,16 @@ public class AbilityGUI extends GuiScreen {
 		this.initGuiParameters();
 		displayedAbilities.clear();
 		buttonListA.clear();
+		buttonList.clear();
+		
+		buttonList.add(new ButtonChangePage(0, left + 103, top + 140, 10, 15, false));
+		buttonList.add(new ButtonChangePage(1, left + 150, top + 140, 10, 15, true));
+		if(scrollAmount == 0) {
+			((ButtonChangePage)buttonList.get(0)).update(false);
+		} else if(scrollAmount == maxScrollAmount) {
+			((ButtonChangePage)buttonList.get(1)).update(false);
+		}
+		
 		for(int i = scrollAmount; i < scrollAmount + 6; i++) {
 			addAbilityToList(displayedAbilities, i);
 		}
@@ -88,6 +99,7 @@ public class AbilityGUI extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		initGui();
 		ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left, top, xSize, ySize, 0, 0, 0.6862745098, 0.66715625, false);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawForeground();
@@ -117,10 +129,11 @@ public class AbilityGUI extends GuiScreen {
 	
 	private void drawForeground() {
 		fontRenderer.drawStringWithShadow(mc.player.getName(), left + 10, top + 8, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow("Page " + (scrollAmount+1), left + 115, top + 143, 0xFFFFFF);
 		this.drawLevelStuff();
 		this.drawScrollbar();
 		if(displayedAbilities.isEmpty()) {
-			mc.fontRenderer.drawStringWithShadow("NO ABILITIES", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
+			fontRenderer.drawStringWithShadow("NO ABILITIES", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
 			return;
 		}
 	}
