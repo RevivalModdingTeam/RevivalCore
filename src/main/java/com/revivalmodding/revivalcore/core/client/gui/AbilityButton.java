@@ -35,7 +35,7 @@ public class AbilityButton extends GuiButton {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		ImageHelper.drawCustomSizedImage(mc, ability.getIcon(), this.x + 3, this.y + 2, 16, 16, true);
 		mc.fontRenderer.drawStringWithShadow(ability.getFullName(), this.x + 20, this.y + 6, 0xFFFFFF);
-		mc.fontRenderer.drawStringWithShadow(ability.getAbilityPrice()+"", this.x + 140, this.y + 6, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow(ability.getAbilityPrice()+"", ability.getAbilityPrice() >= 10 ? this.x + 135 : this.x + 140, this.y + 6, 0xFFFFFF);
 	}
 	
 	private void updateState(int mouseX, int mouseY) {

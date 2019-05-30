@@ -9,6 +9,9 @@ import com.revivalmodding.revivalcore.core.abilities.DebugAbility0;
 import com.revivalmodding.revivalcore.core.abilities.DebugAbility1;
 import com.revivalmodding.revivalcore.core.abilities.DebugAbility2;
 import com.revivalmodding.revivalcore.core.abilities.DebugAbility3;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility4;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility5;
+import com.revivalmodding.revivalcore.core.abilities.DebugAbility6;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
@@ -65,6 +68,9 @@ public class Registries {
         	e.register(new DebugAbility1());
         	e.register(new DebugAbility2());
         	e.register(new DebugAbility3());
+        	e.register(new DebugAbility4());
+        	e.register(new DebugAbility5());
+        	e.register(new DebugAbility6());
         }
 
         @SubscribeEvent

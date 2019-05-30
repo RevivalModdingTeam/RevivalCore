@@ -81,7 +81,7 @@ public class AbilityGUI extends GuiScreen {
 			((ButtonChangePage)buttonList.get(1)).update(false);
 		}
 		
-		for(int i = scrollAmount; i < scrollAmount + 6; i++) {
+		for(int i = scrollAmount*6; i < scrollAmount*6 + 6; i++) {
 			addAbilityToList(displayedAbilities, i);
 		}
 		for(int i = 0; i < displayedAbilities.size(); i++) {
@@ -102,12 +102,12 @@ public class AbilityGUI extends GuiScreen {
 	@Override
 	public void handleMouseInput() throws IOException {
 		int i = Integer.signum(Mouse.getEventDWheel());
-		if(scrollAmount > 0 && i < 0) {
+		if(i < 0 && scrollAmount < maxScrollAmount) {
 			scrollAmount -= i;
 			this.initGui();
 		}
-		if(scrollAmount < maxScrollAmount && i > 0) {
-			scrollAmount += i;
+		if(i > 0 && scrollAmount > 0) {
+			scrollAmount -= i;
 			this.initGui();
 		}
 		super.handleMouseInput();
@@ -163,7 +163,6 @@ public class AbilityGUI extends GuiScreen {
 		fontRenderer.drawStringWithShadow(mc.player.getName(), left + 10, top + 8, 0xFFFFFF);
 		fontRenderer.drawStringWithShadow("Page " + (scrollAmount+1), left + 78, top + 148, 0xFFFFFF);
 		this.drawLevelStuff();
-		this.drawScrollbar();
 		if(displayedAbilities.isEmpty()) {
 			fontRenderer.drawStringWithShadow("NO ABILITIES", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
 			return;
@@ -180,24 +179,6 @@ public class AbilityGUI extends GuiScreen {
 		fontRenderer.drawStringWithShadow(abilities.getAbilities().size()+"/3", left + 10, top + 150, 0xFFFFFF);
 	}
 	
-	private void drawScrollbar() {
-		int state = displayedAbilities.size() <= 6 ? 0 : scrollAmount == maxScrollAmount ? 1 : 2;
-		switch(state) {
-			case 0: {
-				ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left+160, top+20, 9, 120, 0.68819607843, 0.02260784313, 0.72849019607, 0.14509803921, false);
-				break;
-			}
-			case 1: {
-				int parts = ABILITY_LIST.length - 6;
-				int length = 120 / (int)(parts*1.25);
-				break;
-			}
-			case 2: {
-				break;
-			}
-		}
-	}
-	
 	private void initGuiParameters() {
 		xSize = 175;
 		ySize = 169;
@@ -210,6 +191,7 @@ public class AbilityGUI extends GuiScreen {
 				++pageCount;
 				abilitiesLeft -= 6;
 			}
+			--pageCount;
 		}
 		this.maxScrollAmount = pageCount;
 	}
