@@ -1,10 +1,12 @@
 package com.revivalmodding.revivalcore.network.packets;
 
+import com.revivalmodding.revivalcore.core.common.events.PowerToggleEvent;
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -38,6 +40,7 @@ public class PacketSetPower implements IMessage {
                     data.setPowerEnabled(true);
                     PlayerHelper.sendMessage(player, "Power Enabled!", true);
                 }
+                MinecraftForge.EVENT_BUS.post(new PowerToggleEvent(player, data.isPowerEnabled()));
                 data.sync();
             });
             return null;
