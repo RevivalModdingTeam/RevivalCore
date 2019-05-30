@@ -34,7 +34,6 @@ public class ModHelper {
 
         setBetaTester(RCTeam.KIROZAKI);
         setBetaTester(RCTeam.CHARLES);
-        setBetaTester(RCTeam.X39);
         betaTester.addAll(teamMembers);
     }
 

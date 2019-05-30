@@ -10,5 +10,4 @@ public class RCTeam {
     // Testers
     public static final String KIROZAKI = "1e9a9ee1-1825-46c3-8db4-905859fbc268";
     public static final String CHARLES = "5950d366-d6f0-4a0b-88a5-326b51660508";
-    public static final String X39 = "0b565668-f19a-4b9f-821c-a9ec4a8e79de";
 }
