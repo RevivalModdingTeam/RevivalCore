@@ -203,7 +203,15 @@ public class AbilityGUI extends GuiScreen {
 		ySize = 169;
 		left = (this.width - 175) / 2;
 		top = (this.height - 169) / 2;
-		maxScrollAmount = Registries.ABILITIES.size() > 6 ? Registries.ABILITIES.size() - 6 : 0;
+		int abilitiesLeft = ABILITY_LIST.length;
+		int pageCount = 0;
+		if(abilitiesLeft > 6) {
+			while(abilitiesLeft > 0) {
+				++pageCount;
+				abilitiesLeft -= 6;
+			}
+		}
+		this.maxScrollAmount = pageCount;
 	}
 	
 	private static void addAbilityToList(List<AbilityBase> list, int i) {
