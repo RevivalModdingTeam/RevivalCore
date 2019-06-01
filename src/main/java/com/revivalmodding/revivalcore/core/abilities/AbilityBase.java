@@ -62,10 +62,11 @@ public abstract class AbilityBase implements IRegistryEntry
 		return true;
 	}
 	
-	/**
-	 *  Called first on server, then is sent to client.
-	 *  TODO: Not sure if this ^^ is good idea.
-	 */
+	/** Called when player removes this ability from active ability list **/
+	public void onAbilityDeactivated(EntityPlayer player) {
+		
+	}
+	
 	public void toggleAbility() {
 		active = !active;
 	}

@@ -41,6 +41,7 @@ public class PacketDeactivateAbility implements IMessage {
 				AbilityBase ability = message.ability;
 				if(cap.containsAbility(cap.getAbilities(), ability)) {
 					cap.removeAbility(ability);
+					ability.onAbilityDeactivated(player);
 				}
 				cap.sync(player);
 			});
