@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.common.events.LevelUpEvent;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -350,6 +352,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 				if(cap.getXP() >= Impl.getRequiredXPForNewLevel(cap)) {
 					cap.setXP(0);
 					cap.setLevel(cap.getLevel() + 1);
+					MinecraftForge.EVENT_BUS.post(new LevelUpEvent(e.player, cap));
 					PlayerHelper.sendMessage(e.player, "You are now level " + cap.getLevel(), true);
 				}
 			}
