@@ -34,7 +34,6 @@ public class ItemEatable extends Item {
 
         if(isDrink)
         setMaxStackSize(1);
-
         this.setCreativeTab(CreativeTabs.FOOD);
         addPropertyOverride(new ResourceLocation("empty"), (stack, worldIn, entityIn) -> {
             if (getStackTag(stack) == null) {
@@ -48,7 +47,6 @@ public class ItemEatable extends Item {
             return 0F;
         });
     }
-
 
     public static NBTTagCompound getStackTag(ItemStack stack) {
         if (stack.getTagCompound() == null) {
@@ -67,7 +65,6 @@ public class ItemEatable extends Item {
     }
 
     @Override
-
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
         if (entityLiving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityLiving;
@@ -88,7 +85,6 @@ public class ItemEatable extends Item {
                 if (entityplayer instanceof EntityPlayerMP) {
                     CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) entityplayer, stack);
                 }
-
             }else{
                 return stack;
             }
