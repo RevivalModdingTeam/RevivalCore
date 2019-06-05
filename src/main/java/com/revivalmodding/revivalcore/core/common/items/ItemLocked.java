@@ -38,10 +38,8 @@ public class ItemLocked extends Item {
     }
 
     public static boolean isUserAllowed(EntityPlayer player) {
-        for (String s : UUIDS) {
-            if (player.getUniqueID().toString().equals(s)) {
-                return true;
-            }
+        if(UUIDS.contains(player.getUniqueID().toString())) {
+            return true;
         }
         return false;
     }
