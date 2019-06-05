@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "blocks/concrete_powder_white",
-		"1": "shr:items/coffee",
+		"1": "revivalcore:items/coffee",
 		"particle": "blocks/concrete_powder_white"
 	},
 	"elements": [
