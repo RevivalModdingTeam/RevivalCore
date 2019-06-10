@@ -23,7 +23,8 @@ public class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
         super(name, mat, index, slot);
         this.donator = donatorName;
         this.amount = amount;
-        this.allowed.add(uuid); this.allowed.addAll(ModHelper.teamMembers);
+        this.allowed.add(uuid);
+        this.allowed.addAll(ModHelper.teamMembers);
     }
 
     @Override

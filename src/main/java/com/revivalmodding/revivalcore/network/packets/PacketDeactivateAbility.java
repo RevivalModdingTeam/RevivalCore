@@ -2,9 +2,13 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.common.events.AbilityEvent;
+import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -42,6 +46,8 @@ public class PacketDeactivateAbility implements IMessage {
 				if(cap.containsAbility(cap.getAbilities(), ability)) {
 					cap.removeAbility(ability);
 					ability.onAbilityDeactivated(player);
+					PlayerHelper.sendMessage(player, TextFormatting.RED + "You have deactivated ability: " + ability.getFullName(), true);
+					MinecraftForge.EVENT_BUS.post(new AbilityEvent.Deactivate(ability, player));
 				}
 				cap.sync(player);
 			});

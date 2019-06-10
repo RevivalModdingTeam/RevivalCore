@@ -2,9 +2,13 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.common.events.AbilityEvent;
+import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -40,6 +44,8 @@ public class PacketActivateAbility implements IMessage {
 				AbilityBase ability = message.ability;
 				if(cap.getAbilities().size() < 3 && ability.canActivateAbility(player)) {
 					cap.addAbility(ability);
+					PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated ability: " + ability.getFullName(), true);
+					MinecraftForge.EVENT_BUS.post(new AbilityEvent.Activate(ability, player));
 				}
 				cap.sync(player);
 			});
