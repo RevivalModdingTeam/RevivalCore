@@ -139,6 +139,19 @@ public abstract class AbilityBase implements IRegistryEntry
 	}
 	
 	@Override
+	public String toString() {
+		return "Ability:[registry name="+name+", active="+active+"]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof AbilityBase) {
+			return ((AbilityBase)obj).getName().equals(this.getName());
+		}
+		return false;
+	}
+	
+	@Override
 	public String getName() {
 		return name;
 	}
