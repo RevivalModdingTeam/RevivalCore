@@ -53,6 +53,8 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void unlockAbility(String key);
 	
+	void lockAbility(String key);
+	
 	void lockAbilities();
 	
 	List<AbilityBase> getUnlockedAbilities();
@@ -136,9 +138,19 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		
 		@Override
 		public void unlockAbility(String key) {
-			if(AbilityBase.getAbilityFromKey(key) != null) {
+			if(AbilityBase.getAbilityFromKey(key) != null && !AbilityBase.hasAbility(AbilityBase.getAbilityFromKey(key), unlockedAbilities)) {
 				unlockedAbilities.add(AbilityBase.getAbilityFromKey(key));
 			} else RevivalCore.logger.error("Couldn't unlock ability from key '{}', ability doesn't exist!", key);
+		}
+		
+		@Override
+		public void lockAbility(String key) {
+			AbilityBase a = AbilityBase.getAbilityFromKey(key);
+			if(a != null) {
+				if(AbilityBase.hasAbility(a, unlockedAbilities)) {
+					unlockedAbilities.remove(a);
+				}
+			}
 		}
 		
 		@Override
@@ -216,6 +228,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		
 		@Override
 		public void sync(EntityPlayerMP player) {
+			if(this.getLevel() > 99) setLevel(99);
 			NetworkManager.INSTANCE.sendTo(new PacketSync(this.serializeNBT()), player);
 		}
 		
@@ -279,7 +292,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		public static int getRequiredXPForNewLevel(IAbilityCap cap) {
-			return 100 + (cap.getLevel()+1)*10;
+			return cap.getLevel() == 99 ? Integer.MAX_VALUE : 100 + (cap.getLevel()+1)*25;
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -86,6 +87,15 @@ public abstract class AbilityBase implements IRegistryEntry
 				if(base.getName().equalsIgnoreCase(abilityName)) {
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+	
+	public static final boolean hasAbility(AbilityBase ability, Collection<AbilityBase> collection) {
+		for(AbilityBase a : collection) {
+			if(a.getName().equalsIgnoreCase(ability.getName())) {
+				return true;
 			}
 		}
 		return false;
