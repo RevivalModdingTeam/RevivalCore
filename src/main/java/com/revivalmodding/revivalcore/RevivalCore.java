@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore;
 
+import com.revivalmodding.revivalcore.command.CommandSuperpowers;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.CoreItems;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -66,6 +68,11 @@ public class RevivalCore {
     public static void postinit(FMLPostInitializationEvent event) {
     	MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitRegistryEvent());
         proxy.postInit(event);
+    }
+    
+    @EventHandler
+    public static void serverStarting(FMLServerStartingEvent e) {
+    	e.registerServerCommand(new CommandSuperpowers());
     }
 }
 
