@@ -15,6 +15,7 @@ import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
+import com.revivalmodding.revivalcore.util.helper.ModHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -55,6 +56,7 @@ public class Registries {
         @SubscribeEvent
         public static void onModelRegister(ModelRegistryEvent event) {
             CoreItems.registerRenders();
+            //ModHelper.jsonCreator().createBlockModelFiles(RevivalCore.MODID, "D:/mcmods/1.12.2/RevivalCore/src/main/resources/assets/revivalcore");
             for(Block block : CoreBlocks.BLOCK_LIST) {
                 if(block instanceof IHaveItem) {
                     if(((IHaveItem) block).hasItem())

@@ -19,10 +19,9 @@ public class CoreBlocks {
 
     public static final List<Block> BLOCK_LIST = new ArrayList<Block>();
 
-    public static Block SUIT_MAKER = RegisterBlock(new BlockSuitMaker(Material.ROCK), "suit_maker", true); // TODO Fix lava particles on break
+    public static BlockSuitMaker SUIT_MAKER = registerBlock(new BlockSuitMaker(Material.ROCK), "suit_maker", true); // TODO Fix lava particles on break
 
-
-    public static Block RegisterBlock(Block block, String name, boolean tab) {
+    public static <B extends Block> B registerBlock(B block, String name, boolean tab) {
         block.setRegistryName(name);
         block.setTranslationKey(name);
         CoreBlocks.BLOCK_LIST.add(block);

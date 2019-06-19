@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.util.RCTeam;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Mod;
@@ -69,7 +69,7 @@ public class ModHelper {
         return false;
     }
     
-    public static JSONCreator jsonCretor() {
+    public static JSONCreator jsonCreator() {
     	return JSON_CREATOR;
     }
 
@@ -80,8 +80,14 @@ public class ModHelper {
         }
     }
     
+    /** Created by Toma **/
     public static final class JSONCreator {
     	
+    	/**
+    	 * Generates item model json file
+    	 * @param modID - the ID of mod for which we are generating the json files
+    	 * @param path - path to models/item directory in your pc
+    	 */
     	public void createItemModelFiles(String modID, String itemModelDirectoryPath) {
     		if(!getIsDev()) {
     			return;
@@ -89,6 +95,21 @@ public class ModHelper {
     		ForgeRegistries.ITEMS.getValuesCollection().stream()
     				.filter(i -> i.getRegistryName().getNamespace().equals(modID))
     				.forEach(i -> {createItemModel(i, itemModelDirectoryPath, modID);});
+    	}
+    	
+    	/**
+    	 * Generates blockstate, model and item model json files
+    	 * <u>Must be called before item model creation!</u>
+    	 * @param modID - the ID of mod for which we are generating the json files
+    	 * @param path - path to {@code assets/modid} directory in your pc
+    	 */
+    	public void createBlockModelFiles(String modID, String path) {
+    		if(!getIsDev()) {
+    			return;
+    		}
+    		ForgeRegistries.BLOCKS.getValuesCollection().stream()
+    			.filter(b -> b.getRegistryName().getNamespace().equals(modID))
+    			.forEach(b -> {createBlockModel(b, modID, path);});
     	}
     	
     	private void createItemModel(Item item, String path, String id) {
@@ -106,12 +127,70 @@ public class ModHelper {
     				"}";
     				writer.write(json);
     				writer.close();
+    				RevivalCore.logger.info("Created item model for {}", item.getRegistryName());
     			} catch(Exception e) {
     				e.printStackTrace();
     			}
     		}
     	}
     	
-    	// TODO block models/states
+    	private void createBlockModel(Block block, String modID, String path) {
+    		String name = block.getRegistryName().getPath();
+    		File blockState = new File(path + "/blockstates/" + name + ".json");
+    		File model = new File(path + "/models/block/" + name + ".json");
+    		File item = new File(path + "/models/item/" + name + ".json");
+    		if(!blockState.exists()) {
+    			try {
+    				blockState.createNewFile();
+    				FileWriter writer = new FileWriter(blockState);
+    				String json = 
+    				"{\n"+
+    				"\t\"variants\": {\n"+
+    				"\t\t\"normal\": {\n"+
+    				"\t\t\t\"model\": \""+block.getRegistryName().toString()+"\"\n"+
+    				"\t\t}\n"+
+    				"\t}\n"+
+    				"}";
+    				writer.write(json);
+    				writer.close();
+    				RevivalCore.logger.info("Created new blockstate file for {}", block.getRegistryName());
+    			} catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    		if(!model.exists()) {
+    			try {
+    				model.createNewFile();
+    				FileWriter writer = new FileWriter(model);
+    				String json =
+    				"{\n"+
+    				"\t\"parent\": \"block/cube_all\",\n"+
+    				"\t\"textures\": {\n"+
+    				"\t\t\"all\": \""+modID+":blocks/"+name+"\"\n"+
+    				"\t}\n"+
+    				"}";
+    				writer.write(json);
+    				writer.close();
+    				RevivalCore.logger.info("Created new model file for {}", block.getRegistryName());
+    			} catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    		if(!item.exists()) {
+    			try {
+    				item.createNewFile();
+    				FileWriter writer = new FileWriter(item);
+    				String json =
+    				"{\n"+
+    				"\t\"parent\": \""+modID+":block/"+name+"\"\n"+
+    				"}";
+    				writer.write(json);
+    				writer.close();
+    				RevivalCore.logger.info("Created new item file for {}", block.getRegistryName());
+    			} catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
     }
  }
