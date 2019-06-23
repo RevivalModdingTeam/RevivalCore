@@ -32,7 +32,6 @@ public class CommandSuperpowers extends CommandBase {
 		return "cmd.superpowers";
 	}
 	
-	//TODO: WIP. Not tested!
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length > 0) {

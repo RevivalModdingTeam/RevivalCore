@@ -99,7 +99,7 @@ public class ModHelper {
     	
     	/**
     	 * Generates blockstate, model and item model json files
-    	 * <u>Must be called before item model creation!</u>
+    	 * <u>Must be called before item model creation!</u> -> Because of item block file
     	 * @param modID - the ID of mod for which we are generating the json files
     	 * @param path - path to {@code assets/modid} directory in your pc
     	 */
@@ -128,6 +128,8 @@ public class ModHelper {
     				writer.write(json);
     				writer.close();
     				RevivalCore.logger.info("Created item model for {}", item.getRegistryName());
+    			} catch(SecurityException e) {
+    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", file.getPath());
     			} catch(Exception e) {
     				e.printStackTrace();
     			}
@@ -154,6 +156,8 @@ public class ModHelper {
     				writer.write(json);
     				writer.close();
     				RevivalCore.logger.info("Created new blockstate file for {}", block.getRegistryName());
+    			} catch(SecurityException e) {
+    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", blockState.getPath());
     			} catch(Exception e) {
     				e.printStackTrace();
     			}
@@ -172,6 +176,8 @@ public class ModHelper {
     				writer.write(json);
     				writer.close();
     				RevivalCore.logger.info("Created new model file for {}", block.getRegistryName());
+    			} catch(SecurityException e) {
+    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", model.getPath());
     			} catch(Exception e) {
     				e.printStackTrace();
     			}
@@ -187,6 +193,8 @@ public class ModHelper {
     				writer.write(json);
     				writer.close();
     				RevivalCore.logger.info("Created new item file for {}", block.getRegistryName());
+    			} catch(SecurityException e) {
+    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", item.getPath());
     			} catch(Exception e) {
     				e.printStackTrace();
     			}
