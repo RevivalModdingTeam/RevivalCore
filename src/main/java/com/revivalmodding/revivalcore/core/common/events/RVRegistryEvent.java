@@ -1,11 +1,9 @@
 package com.revivalmodding.revivalcore.core.common.events;
 
-import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
-import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 import com.revivalmodding.revivalcore.core.registry.Registries.SuitMakerRecipeRegistry;
 import com.revivalmodding.revivalcore.core.registry.Registries.SuitRegistry;

@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.util.helper;
 
 import com.revivalmodding.revivalcore.meta.util.MetaPowerStrings;
+
 import net.minecraft.util.IStringSerializable;
 
 public class EnumHelper {

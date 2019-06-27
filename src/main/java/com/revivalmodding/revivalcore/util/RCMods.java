@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.util;
 
 import com.revivalmodding.revivalcore.RevivalCore;
+
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.common.Loader;
 

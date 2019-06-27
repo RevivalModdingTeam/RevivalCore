@@ -1,9 +1,10 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
-import com.revivalmodding.revivalcore.core.common.items.CoreItems;
-import net.minecraft.entity.player.EntityPlayer;
+import java.awt.Color;
 
-import java.awt.*;
+import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 public class SuitDebug extends AbstractSuit
 {

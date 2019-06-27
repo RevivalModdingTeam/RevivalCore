@@ -1,17 +1,18 @@
 package com.revivalmodding.revivalcore.core.common.suits.donators;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
 

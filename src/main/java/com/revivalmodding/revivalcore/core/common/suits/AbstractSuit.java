@@ -1,12 +1,13 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
+import java.awt.Color;
+
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-
-import java.awt.*;
 
 public abstract class AbstractSuit implements IRegistryEntry
 {

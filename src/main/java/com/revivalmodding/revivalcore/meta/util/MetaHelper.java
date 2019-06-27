@@ -1,12 +1,13 @@
 package com.revivalmodding.revivalcore.meta.util;
 
+import java.util.Random;
+
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.meta.util.PEnumHandler.MetaPower;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
-import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.Random;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class MetaHelper {
 

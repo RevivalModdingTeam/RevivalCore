@@ -1,15 +1,16 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemLocked extends Item {
 

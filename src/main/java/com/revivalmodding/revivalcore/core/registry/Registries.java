@@ -13,13 +13,10 @@ import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
-import com.revivalmodding.revivalcore.core.recipes.RVRecipeBuilder;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
-import com.revivalmodding.revivalcore.util.helper.ModHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -43,7 +40,7 @@ public class Registries {
 
     @EventBusSubscriber
     public static class Registry {
-
+    	
         @SubscribeEvent
         public static void onSuitMakerRecipesRegister(RVRegistryEvent.SuitMakerRecipeRegistryEvent e) {
         }

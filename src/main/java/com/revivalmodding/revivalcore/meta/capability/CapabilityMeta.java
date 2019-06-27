@@ -1,9 +1,12 @@
 package com.revivalmodding.revivalcore.meta.capability;
 
+import javax.annotation.Nonnull;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketCapSync;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,8 +18,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import javax.annotation.Nonnull;
 
 /**
  * Created by Josia50

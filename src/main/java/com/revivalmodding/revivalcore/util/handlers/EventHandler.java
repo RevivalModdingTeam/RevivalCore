@@ -6,13 +6,11 @@ import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
-import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;

@@ -16,10 +16,8 @@ import com.revivalmodding.revivalcore.network.packets.PacketUnlockAbility;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class AbilityGUI extends GuiScreen {

@@ -1,10 +1,13 @@
 package com.revivalmodding.revivalcore.core.client.render.tileentity;
 
+import org.lwjgl.opengl.GL11;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.models.ModelSuitMaker;
 import com.revivalmodding.revivalcore.core.common.blocks.BlockSuitMaker;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.helper.RenderHelpers;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,7 +18,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderSuitMaker extends TileEntitySpecialRenderer<TileEntitySuitMaker> {

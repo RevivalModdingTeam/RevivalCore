@@ -1,10 +1,14 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.util.RCMods;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -16,9 +20,6 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod.EventBusSubscriber
 public class CoreItems {

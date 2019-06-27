@@ -2,7 +2,6 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
-import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;

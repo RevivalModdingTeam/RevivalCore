@@ -354,7 +354,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
 			IAbilityCap cap = IAbilityCap.Impl.get(e.player);
 			if(cap != null) {
-				if(cap.getAbilities().isEmpty()) {
+				if(!cap.getAbilities().isEmpty()) {
 					for(AbilityBase activeAbility : cap.getAbilities()) {
 						if(activeAbility != null) {
 							activeAbility.update(e.player);
