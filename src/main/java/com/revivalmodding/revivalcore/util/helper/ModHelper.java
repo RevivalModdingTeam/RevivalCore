@@ -84,6 +84,17 @@ public class ModHelper {
     public static final class JSONCreator {
     	
     	/**
+    	 * Generates all required .json files for both blocks and items
+    	 * Call before registering models!
+    	 * @param modID
+    	 * @param assetsPath - path to {@code /main/resources/assets}
+    	 */
+    	public void generateFiles(String modID, String assetsPath) {
+    		createBlockModelFiles(modID, assetsPath + "/" + modID);
+    		createItemModelFiles(modID, assetsPath + "/" + modID + "/models/item");
+    	}
+    	
+    	/**
     	 * Generates item model json file
     	 * @param modID - the ID of mod for which we are generating the json files
     	 * @param path - path to models/item directory in your pc

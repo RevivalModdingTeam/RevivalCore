@@ -20,7 +20,7 @@ public class CoreBlocks {
     public static final List<Block> BLOCK_LIST = new ArrayList<Block>();
 
     public static BlockSuitMaker SUIT_MAKER = registerBlock(new BlockSuitMaker(Material.ROCK), "suit_maker", true); // TODO Fix lava particles on break
-
+    
     public static <B extends Block> B registerBlock(B block, String name, boolean tab) {
         block.setRegistryName(name);
         block.setTranslationKey(name);

@@ -14,6 +14,7 @@ import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
+import com.revivalmodding.revivalcore.util.helper.ModHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
