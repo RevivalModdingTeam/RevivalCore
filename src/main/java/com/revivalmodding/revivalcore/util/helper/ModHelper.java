@@ -3,16 +3,25 @@ package com.revivalmodding.revivalcore.util.helper;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.util.JsonGenerator;
 import com.revivalmodding.revivalcore.util.RCTeam;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -69,7 +78,7 @@ public class ModHelper {
         return false;
     }
     
-    public static JSONCreator jsonCreator() {
+    public static JSONCreator jsonGenerator() {
     	return JSON_CREATOR;
     }
 
@@ -149,30 +158,12 @@ public class ModHelper {
     	
     	private void createBlockModel(Block block, String modID, String path) {
     		String name = block.getRegistryName().getPath();
-    		File blockState = new File(path + "/blockstates/" + name + ".json");
     		File model = new File(path + "/models/block/" + name + ".json");
     		File item = new File(path + "/models/item/" + name + ".json");
-    		if(!blockState.exists()) {
-    			try {
-    				blockState.createNewFile();
-    				FileWriter writer = new FileWriter(blockState);
-    				String json = 
-    				"{\n"+
-    				"\t\"variants\": {\n"+
-    				"\t\t\"normal\": {\n"+
-    				"\t\t\t\"model\": \""+block.getRegistryName().toString()+"\"\n"+
-    				"\t\t}\n"+
-    				"\t}\n"+
-    				"}";
-    				writer.write(json);
-    				writer.close();
-    				RevivalCore.logger.info("Created new blockstate file for {}", block.getRegistryName());
-    			} catch(SecurityException e) {
-    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", blockState.getPath());
-    			} catch(Exception e) {
-    				e.printStackTrace();
-    			}
-    		}
+    		if(block.getBlockState().getProperties().isEmpty()) {
+    			createGenericBlockstate(block, modID, path);
+    		} else createPropertyBlockstate(block, modID, path);
+    		
     		if(!model.exists()) {
     			try {
     				model.createNewFile();
@@ -211,5 +202,115 @@ public class ModHelper {
     			}
     		}
     	}
+    	
+    	private void createGenericBlockstate(Block block, String id, String path) {
+    		String name = block.getRegistryName().getPath();
+    		File blockState = new File(path + "/blockstates/" + name + ".json");
+    		if(!blockState.exists()) {
+    			try {
+    				blockState.createNewFile();
+    				FileWriter writer = new FileWriter(blockState);
+    				String json = 
+    				"{\n"+
+    				"\t\"variants\": {\n"+
+    				"\t\t\"normal\": {\n"+
+    				"\t\t\t\"model\": \""+block.getRegistryName().toString()+"\"\n"+
+    				"\t\t}\n"+
+    				"\t}\n"+
+    				"}";
+    				writer.write(json);
+    				writer.close();
+    				RevivalCore.logger.info("Created new blockstate file for {}", block.getRegistryName());
+    			} catch(SecurityException e) {
+    				RevivalCore.logger.fatal("Couldn't create new file in {}, no access", blockState.getPath());
+    			} catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
+    	
+    	private void createPropertyBlockstate(Block block, String id, String path) {
+    		String name = block.getRegistryName().getPath();
+    		File file = new File(path + "/blockstates/" + name + ".json");
+			if(!file.exists()) {
+				try {
+					file.createNewFile();
+					StringBuilder sb = new StringBuilder();
+					FileWriter writer = new FileWriter(file);
+					sb.append("{\n");
+					sb.append("\t\"variants\": {\n");
+					Iterator<IBlockState> stateIterator = block.getBlockState().getValidStates().iterator();
+					while(stateIterator.hasNext()) {
+						IBlockState state = stateIterator.next();
+						boolean flag0 = stateIterator.hasNext();
+						sb.append("\t\t\"");
+						Collection<IProperty<?>> properties = state.getPropertyKeys();
+						boolean hasDirectionProp = contains(PropertyDirection.class, properties);
+						boolean hasIntegerProp = contains(PropertyInteger.class, properties);
+						int value = 0;
+						EnumFacing facing = null;
+						String[] names = new String[properties.size()];
+						String[] values = new String[properties.size()];
+						IProperty[] propArray = properties.toArray(new IProperty[0]);
+						for(int i = 0; i < properties.size(); i++) {
+							IProperty<?> p = propArray[i];
+							names[i] = p.getName();
+							values[i] = state.getProperties().get(p).toString();
+							if(hasDirectionProp && p instanceof PropertyDirection) {
+								facing = EnumFacing.valueOf(state.getProperties().get(p).toString().toUpperCase());
+							}
+							if(hasIntegerProp && p instanceof PropertyInteger) {
+								value = (Integer)state.getProperties().get(p);
+							}
+						}
+						for(int i = 0; i < properties.size(); i++) {
+							boolean flag1 = i == properties.size()-1;
+							sb.append(names[i]+"="+values[i]+(flag1?("\": {" + getModel(block, values[i], hasIntegerProp, value) +
+									(hasDirectionProp&&facing!=null?",\"y\": "+facing.getOpposite().getHorizontalAngle()+"}"+(flag0?",":"")+"\n":"}"+(flag0?",":"")+"\n")):","));
+						}
+					}
+					sb.append("\t}\n");
+					sb.append("}");
+					writer.write(sb.toString());
+					writer.close();
+				} catch(SecurityException e) {
+					RevivalCore.logger.fatal("Couldn't create new file in {}, no access", file.getPath());
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+    	}
+    	
+		private String getModel(Block block, String additional, boolean integerProperty, int value) {
+			String integerName = "_stage_";
+			String boolName = "_on";
+			if(block.getClass().isAnnotationPresent(JsonGenerator.class)) {
+				JsonGenerator json = block.getClass().getAnnotation(JsonGenerator.class);
+				integerName = json.intName();
+				boolName = json.boolName();
+			}
+			Collection<IProperty<?>> props = block.getBlockState().getProperties();
+			boolean bool = contains(PropertyBool.class, props);
+			StringBuilder sb = new StringBuilder();
+			sb.append("\"model\": \"" + block.getRegistryName().toString());
+			if(integerProperty) {
+				sb.append(integerName + value);
+			}
+			if(bool) {
+				boolean flag = additional != null && additional.contains("true");
+				sb.append(flag?boolName:"");
+			}
+			sb.append("\"");
+			return sb.toString();
+		}
+		
+		private static boolean contains(Class<? extends IProperty<?>> cls, Collection<IProperty<?>> collection) {
+			for(IProperty<?> prop : collection) {
+				if(prop.getClass().equals(cls)) {
+					return true;
+				}
+			}
+			return false;
+		}
     }
  }
