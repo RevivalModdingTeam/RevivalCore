@@ -1,15 +1,10 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.events.LevelUpEvent;
 import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.network.packets.PacketSyncAbilities;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,10 +25,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
@@ -229,7 +223,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		@Override
 		public void sync(EntityPlayerMP player) {
 			if(this.getLevel() > 99) setLevel(99);
-			NetworkManager.INSTANCE.sendTo(new PacketSync(this.serializeNBT()), player);
+			NetworkManager.INSTANCE.sendTo(new PacketSyncAbilities(this.serializeNBT(), player), player);
 		}
 		
 		@Override
@@ -375,42 +369,6 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		public static void attachAbility(AttachCapabilitiesEvent<Entity> e) {
 			if(e.getObject() instanceof EntityPlayer) {
 				e.addCapability(new ResourceLocation(RevivalCore.MODID, "abilityCap"), new IAbilityCap.Provider());
-			}
-		}
-	}
-	
-	public class PacketSync implements IMessage {
-		
-		private NBTTagCompound comp;
-		
-		public PacketSync() {}
-		
-		public PacketSync(NBTTagCompound comp) {
-			this.comp = comp;
-		}
-		
-		@Override
-		public void toBytes(ByteBuf buf) {
-			ByteBufUtils.writeTag(buf, comp);
-		}
-		
-		@Override
-		public void fromBytes(ByteBuf buf) {
-			comp = ByteBufUtils.readTag(buf);
-		}
-		
-		public static class Handler implements IMessageHandler<PacketSync, IMessage> {
-			
-			@Override
-			public IMessage onMessage(PacketSync message, MessageContext ctx) {
-				if(ctx.side.isClient()) {
-					Minecraft.getMinecraft().addScheduledTask(() -> sync(message));
-				}
-				return null;
-			}
-			
-			public static void sync(PacketSync p) {
-				IAbilityCap.Impl.get(Minecraft.getMinecraft().player).deserializeNBT(p.comp);
 			}
 		}
 	}
