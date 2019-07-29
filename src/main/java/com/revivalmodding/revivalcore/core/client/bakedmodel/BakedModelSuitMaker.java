@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+@Deprecated
 public class BakedModelSuitMaker implements IBakedModel
 {
 	@Override
