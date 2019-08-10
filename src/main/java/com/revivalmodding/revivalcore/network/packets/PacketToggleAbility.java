@@ -3,7 +3,6 @@ package com.revivalmodding.revivalcore.network.packets;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextFormatting;
@@ -43,6 +42,7 @@ public class PacketToggleAbility implements IMessage {
 					AbilityBase ability = cap.getAbilities().get(message.id);
 					if(ability != null) {
 						ability.toggleAbility();
+						PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have used/toggled " + ability.getFullName().toLowerCase(), true);
 					}
 				} else {
 					PlayerHelper.sendMessage(player, TextFormatting.RED + "No active ability for slot " + message.id, true);

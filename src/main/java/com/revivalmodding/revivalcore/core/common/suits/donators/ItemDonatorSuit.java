@@ -1,12 +1,8 @@
 package com.revivalmodding.revivalcore.core.common.suits.donators;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +10,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
 
     private final String donator;
     private final double amount;
@@ -53,8 +52,7 @@ public class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
 
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        IDonatorSuit suit = (IDonatorSuit) this;
         tooltip.add("Donator Suit");
-        tooltip.add("Thanks " + suit.getDonatorName() + " for donating " + suit.getDonatedAmount() + "$");
+        tooltip.add("Thanks " + this.getDonatorName() + " for donating " + this.getDonatedAmount() + "$");
     }
 }

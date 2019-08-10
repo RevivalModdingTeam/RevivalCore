@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.util.MetaHelper;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
@@ -11,6 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.util.stream.Collectors;
 
 public class ItemInjection extends Item {
 
@@ -20,6 +24,7 @@ public class ItemInjection extends Item {
         setTranslationKey(name);
         setRegistryName(name);
         setMaxStackSize(1);
+        setCreativeTab(RevivalCore.coretab);
         this.injectionTypes = injectionType;
     }
 
@@ -45,7 +50,7 @@ public class ItemInjection extends Item {
     private void changeItemInjection(EntityPlayer player, ItemStack stack, InjectionTypes types) {
 
         stack.shrink(1);
-        for (Item item : CoreItems.ITEM_LIST) {
+        for (Item item : ForgeRegistries.ITEMS.getValuesCollection().stream().filter(i -> i.getRegistryName().getNamespace().equals(RevivalCore.MODID)).collect(Collectors.toList())) {
             if (item instanceof ItemInjection) {
                 if (((ItemInjection) item).injectionTypes.getName().equals(types.getName())) {
                     player.addItemStackToInventory(new ItemStack(item));

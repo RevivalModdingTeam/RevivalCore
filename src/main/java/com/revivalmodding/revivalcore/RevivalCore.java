@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import com.revivalmodding.revivalcore.command.CommandSuperpowers;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
-import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.tabs.CoreTab;
 import com.revivalmodding.revivalcore.meta.capability.CapMetaStorage;
@@ -33,7 +32,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
-    public static final String VERSION = "0.3.3";
+    public static final String VERSION = "0.3.4";
     public static final String UPDATEURL = "https://raw.githubusercontent.com/RevivalModdingTeam/RevivalModding-ModBugs/master/update/updatecore.json";
 
 
@@ -52,7 +51,6 @@ public class RevivalCore {
         proxy.preInit(event);
         NetworkManager.init();
         Registries.TileRegistry.init();
-        CoreItems.init();
         CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
         CapabilityManager.INSTANCE.register(IAbilityCap.class, new IAbilityCap.Storage(), IAbilityCap.Impl::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());

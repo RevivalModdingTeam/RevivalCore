@@ -1,21 +1,13 @@
 package com.revivalmodding.revivalcore.core.registry;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
-import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
-import com.revivalmodding.revivalcore.core.common.items.CoreItems;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
-import com.revivalmodding.revivalcore.core.common.suits.SuitDebug;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
-import com.revivalmodding.revivalcore.util.helper.ModHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -28,10 +20,15 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Registries {
 	
@@ -47,15 +44,10 @@ public class Registries {
         }
 
         @SubscribeEvent
-        public static void onSuitRegister(RVRegistryEvent.SuitRegistryEvent e) {
-        	e.register(new SuitDebug());
-        }
-
-        @SubscribeEvent
         public static void onModelRegister(ModelRegistryEvent event) {
-            CoreItems.registerRenders();
-            //ModHelper.jsonCreator().createBlockModelFiles(RevivalCore.MODID, "D:/mcmods/1.12.2/RevivalCore/src/main/resources/assets/revivalcore");
-            for(Block block : CoreBlocks.BLOCK_LIST) {
+			ForgeRegistries.ITEMS.getValuesCollection().stream().filter(i -> i.getRegistryName().getNamespace().equals(RevivalCore.MODID))
+					.forEach(i -> ModelLoader.setCustomModelResourceLocation(i, 0, new ModelResourceLocation(i.getRegistryName(), "inventory")));
+            for(Block block : ForgeRegistries.BLOCKS.getValuesCollection().stream().filter(b -> b.getRegistryName().getNamespace().equals(RevivalCore.MODID)).collect(Collectors.toList())) {
                 if(block instanceof IHaveItem) {
                     if(((IHaveItem) block).hasItem())
                         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "normal"));

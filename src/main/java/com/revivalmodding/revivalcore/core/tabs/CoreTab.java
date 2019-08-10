@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore.core.tabs;
 
-import com.revivalmodding.revivalcore.core.common.blocks.CoreBlocks;
+import com.revivalmodding.revivalcore.core.common.blocks.CoreBlockRegistry;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -14,6 +14,6 @@ public class CoreTab extends CreativeTabs {
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Item.getItemFromBlock(CoreBlocks.SUIT_MAKER));
+        return new ItemStack(Item.getItemFromBlock(CoreBlockRegistry.CoreBlocks.SUIT_MAKER));
     }
 }
