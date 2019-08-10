@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;

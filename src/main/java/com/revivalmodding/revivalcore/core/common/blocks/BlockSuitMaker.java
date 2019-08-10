@@ -3,7 +3,7 @@ package com.revivalmodding.revivalcore.core.common.blocks;
 import javax.annotation.Nullable;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.core.common.items.CoreItems;
+import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
@@ -61,7 +61,7 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         super.getDrops(drops, world, pos, state, fortune);
         drops.clear();
-        drops.add(new ItemStack(CoreItems.suit_maker));
+        drops.add(new ItemStack(ItemRegistry.CoreItems.SUIT_MAKER));
          TileEntitySuitMaker tileEntitySuitMaker = (TileEntitySuitMaker) world.getTileEntity(pos);
          for(int i = 0; i < tileEntitySuitMaker.getInventory().size(); i++) {
              drops.add(new ItemStack(tileEntitySuitMaker.getStackInSlot(i).getItem()));
