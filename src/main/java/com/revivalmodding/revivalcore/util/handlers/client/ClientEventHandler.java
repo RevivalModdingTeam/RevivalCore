@@ -23,7 +23,6 @@ public class ClientEventHandler
         GlStateManager.pushMatrix();
 
         if (cap.isVibrating() && cap.canVibrate()) {
-
             GlStateManager.enableBlend();
             for (int i = 0; i < 2; i++) {
                 GlStateManager.translate((r.nextFloat() - 0.5F) / 15, 0, (r.nextFloat() - 0.5F) / 15);
