@@ -32,6 +32,8 @@ public class CapabilityMeta implements IMetaCap {
     private boolean isPowerMalfunction = false;
     private boolean powertempmalfunction = false;
     private int malfunctionlevel = 20;
+    private boolean canVibrate = true;
+    private boolean isVibrating = false;
 
     public CapabilityMeta() {
 
@@ -98,6 +100,26 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
+    public boolean isVibrating() {
+        return isVibrating;
+    }
+
+    @Override
+    public void canVibrate(boolean v) {
+        canVibrate = v;
+    }
+
+    @Override
+    public void setVibrating(boolean v) {
+        isVibrating = v;
+    }
+
+    @Override
+    public boolean canVibrate() {
+        return canVibrate;
+    }
+
+    @Override
     public void setExhaustionLevel(double exhaustionLevel) {
         this.exhaustionlevel = exhaustionLevel;
     }
@@ -130,6 +152,8 @@ public class CapabilityMeta implements IMetaCap {
         nbt.setBoolean("enabled", isPowerEnabled);
         nbt.setBoolean("power_malfunction", isPowerMalfunction);
         nbt.setBoolean("temp_malfunction", powertempmalfunction);
+        nbt.setBoolean("can_vibrate", canVibrate);
+        nbt.setBoolean("vibrating", isVibrating);
         return nbt;
     }
 
@@ -140,6 +164,8 @@ public class CapabilityMeta implements IMetaCap {
         isPowerEnabled = nbt.getBoolean("enabled");
         isPowerMalfunction = nbt.getBoolean("power_malfunction");
         powertempmalfunction = nbt.getBoolean("temp_malfunction");
+        canVibrate = nbt.getBoolean("can_vibrate");
+        isVibrating = nbt.getBoolean("vibrating");
     }
 
 

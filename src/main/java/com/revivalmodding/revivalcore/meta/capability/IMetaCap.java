@@ -17,6 +17,14 @@ public interface IMetaCap extends INBTSerializable<NBTTagCompound> {
 
     boolean hasMetaPowers();
 
+    boolean isVibrating();
+
+    void canVibrate(boolean v);
+
+    void setVibrating(boolean v);
+
+    boolean canVibrate();
+
     void setExhaustionLevel(double exhaustionLevel);
 
     double getexhaustionLevel();

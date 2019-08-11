@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
-import com.revivalmodding.revivalcore.util.handlers.client.ClientEventHandler;
+import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
+import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,8 +33,10 @@ public class AbilityVibrate extends AbilityBase {
 
     @Override
     public void update(EntityPlayer player) {
-        if(isActive()) {
-            ClientEventHandler.vibrating = !ClientEventHandler.vibrating;
+        IMetaCap cap = CapabilityMeta.get(player);
+        if (isActive()) {
+            cap.setVibrating(!cap.isVibrating());
+            cap.sync();
             toggleAbility();
         }
     }
