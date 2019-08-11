@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.core.registry;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.AbilityVibrate;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
@@ -40,8 +41,9 @@ public class Registries {
     public static class Registry {
     	
         @SubscribeEvent
-        public static void onSuitMakerRecipesRegister(RVRegistryEvent.SuitMakerRecipeRegistryEvent e) {
-        }
+        public static void onAbilityRegister(RVRegistryEvent.AbilityRegistryEvent e) {
+        	e.register(new AbilityVibrate());
+		}
 
         @SubscribeEvent
         public static void onModelRegister(ModelRegistryEvent event) {

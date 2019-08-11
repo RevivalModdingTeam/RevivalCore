@@ -10,8 +10,6 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class ClientEventHandler
 {
-
-
     public static boolean vibrating = false;     // TODO Please make this check if player has vibrating enabled
 
     @SubscribeEvent
