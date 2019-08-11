@@ -105,7 +105,7 @@ public class CapabilityMeta implements IMetaCap {
     }
 
     @Override
-    public void canVibrate(boolean v) {
+    public void setCanVibrate(boolean v) {
         canVibrate = v;
     }
 
@@ -116,6 +116,7 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public boolean canVibrate() {
+        // Doesn't always let you vibrate despite the default TRUE setting
         return canVibrate;
     }
 

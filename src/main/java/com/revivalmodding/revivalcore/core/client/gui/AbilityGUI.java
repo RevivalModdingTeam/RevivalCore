@@ -83,7 +83,7 @@ public class AbilityGUI extends GuiScreen {
 			addAbilityToList(displayedAbilities, i);
 		}
 		for(int i = 0; i < displayedAbilities.size(); i++) {
-			this.buttonListA.add(new AbilityButton(displayedAbilities.get(i), i, left, top));
+			this.buttonListA.add(new AbilityButton(displayedAbilities.get(i), i, left, top, this));
 		}
 	}
 	

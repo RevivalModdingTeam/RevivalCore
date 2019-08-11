@@ -6,13 +6,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AbilityVibrate extends AbilityBase {
 
     private static final ResourceLocation ICON = new ResourceLocation("");
+    private final String[] description;
 
     public AbilityVibrate() {
         super("vibrate");
+        this.description = new String[] {"Who knows what's required for this","* Josia propably knows tho*"};
     }
 
     @Nonnull
@@ -39,5 +42,16 @@ public class AbilityVibrate extends AbilityBase {
             cap.sync();
             toggleAbility();
         }
+    }
+
+    @Override
+    public boolean canActivateAbility(EntityPlayer player) {
+        return CapabilityMeta.get(player).canVibrate();
+    }
+
+    @Nullable
+    @Override
+    public String[] getHoveredDescription() {
+        return description;
     }
 }
