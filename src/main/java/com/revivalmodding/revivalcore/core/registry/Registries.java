@@ -11,6 +11,7 @@ import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -21,14 +22,17 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Registries {
@@ -60,11 +64,45 @@ public class Registries {
         @SubscribeEvent
         public static void addEntities(RegistryEvent.Register<EntityEntry> e) {
             IForgeRegistry<EntityEntry> reg = e.getRegistry();
-            reg.registerAll();
+            EntityEntries.registerEntries();
+            reg.registerAll(EntityEntries.ENTRY_LIST.toArray(new EntityEntry[0]));
+            EntityEntries.ENTRY_LIST.clear();
         }
 
         public static class EntityEntries {
 
+        	private static int ID = -1;
+        	private static final List<EntityEntry> ENTRY_LIST = new ArrayList<>();
+
+        	public static void registerEntries() {
+
+			}
+
+			private static void registerEntry(String name, Class<? extends Entity> entityClass) {
+        		EntityEntry entry = createEntryBuilder(name).entity(entityClass).build();
+				ENTRY_LIST.add(entry);
+			}
+
+			private static void registerEntry(String name, Class<? extends Entity> entityClass, int primaryColor, int secondaryColor) {
+				EntityEntry entry = createEntryBuilder(name).entity(entityClass).egg(primaryColor, secondaryColor).build();
+				ENTRY_LIST.add(entry);
+			}
+
+			private static void registerEntry(String name, Class<? extends Entity> entityClass, int trackRange, int updatesPerSecond, boolean sendsVelocityUpdates) {
+				EntityEntry entry = createEntryBuilder(name).entity(entityClass).tracker(trackRange, updatesPerSecond, sendsVelocityUpdates).build();
+				ENTRY_LIST.add(entry);
+			}
+
+			private static void registerEntry(String name, Class<? extends Entity> entityClass, int primaryColor, int secondaryColor, int trackRange, int updatesPerSecond, boolean sendsVelocityUpdates) {
+				EntityEntry entry = createEntryBuilder(name).entity(entityClass).egg(primaryColor, secondaryColor).tracker(trackRange, updatesPerSecond, sendsVelocityUpdates).build();
+				ENTRY_LIST.add(entry);
+			}
+
+			private static <E extends Entity> EntityEntryBuilder<E> createEntryBuilder(String name) {
+				EntityEntryBuilder<E> builder = EntityEntryBuilder.create();
+				ResourceLocation rl = new ResourceLocation(RevivalCore.MODID, name);
+				return builder.id(rl, ID++).name(rl.toString());
+			}
         }
 
         // Use in preinit in mod.

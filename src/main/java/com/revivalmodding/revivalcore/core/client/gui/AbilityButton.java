@@ -21,7 +21,7 @@ public class AbilityButton extends GuiButton {
 	private EnumButtonState state = EnumButtonState.INACTIVE;
 	private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(RevivalCore.MODID + ":textures/gui/abilitybutton.png");
 	private static final ResourceLocation TEXT_BACKGROUND = new ResourceLocation(RevivalCore.MODID + ":textures/gui/background.png");
-	private List<String> abilityDescription = new ArrayList();
+	private List<String> abilityDescription = new ArrayList<>();
 	private int descWidth, descHeight;
 	
 	public AbilityButton(AbilityBase ability, int id, int left, int top, AbilityGUI parentGui) {
@@ -79,7 +79,7 @@ public class AbilityButton extends GuiButton {
 			}
 		}
 		descWidth = maxWidth + 20;
-		descHeight = abilityDescription.size() * 13 + 20;
+		descHeight = abilityDescription.size() * 13 + 40;
 	}
 
 	private void drawAbilityRequirements(Minecraft mc, int mx, int my) {
@@ -94,6 +94,9 @@ public class AbilityButton extends GuiButton {
 			String line = abilityDescription.get(i);
 			mc.fontRenderer.drawString(line, bgX + 10, bgY + 10 + i * 13, 0xFFFFFF);
 		}
+		boolean flag = ability.canActivateAbility(mc.player);
+		int color = flag ? 0x00FF00 : 0xFF0000;
+		mc.fontRenderer.drawString(flag ? "Ability can be activated" : "Ability cannot be activated", bgX + 10, bgY + 10 + (abilityDescription.size() + 1)*13, color);
 	}
 	
 	private void updateState(int mouseX, int mouseY) {
