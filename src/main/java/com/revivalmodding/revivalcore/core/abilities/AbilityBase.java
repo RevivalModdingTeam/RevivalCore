@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
@@ -67,6 +68,11 @@ public abstract class AbilityBase implements IRegistryEntry
 	public void onAbilityDeactivated(EntityPlayer player) {
 		
 	}
+
+	@Nullable
+	public String[] getHoveredDescription() {
+		return null;
+	}
 	
 	public void toggleAbility() {
 		active = !active;
@@ -80,7 +86,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return active;
 	}
 	
-	public static final boolean hasAbility(EntityPlayer player, String abilityName) {
+	public static boolean hasAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
 			for(AbilityBase base : cap.getAbilities()) {
@@ -92,7 +98,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return false;
 	}
 	
-	public static final boolean hasAbility(AbilityBase ability, Collection<AbilityBase> collection) {
+	public static boolean hasAbility(AbilityBase ability, Collection<AbilityBase> collection) {
 		for(AbilityBase a : collection) {
 			if(a.getName().equalsIgnoreCase(ability.getName())) {
 				return true;
@@ -101,7 +107,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return false;
 	}
 	
-	public static final boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
+	public static boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
 			for(AbilityBase base : cap.getUnlockedAbilities()) {
@@ -113,7 +119,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return false;
 	}
 	
-	public static final AbilityBase getAbility(EntityPlayer player, int powerKeybind) {
+	public static AbilityBase getAbility(EntityPlayer player, int powerKeybind) {
 		if(powerKeybind > 2) {
 			return null;
 		}
@@ -125,7 +131,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return null;
 	}
 	
-	public static final AbilityBase getAbilityFromKey(String key) {
+	public static AbilityBase getAbilityFromKey(String key) {
 		for(AbilityBase base : Registries.ABILITIES) {
 			if(base.getName().equalsIgnoreCase(key)) {
 				return base;

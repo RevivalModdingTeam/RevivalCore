@@ -22,7 +22,7 @@ public class ClientEventHandler
         IMetaCap cap = CapabilityMeta.get(player);
         GlStateManager.pushMatrix();
 
-        if (cap.isVibrating() && cap.canVibrate()) {
+        if (cap.isVibrating()) {
             GlStateManager.enableBlend();
             for (int i = 0; i < 1; i++) {
                 GlStateManager.translate((r.nextFloat() - 1F) / 20, 0, (r.nextFloat() - 1F) / 20);
@@ -36,7 +36,7 @@ public class ClientEventHandler
         EntityPlayer player = e.getEntityPlayer();
         IMetaCap cap = CapabilityMeta.get(player);
 
-        if (cap.isVibrating() && cap.canVibrate()) {
+        if (cap.isVibrating()) {
             GlStateManager.disableBlend();
         }
         GlStateManager.popMatrix();
