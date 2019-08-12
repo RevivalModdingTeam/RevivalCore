@@ -10,12 +10,13 @@ import javax.annotation.Nullable;
 
 public class AbilityVibrate extends AbilityBase {
 
+    // TODO
     private static final ResourceLocation ICON = new ResourceLocation("");
     private final String[] description;
 
     public AbilityVibrate() {
         super("vibrate");
-        this.description = new String[] {"Who knows what's required for this","* Josia propably knows tho*"};
+        this.description = new String[] {"Who knows what's required for this","* Josia propably knows tho *"};
     }
 
     @Nonnull

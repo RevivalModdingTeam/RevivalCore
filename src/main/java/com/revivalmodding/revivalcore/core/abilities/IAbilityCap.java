@@ -69,7 +69,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void sync(EntityPlayerMP player);
 	
-	public class Storage implements IStorage<IAbilityCap> {
+	class Storage implements IStorage<IAbilityCap> {
 		
 		@Override
 		public NBTBase writeNBT(Capability<IAbilityCap> capability, IAbilityCap instance, EnumFacing side) {
@@ -82,7 +82,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 	}
 	
-	public class Impl implements IAbilityCap {
+	class Impl implements IAbilityCap {
 		
 		// all curently active abilities
 		private List<AbilityBase> abilities = new ArrayList<>();
@@ -290,7 +290,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 	}
 	
-	public class Provider implements ICapabilitySerializable<NBTTagCompound> {
+	class Provider implements ICapabilitySerializable<NBTTagCompound> {
 		
 		@CapabilityInject(IAbilityCap.class)
 		public static final Capability<IAbilityCap> ABILITIES = null;
@@ -319,7 +319,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	}
 	
 	@EventBusSubscriber
-	public static class Events {
+	class Events {
 
 		@SubscribeEvent
 		public static void onRespawn(PlayerEvent.PlayerRespawnEvent e) {

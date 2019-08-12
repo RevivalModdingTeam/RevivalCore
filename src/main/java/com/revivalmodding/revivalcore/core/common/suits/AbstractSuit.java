@@ -9,9 +9,18 @@ import com.revivalmodding.revivalcore.core.registry.Registries;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
+/**
+ * Base class for suit system.
+ * Every suit contains 4 armor items (ItemSuit instances)
+ *
+ * Every suit has to be registered in appropriate event - in this case it's RVRegistryEvent.SuitRegistryEvent
+ */
 public abstract class AbstractSuit implements IRegistryEntry
 {
+	/** registry name for the suit, doesn't have to contain modID **/
 	private final String name;
+
+	/** color of trails which will be created by this suit *Trails are currently SHR thing, TODO move?* **/
 	private final Color color;
 	
 	public AbstractSuit(String name)
@@ -29,7 +38,8 @@ public abstract class AbstractSuit implements IRegistryEntry
 		this.name = name;
 		this.color = color;
 	}
-	
+
+	/** As the name says, it get's the suit from the playerParameter, returns null if player doesn't have suit **/
     public static AbstractSuit getSuit(EntityPlayer player) {
     	for(int i = 2; i < 6; ++i) {
     		if(!(player.getItemStackFromSlot(EntityEquipmentSlot.values()[i]).getItem() instanceof ItemSuit)) {
@@ -43,13 +53,25 @@ public abstract class AbstractSuit implements IRegistryEntry
     	}
     	return null;
     }
-	
+
+	/**
+	 * @return the suit's helmet item
+	 */
 	public abstract ItemSuit getHelmet();
-	
+
+	/**
+	 * @return the suit's chestplate item
+	 */
 	public abstract ItemSuit getChest();
-	
+
+	/**
+	 * @return the suit's leggings item
+	 */
 	public abstract ItemSuit getLeggings();
-	
+
+	/**
+	 * @return the suit's boots item
+	 */
 	public abstract ItemSuit getBoots();
 	
 	/**
@@ -58,7 +80,8 @@ public abstract class AbstractSuit implements IRegistryEntry
 	 * @param player
 	 */
 	public abstract void handleEffects(EntityPlayer player);
-	
+
+	/** creates new array of all suit parts/items (helmet = 0, chestplate = 1, leggings = 2, boots = 3) **/
 	public final ItemSuit[] getSet()
 	{
 		return new ItemSuit[] {this.getHelmet(), this.getChest(), this.getLeggings(), this.getBoots()};

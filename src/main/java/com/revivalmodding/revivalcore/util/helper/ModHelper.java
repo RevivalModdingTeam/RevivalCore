@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revivalmodding.revivalcore.RevivalCore;
@@ -30,8 +32,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @Mod.EventBusSubscriber
 public class ModHelper {
 
-    public static List<String> betaTester = new ArrayList<>();
-    public static List<String> teamMembers = new ArrayList<>();
+    private static List<String> betaTester = new ArrayList<>();
+    private static List<String> teamMembers = new ArrayList<>();
     public static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     private static final JSONCreator JSON_CREATOR = new JSONCreator();
 
@@ -52,13 +54,21 @@ public class ModHelper {
         betaTester.addAll(teamMembers);
     }
 
-    public static void setBetaTester(String uuid) {
+    protected static void setBetaTester(String uuid) {
         betaTester.add(uuid);
     }
 
-    public static void setTeamMembers(String uuid) {
+    protected static void setTeamMembers(String uuid) {
         teamMembers.add(uuid);
     }
+
+    public static List<String> getBetaTesters() {
+    	return ImmutableList.copyOf(betaTester);
+	}
+
+	public static List<String> getTeamMembers() {
+    	return ImmutableList.copyOf(teamMembers);
+	}
 
     public static boolean betaTesterCheck(String uuid) {
         for (String uuid1 : betaTester) {
@@ -77,7 +87,8 @@ public class ModHelper {
         }
         return false;
     }
-    
+
+    /** Returns the JSONCreator instance **/
     public static JSONCreator jsonGenerator() {
     	return JSON_CREATOR;
     }
@@ -88,9 +99,17 @@ public class ModHelper {
             throw new IllegalStateException("You don't have acces to this!");
         }
     }
-    
-    /** Created by Toma **/
-    public static final class JSONCreator {
+
+	/**
+	 * This allows you to automatically generate simple json files
+	 * like blockstates, block models (16x16x16 cubes = 1 full block), item models
+	 * which might save you some time.
+	 * It can even generate blockstates for blocks with multiple IProperty properties,
+	 * however the model name doesn't have to be precise to what you want
+	 *
+	 * - Made by Toma
+	 */
+	public static final class JSONCreator {
     	
     	/**
     	 * Generates all required .json files for both blocks and items
@@ -106,7 +125,7 @@ public class ModHelper {
     	/**
     	 * Generates item model json file
     	 * @param modID - the ID of mod for which we are generating the json files
-    	 * @param path - path to models/item directory in your pc
+    	 * @param itemModelDirectoryPath - path to models/item directory in your pc
     	 */
     	public void createItemModelFiles(String modID, String itemModelDirectoryPath) {
     		if(!getIsDev()) {

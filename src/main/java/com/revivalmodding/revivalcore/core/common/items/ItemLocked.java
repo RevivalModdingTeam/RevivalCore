@@ -16,7 +16,7 @@ public class ItemLocked extends Item {
     public List<String> UUIDS = new ArrayList<String>();
 
     public ItemLocked() {
-        UUIDS.addAll(ModHelper.teamMembers);
+        UUIDS.addAll(ModHelper.getBetaTesters());
     }
 
     public void addAllowedUser(String uuid) {

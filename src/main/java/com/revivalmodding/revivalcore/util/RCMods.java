@@ -11,7 +11,7 @@ public class RCMods {
     public static final String SPEEDSTERREBORN = "shr";
     public static final String METAVERSE = "metaverse";
 
-    public static enum Mods implements IStringSerializable {
+    public enum Mods implements IStringSerializable {
         SPEEDSTERREBORN("shr");
 
         private String names;

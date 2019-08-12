@@ -74,6 +74,7 @@ public class Registries {
         	private static int ID = -1;
         	private static final List<EntityEntry> ENTRY_LIST = new ArrayList<>();
 
+        	// Register entity entries here
         	public static void registerEntries() {
 
 			}

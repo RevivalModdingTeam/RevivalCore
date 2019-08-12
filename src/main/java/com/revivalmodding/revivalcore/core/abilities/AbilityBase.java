@@ -18,13 +18,24 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Base class for all abilities
+ * Each ability has to be registered in RVRegistryEvent.AbilityRegistryEvent
+ * Once registered, players can unlock and use this ability using the AbilityGUI
+ *
+ * Each ability interaction fires some event (AbilityEvent.Activate and AbilityEvent.Deactivate)
+ * Keep in mind that not all abilites might call the .Deactivate event, design feature/flaw, whatever
+ *
+ * - Made by Toma
+ */
 public abstract class AbilityBase implements IRegistryEntry
 {
 	public final int maxCooldown;
 	public int currentCooldown;
 	private final String name;
 	private boolean active;
-	
+
+
 	public AbilityBase(String name, int cooldown) {
 		this.name = name;
 		this.maxCooldown = cooldown;
@@ -69,23 +80,31 @@ public abstract class AbilityBase implements IRegistryEntry
 		
 	}
 
+	/**
+	 * Description which will be displayed when player hovers over this
+	 * ability inside AbilityGUI.
+	 * return null for no description
+	 */
 	@Nullable
 	public String[] getHoveredDescription() {
 		return null;
 	}
 	
-	public void toggleAbility() {
+	public final void toggleAbility() {
 		active = !active;
 	}
 	
-	public boolean hasCooldown() {
+	public final boolean hasCooldown() {
 		return currentCooldown > 0;
 	}
 	
-	public boolean isActive() {
+	public final boolean isActive() {
 		return active;
 	}
-	
+
+	/**
+	 * @return if player has currently active ability with the name of abilityName
+	 */
 	public static boolean hasAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
@@ -130,7 +149,12 @@ public abstract class AbilityBase implements IRegistryEntry
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Called only during capability sync, you shouldn't have to call this method
+	 * @param key - the ability registry name
+	 * @return
+	 */
 	public static AbilityBase getAbilityFromKey(String key) {
 		for(AbilityBase base : Registries.ABILITIES) {
 			if(base.getName().equalsIgnoreCase(key)) {

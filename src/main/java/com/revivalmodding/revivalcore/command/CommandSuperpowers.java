@@ -20,6 +20,14 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+/**
+ * Command for modifying player data like level,
+ * abilities etc.
+ * Calls SuperpowersCommandExecuteEvent on Forge's event bus.
+ * The event is only called when first command arg == "all"
+ *
+ * Made by Toma
+ */
 public class CommandSuperpowers extends CommandBase {
 	
 	@Override

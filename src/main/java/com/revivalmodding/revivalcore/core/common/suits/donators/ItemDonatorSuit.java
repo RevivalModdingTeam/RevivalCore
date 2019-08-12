@@ -24,7 +24,7 @@ public abstract class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
         this.donator = donatorName;
         this.amount = amount;
         this.allowed.add(uuid);
-        this.allowed.addAll(ModHelper.teamMembers);
+        this.allowed.addAll(ModHelper.getTeamMembers());
     }
 
     @Override
