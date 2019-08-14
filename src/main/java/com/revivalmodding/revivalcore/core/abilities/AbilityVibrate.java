@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,12 +11,12 @@ import javax.annotation.Nullable;
 
 public class AbilityVibrate extends AbilityBase {
 
-    // TODO
-    private static final ResourceLocation ICON = new ResourceLocation("");
+    private static final ResourceLocation ICON = new ResourceLocation(RevivalCore.MODID + ":textures/icons/abilityvibrate.png");
     private final String[] description;
 
     public AbilityVibrate() {
         super("vibrate");
+        // TODO better description
         this.description = new String[] {"Who knows what's required for this","* Josia propably knows tho *"};
     }
 
