@@ -1,20 +1,11 @@
 package com.revivalmodding.revivalcore.util.helper;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.util.JsonGenerator;
 import com.revivalmodding.revivalcore.util.RCTeam;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -25,9 +16,14 @@ import net.minecraft.item.Item;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 @Mod.EventBusSubscriber
 public class ModHelper {
@@ -71,33 +67,18 @@ public class ModHelper {
 	}
 
     public static boolean betaTesterCheck(String uuid) {
-        for (String uuid1 : betaTester) {
-            if (uuid1.equals(uuid)) {
-                return true;
-            }
-        }
+        for (String uuid1 : betaTester) { if (uuid1.equals(uuid)) return true; }
         return false;
     }
 
     public static boolean teamMemberCheck(String uuid) {
-        for(String uuid1 : teamMembers) {
-            if(uuid1.equals(uuid)) {
-                return true;
-            }
-        }
+        for(String uuid1 : teamMembers) { if(uuid1.equals(uuid)) return true; }
         return false;
     }
 
     /** Returns the JSONCreator instance **/
     public static JSONCreator jsonGenerator() {
     	return JSON_CREATOR;
-    }
-
-    @SubscribeEvent
-    public static void PreventNonBetaTester(PlayerEvent.PlayerLoggedInEvent e) {
-        if(!betaTesterCheck(e.player.getUniqueID().toString()) && !getIsDev() && RevivalCore.check) {
-            throw new IllegalStateException("You don't have acces to this!");
-        }
     }
 
 	/**

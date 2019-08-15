@@ -32,7 +32,7 @@ public class CapabilityMeta implements IMetaCap {
     private boolean isPowerMalfunction = false;
     private boolean powertempmalfunction = false;
     private int malfunctionlevel = 20;
-    private boolean canVibrate = true;
+    private boolean canVibrate = false;
     private boolean isVibrating = false;
 
     public CapabilityMeta() {
@@ -116,8 +116,8 @@ public class CapabilityMeta implements IMetaCap {
 
     @Override
     public boolean canVibrate() {
-        // Doesn't always let you vibrate despite the default TRUE setting
         return canVibrate;
+        // TODO Once Superpower registry is in , let this check if the power itself allows vibrating
     }
 
     @Override

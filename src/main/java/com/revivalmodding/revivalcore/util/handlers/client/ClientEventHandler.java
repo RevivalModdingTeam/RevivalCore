@@ -25,7 +25,7 @@ public class ClientEventHandler
         if (cap.isVibrating()) {
             GlStateManager.enableBlend();
             for (int i = 0; i < 1; i++) {
-                GlStateManager.translate((r.nextFloat() - 1F) / 20, 0, (r.nextFloat() - 1F) / 20);
+                GlStateManager.translate((r.nextFloat() - 1F) / 80, 0, (r.nextFloat() - 1F) / 80);
                 GlStateManager.color(1, 1, 1, 0.4F);
             }
         }
