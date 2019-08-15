@@ -17,7 +17,7 @@ public abstract class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
 
     private final String donator;
     private final double amount;
-    public static List<String> allowed = new ArrayList<>();
+    public List<String> allowed = new ArrayList<>();
 
     public ItemDonatorSuit(String name, ArmorMaterial mat, int index, EntityEquipmentSlot slot, String donatorName, String uuid, double amount) {
         super(name, mat, index, slot);
