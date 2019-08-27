@@ -4,6 +4,8 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ItemSuit extends ItemArmor
 {
@@ -13,7 +15,9 @@ public abstract class ItemSuit extends ItemArmor
 		setRegistryName(name);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public abstract ResourceLocation get3DTexture();
 
+	@SideOnly(Side.CLIENT)
 	public abstract ModelBiped get3DModel();
 }
