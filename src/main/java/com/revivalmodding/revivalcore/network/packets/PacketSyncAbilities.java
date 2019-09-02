@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -15,35 +16,38 @@ import java.util.UUID;
 public class PacketSyncAbilities implements IMessage {
 
     private NBTTagCompound comp;
-    private EntityPlayer player;
+    private UUID player;
 
     public PacketSyncAbilities() {}
 
-    public PacketSyncAbilities(NBTTagCompound comp, EntityPlayer player) {
+    public PacketSyncAbilities(NBTTagCompound comp, UUID uuid) {
         this.comp = comp;
-        this.player = player;
+        this.player = uuid;
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeTag(buf, comp);
-        ByteBufUtils.writeUTF8String(buf, player.getGameProfile().getId().toString());
+        ByteBufUtils.writeUTF8String(buf, player.toString());
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         comp = ByteBufUtils.readTag(buf);
-        player = Minecraft.getMinecraft().player.world.getPlayerEntityByUUID(UUID.fromString(ByteBufUtils.readUTF8String(buf)));
+        player = UUID.fromString(ByteBufUtils.readUTF8String(buf));
     }
 
     public static class Handler implements IMessageHandler<PacketSyncAbilities, IMessage> {
 
         @Override
         public IMessage onMessage(PacketSyncAbilities message, MessageContext ctx) {
-            EntityPlayer player = message.player;
-            if(player != null) {
-                Minecraft.getMinecraft().addScheduledTask(() -> {IAbilityCap.Impl.get(player).deserializeNBT(message.comp);});
-            }
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                EntityPlayer receiver = Minecraft.getMinecraft().player;
+                EntityPlayer fromClient = receiver.world.getPlayerEntityByUUID(message.player);
+                if(fromClient != null) {
+                    IAbilityCap.Impl.get(fromClient).deserializeNBT(message.comp);
+                }
+            });
             return null;
         }
     }

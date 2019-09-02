@@ -223,7 +223,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		@Override
 		public void sync(EntityPlayerMP player) {
 			if(this.getLevel() > 99) setLevel(99);
-			NetworkManager.INSTANCE.sendTo(new PacketSyncAbilities(this.serializeNBT(), player), player);
+			NetworkManager.INSTANCE.sendTo(new PacketSyncAbilities(this.serializeNBT(), player.getUniqueID()), player);
 		}
 		
 		@Override
