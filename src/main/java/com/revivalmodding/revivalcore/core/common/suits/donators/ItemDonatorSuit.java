@@ -19,8 +19,8 @@ public abstract class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
     private final double amount;
     public List<String> allowed = new ArrayList<>();
 
-    public ItemDonatorSuit(String name, ArmorMaterial mat, int index, EntityEquipmentSlot slot, String donatorName, String uuid, double amount) {
-        super(name, mat, index, slot);
+    public ItemDonatorSuit(String name, EntityEquipmentSlot slot, String donatorName, String uuid, double amount) {
+        super(name, slot);
         this.donator = donatorName;
         this.amount = amount;
         this.allowed.add(uuid);

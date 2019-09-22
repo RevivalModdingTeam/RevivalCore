@@ -1,10 +1,18 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
+import com.revivalmodding.revivalcore.core.client.models.ModelHeadTest;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,10 +29,67 @@ public class SuitRenderHandler {
         EntityPlayer player = e.getEntityPlayer();
         for(EntityEquipmentSlot slot : ARMOR) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            if(stack.getItem() instanceof ItemSuit) {
-                ItemSuit suit = (ItemSuit)stack.getItem();
-
-
+            // TODO
+            if(stack.getItem() instanceof ItemArmor) {
+                //ItemSuit suit = (ItemSuit)stack.getItem();
+                ModelPlayer main = e.getRenderer().getMainModel();
+                ModelBiped model = /*suit.get3DModel(slot)*/new ModelHeadTest();
+                //ResourceLocation texture = suit.get3DTexture();
+                float partial = e.getPartialRenderTick();
+                GlStateManager.pushMatrix();
+                GlStateManager.disableCull();
+                boolean shouldSit = player.isRiding() && (player.getRidingEntity() != null && player.getRidingEntity().shouldRiderSit());
+                boolean sneak = main.isSneak;
+                model.swingProgress = main.swingProgress;
+                float f = normalizeAndInterpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, partial);
+                float f1 = normalizeAndInterpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partial);
+                float yaw = f1 - f;
+                if (shouldSit && player.getRidingEntity() instanceof EntityLivingBase) {
+                    EntityLivingBase entitylivingbase = (EntityLivingBase) player.getRidingEntity();
+                    f = normalizeAndInterpolateRotation(entitylivingbase.prevRenderYawOffset, entitylivingbase.renderYawOffset, partial);
+                    yaw = f1 - f;
+                    float f3 = MathHelper.wrapDegrees(yaw);
+                    if (f3 < -85.0F) {
+                        f3 = -85.0F;
+                    }
+                    if (f3 >= 85.0F) {
+                        f3 = 85.0F;
+                    }
+                    f = f1 - f3;
+                    if (f3 * f3 > 2500.0F) {
+                        f += f3 * 0.2F;
+                    }
+                    yaw = f1 - f;
+                }
+                float f7 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partial;
+                float f8 = player.ticksExisted + partial;
+                GlStateManager.rotate(180.0F - f, 0.0F, 1.0F, 0.0F);
+                float f4 = prepareScale(player, partial);
+                float f5 = 0.0F;
+                float f6 = 0.0F;
+                if (!player.isRiding()) {
+                    f5 = player.prevLimbSwingAmount + (player.limbSwingAmount - player.prevLimbSwingAmount) * partial;
+                    f6 = player.limbSwing - player.limbSwingAmount * (1.0F - partial);
+                    if (player.isChild()) {
+                        f6 *= 3.0F;
+                    }
+                    if (f5 > 1.0F) {
+                        f5 = 1.0F;
+                    }
+                    yaw = f1 - f;
+                }
+                GlStateManager.enableAlpha();
+                model.setLivingAnimations(player, f6, f5, partial);
+                model.setRotationAngles(f6, f5, f8, yaw, f7, f4, player);
+                //TODO
+                Minecraft.getMinecraft().getTextureManager().bindTexture(ItemSuit.EMPTY);
+                model.render(player, f6, f5, f8, yaw, f7, f4);
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+                GlStateManager.enableTexture2D();
+                GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+                GlStateManager.enableCull();
+                GlStateManager.popMatrix();
             }
         }
     }
@@ -36,7 +101,7 @@ public class SuitRenderHandler {
     private static float prepareScale(EntityPlayer player, float partial) {
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-        GlStateManager.scale(1.9F, 1.9F, 1.9F);
+        GlStateManager.scale(1.5F, 1.5F, 1.5F);
         GlStateManager.translate(0.0F, -1.5F, 0.0F);
         return 0.0625F;
     }
