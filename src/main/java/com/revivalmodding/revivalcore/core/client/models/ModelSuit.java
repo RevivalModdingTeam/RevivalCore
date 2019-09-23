@@ -1,23 +1,24 @@
 package com.revivalmodding.revivalcore.core.client.models;
 
+import com.revivalmodding.revivalcore.core.client.render.SHRModelRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelSuit extends ModelBase {
 
-    public ModelRenderer headPart;
-    public ModelRenderer bodyPart;
-    public ModelRenderer rightArm;
-    public ModelRenderer leftArm;
-    public ModelRenderer rightLeg;
-    public ModelRenderer leftLeg;
+    public SHRModelRenderer headPart;
+    public SHRModelRenderer bodyPart;
+    public SHRModelRenderer rightArm;
+    public SHRModelRenderer leftArm;
+    public SHRModelRenderer rightLeg;
+    public SHRModelRenderer leftLeg;
     public ModelBiped.ArmPose leftArmPose;
     public ModelBiped.ArmPose rightArmPose;
     public boolean isSneak;
@@ -29,7 +30,7 @@ public class ModelSuit extends ModelBase {
         this.textureHeight = texHeight;
     }
 
-    public static <T extends ModelRenderer> T validateAndAssign(T part) {
+    public static <T extends SHRModelRenderer> T validateAndAssign(T part) {
         if (part == null) {
             throw new NullPointerException("Suit cannot have null part!");
         }
@@ -39,7 +40,7 @@ public class ModelSuit extends ModelBase {
     /**
      * Must be called in order to render properly
      **/
-    public void setParentModels(ModelRenderer head, ModelRenderer body, ModelRenderer rightArm, ModelRenderer leftArm, ModelRenderer rightLeg, ModelRenderer leftLeg) {
+    public void setParentModels(SHRModelRenderer head, SHRModelRenderer body, SHRModelRenderer rightArm, SHRModelRenderer leftArm, SHRModelRenderer rightLeg, SHRModelRenderer leftLeg) {
         this.headPart = validateAndAssign(head);
         this.bodyPart = validateAndAssign(body);
         this.rightArm = validateAndAssign(rightArm);
@@ -50,6 +51,10 @@ public class ModelSuit extends ModelBase {
 
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        throw new IllegalArgumentException("This function is not acceptable for suit render! Use the one with EntityEquipmentSlot parameter");
+    }
+
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale, EntityEquipmentSlot slot) {
         if(headPart == null || bodyPart == null || rightArm == null || leftArm == null || rightLeg == null || leftLeg == null)
             throw new IllegalArgumentException("Suit part is null! Make sure to call ModelSuit::setParentsModels before rendering!");
         this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
@@ -58,26 +63,26 @@ public class ModelSuit extends ModelBase {
             float f = 2.0F;
             GlStateManager.scale(0.75F, 0.75F, 0.75F);
             GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
-            this.headPart.render(scale);
+            //this.headPart.render(scale, slot);
             GlStateManager.popMatrix();
             GlStateManager.pushMatrix();
             GlStateManager.scale(0.5F, 0.5F, 0.5F);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-            this.bodyPart.render(scale);
-            this.rightArm.render(scale);
-            this.leftArm.render(scale);
-            this.rightLeg.render(scale);
-            this.leftLeg.render(scale);
+            this.bodyPart.render(scale, slot);
+            this.rightArm.render(scale, slot);
+            this.leftArm.render(scale, slot);
+            this.rightLeg.render(scale, slot);
+            this.leftLeg.render(scale, slot);
         } else {
             if (entityIn.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
-            this.headPart.render(scale);
-            this.bodyPart.render(scale);
-            this.rightArm.render(scale);
-            this.leftArm.render(scale);
-            this.rightLeg.render(scale);
-            this.leftLeg.render(scale);
+            this.headPart.render(scale, slot);
+            this.bodyPart.render(scale, slot);
+            this.rightArm.render(scale, slot);
+            this.leftArm.render(scale, slot);
+            this.rightLeg.render(scale, slot);
+            this.leftLeg.render(scale, slot);
         }
         GlStateManager.popMatrix();
     }
@@ -153,7 +158,7 @@ public class ModelSuit extends ModelBase {
         }
         if (this.swingProgress > 0.0F) {
             EnumHandSide enumhandside = this.getMainHand(entityIn);
-            ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
+            SHRModelRenderer modelRenderer = this.getArmForSide(enumhandside);
             float f1 = this.swingProgress;
             this.bodyPart.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
             if (enumhandside == EnumHandSide.LEFT) {
@@ -172,9 +177,9 @@ public class ModelSuit extends ModelBase {
             f1 = 1.0F - f1;
             float f2 = MathHelper.sin(f1 * (float) Math.PI);
             float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.headPart.rotateAngleX - 0.7F) * 0.75F;
-            modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
-            modelrenderer.rotateAngleY += this.bodyPart.rotateAngleY * 2.0F;
-            modelrenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+            modelRenderer.rotateAngleX = (float) ((double) modelRenderer.rotateAngleX - ((double) f2 * 1.2D + (double) f3));
+            modelRenderer.rotateAngleY += this.bodyPart.rotateAngleY * 2.0F;
+            modelRenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
         }
         if (this.isSneak) {
             this.bodyPart.rotateAngleX = 0.5F;
@@ -220,7 +225,7 @@ public class ModelSuit extends ModelBase {
         }
     }
 
-    protected ModelRenderer getArmForSide(EnumHandSide side) {
+    protected SHRModelRenderer getArmForSide(EnumHandSide side) {
         return side == EnumHandSide.LEFT ? this.leftArm : this.rightArm;
     }
 }

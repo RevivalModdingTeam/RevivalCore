@@ -1,10 +1,12 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
 import com.revivalmodding.revivalcore.core.client.models.ModelHeadTest;
+import com.revivalmodding.revivalcore.core.client.models.ModelSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,10 +32,10 @@ public class SuitRenderHandler {
         for(EntityEquipmentSlot slot : ARMOR) {
             ItemStack stack = player.getItemStackFromSlot(slot);
             // TODO
-            if(stack.getItem() instanceof ItemArmor) {
+            if(!(stack.getItem() instanceof ItemArmor)) {
                 //ItemSuit suit = (ItemSuit)stack.getItem();
                 ModelPlayer main = e.getRenderer().getMainModel();
-                ModelBiped model = /*suit.get3DModel(slot)*/new ModelHeadTest();
+                ModelSuit model = new ModelHeadTest();
                 //ResourceLocation texture = suit.get3DTexture();
                 float partial = e.getPartialRenderTick();
                 GlStateManager.pushMatrix();
@@ -81,9 +83,10 @@ public class SuitRenderHandler {
                 GlStateManager.enableAlpha();
                 model.setLivingAnimations(player, f6, f5, partial);
                 model.setRotationAngles(f6, f5, f8, yaw, f7, f4, player);
+                //copyModelAngles(model.headPart, main.bipedHeadwear);
                 //TODO
                 Minecraft.getMinecraft().getTextureManager().bindTexture(ItemSuit.EMPTY);
-                model.render(player, f6, f5, f8, yaw, f7, f4);
+                model.render(player, f6, f5, f8, yaw, f7, f4, slot);
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
                 GlStateManager.enableTexture2D();
@@ -101,8 +104,8 @@ public class SuitRenderHandler {
     private static float prepareScale(EntityPlayer player, float partial) {
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-        GlStateManager.scale(1.5F, 1.5F, 1.5F);
-        GlStateManager.translate(0.0F, -1.5F, 0.0F);
+        GlStateManager.scale(2F, 2F, 2F);
+        GlStateManager.translate(0.0F, -1.5F, -0.0625F);
         return 0.0625F;
     }
 
@@ -120,5 +123,11 @@ public class SuitRenderHandler {
             }
         }
         return false;
+    }
+
+    private static void copyModelAngles(ModelRenderer from, ModelRenderer to) {
+        to.rotateAngleX = from.rotateAngleX;
+        to.rotateAngleY = from.rotateAngleY;
+        to.rotateAngleZ = from.rotateAngleZ;
     }
 }
