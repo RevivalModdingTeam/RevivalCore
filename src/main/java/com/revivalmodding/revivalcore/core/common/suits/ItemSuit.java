@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.core.common.suits;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;

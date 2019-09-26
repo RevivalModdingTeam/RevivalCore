@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SuitRenderHandler {
 
-    private static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
+    public static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
     private static final ModelBiped SUIT_2D = new ModelBiped(0.6F);
     private static final ResourceLocation TEXTURE_2DTEST = new ResourceLocation(RevivalCore.MODID + ":textures/template.png");
 

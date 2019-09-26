@@ -19,7 +19,7 @@ public abstract class AbstractSuit implements IRegistryEntry
 	/** registry name for the suit, doesn't have to contain modID **/
 	private final String name;
 
-	/** color of trails which will be created by this suit *Trails are currently SHR thing, TODO move?* **/
+	/** color of trails which will be created by this suit *Trails are currently SHR thing, TODO move? **/
 	private final Color color;
 	
 	public AbstractSuit(String name)

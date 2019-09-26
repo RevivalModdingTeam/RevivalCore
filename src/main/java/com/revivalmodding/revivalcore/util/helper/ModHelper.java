@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.common.suits.ItemSuitMultiSeason;
 import com.revivalmodding.revivalcore.util.JsonGenerator;
 import com.revivalmodding.revivalcore.util.RCTeam;
 import net.minecraft.block.Block;
@@ -12,9 +13,11 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -49,6 +52,15 @@ public class ModHelper {
         setBetaTester(RCTeam.CHARLES);
         betaTester.addAll(teamMembers);
     }
+
+	public static void registerMultiSeasonSuit(RegistryEvent.Register<Item> event, CreativeTabs tab, String name, ItemSuitMultiSeason.Season... seasons) {
+		ItemSuitMultiSeason.Builder builder = ItemSuitMultiSeason.Builder.create();
+		for(int i = 0; i < seasons.length; i++) {
+			builder.addSeason(seasons[i]);
+		}
+		ItemSuitMultiSeason[] seasonSuitItems = builder.build(name, tab);
+		event.getRegistry().registerAll(seasonSuitItems);
+	}
 
     protected static void setBetaTester(String uuid) {
         betaTester.add(uuid);
