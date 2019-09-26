@@ -78,8 +78,7 @@ public class BakedModelSuitMaker implements IBakedModel
 				trsrt = new TRSRTransformation(translate, leftRot, scale, rightRot);
 				return Pair.of(this, trsrt.getMatrix());
 			}
-			
-			//TODO - finish
+
 			case FIRST_PERSON_LEFT_HAND: {
 				translate = new Vector3f(0.18f, 0.05f, 0.1f);
 				scale = new Vector3f(0.6f, 0.6f, 0.6f);
@@ -97,8 +96,7 @@ public class BakedModelSuitMaker implements IBakedModel
 				trsrt = new TRSRTransformation(translate, leftRot, scale, rightRot);
 				return Pair.of(this, trsrt.getMatrix());
 			}
-			
-			//TODO - finish
+
 			case THIRD_PERSON_LEFT_HAND: {
 				translate = new Vector3f(0, 0, 0);
 				scale = new Vector3f(0, 0, 0);

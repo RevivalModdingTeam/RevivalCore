@@ -54,6 +54,6 @@ public class AbilityVibrate extends AbilityBase {
     @Nullable
     @Override
     public String[] getHoveredDescription() {
-        return description;
+        return null;
     }
 }
