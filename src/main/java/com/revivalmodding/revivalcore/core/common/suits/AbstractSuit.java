@@ -1,13 +1,12 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
-import java.awt.Color;
-
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+
+import java.awt.*;
 
 /**
  * Base class for suit system.
@@ -68,31 +67,24 @@ public abstract class AbstractSuit implements IRegistryEntry
 	 * @return the suit's leggings item
 	 */
 	public abstract ItemSuit getLeggings();
-
-	/**
-	 * @return the suit's boots item
-	 */
-	public abstract ItemSuit getBoots();
 	
 	/**
 	 * Called every tick on both sides
 	 * <u>but only when is being currently worn by player</u>
-	 * @param player
 	 */
 	public abstract void handleEffects(EntityPlayer player);
 
-	/** creates new array of all suit parts/items (helmet = 0, chestplate = 1, leggings = 2, boots = 3) **/
+	/** creates new array of all suit parts/items (helmet = 0, chestplate = 1, leggings = 2) **/
 	public final ItemSuit[] getSet()
 	{
-		return new ItemSuit[] {this.getHelmet(), this.getChest(), this.getLeggings(), this.getBoots()};
+		return new ItemSuit[] {this.getHelmet(), this.getChest(), this.getLeggings()};
 	}
 	
 	public final boolean isSuitComplete(EntityPlayer player)
 	{
 		return player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == this.getHelmet() &&
 				player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == this.getChest() &&
-				player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() == this.getLeggings() &&
-				player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == this.getBoots();
+				player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() == this.getLeggings();
 	}
 	
 	/** Additional xp player will get when wearing this suit **/

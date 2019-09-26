@@ -1,7 +1,6 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
-import com.revivalmodding.revivalcore.core.client.models.ModelHeadTest;
-import com.revivalmodding.revivalcore.core.client.models.ModelSuit;
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -9,11 +8,12 @@ import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,26 +23,26 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SuitRenderHandler {
 
-    private static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
+    private static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
+    private static final ModelBiped SUIT_2D = new ModelBiped(0.6F);
+    private static final ResourceLocation TEXTURE_2DTEST = new ResourceLocation(RevivalCore.MODID + ":textures/template.png");
 
-    // TODO: in future version implement 2D model
     @SubscribeEvent
     public static void renderSuitOnPlayer(RenderPlayerEvent.Post e) {
         EntityPlayer player = e.getEntityPlayer();
         for(EntityEquipmentSlot slot : ARMOR) {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            // TODO
-            if(!(stack.getItem() instanceof ItemArmor)) {
-                //ItemSuit suit = (ItemSuit)stack.getItem();
+            if(stack.getItem() instanceof ItemSuit) {
+                // TODO 3D Render
+                ItemSuit suit = (ItemSuit)stack.getItem();
                 ModelPlayer main = e.getRenderer().getMainModel();
-                ModelSuit model = new ModelHeadTest();
-                //ResourceLocation texture = suit.get3DTexture();
+                ResourceLocation texture = suit.get3DTexture();
                 float partial = e.getPartialRenderTick();
                 GlStateManager.pushMatrix();
                 GlStateManager.disableCull();
                 boolean shouldSit = player.isRiding() && (player.getRidingEntity() != null && player.getRidingEntity().shouldRiderSit());
                 boolean sneak = main.isSneak;
-                model.swingProgress = main.swingProgress;
+                SUIT_2D.swingProgress = main.swingProgress;
                 float f = normalizeAndInterpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, partial);
                 float f1 = normalizeAndInterpolateRotation(player.prevRotationYawHead, player.rotationYawHead, partial);
                 float yaw = f1 - f;
@@ -81,12 +81,12 @@ public class SuitRenderHandler {
                     yaw = f1 - f;
                 }
                 GlStateManager.enableAlpha();
-                model.setLivingAnimations(player, f6, f5, partial);
-                model.setRotationAngles(f6, f5, f8, yaw, f7, f4, player);
-                //copyModelAngles(model.headPart, main.bipedHeadwear);
-                //TODO
-                Minecraft.getMinecraft().getTextureManager().bindTexture(ItemSuit.EMPTY);
-                model.render(player, f6, f5, f8, yaw, f7, f4, slot);
+                SUIT_2D.setLivingAnimations(player, f6, f5, partial);
+                SUIT_2D.setRotationAngles(f6, f5, f8, yaw, f7, f4, player);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+                GlStateManager.translate(0, -1.3, 0.08);
+                GlStateManager.scale(1.8, 1.8, 1.8);
+                doSuitRender2D(player, f6, f5, f8, yaw, f7, f4, slot);
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
                 GlStateManager.enableTexture2D();
@@ -97,6 +97,30 @@ public class SuitRenderHandler {
         }
     }
 
+    private static void doSuitRender2D(Entity e, float limbSwing, float limbSwingAmount, float ticksExisted, float headYaw, float pitch, float scaleFactor, EntityEquipmentSlot slot) {
+        SUIT_2D.setVisible(false);
+        switch (slot) {
+            case HEAD: {
+                // too big smh
+                //SUIT_2D.bipedHead.showModel = true;
+                SUIT_2D.bipedHeadwear.showModel = true;
+                break;
+            }
+            case CHEST: {
+                SUIT_2D.bipedBody.showModel = true;
+                SUIT_2D.bipedRightArm.showModel = true;
+                SUIT_2D.bipedLeftArm.showModel = true;
+                break;
+            }
+            case LEGS: {
+                SUIT_2D.bipedRightLeg.showModel = true;
+                SUIT_2D.bipedLeftLeg.showModel = true;
+                break;
+            }
+        }
+        SUIT_2D.render(e, limbSwing, limbSwingAmount, ticksExisted, headYaw, pitch, scaleFactor);
+    }
+
     private static double interpolate(double prev, double current, double partial) {
         return prev + (current - prev) * partial;
     }
@@ -104,7 +128,7 @@ public class SuitRenderHandler {
     private static float prepareScale(EntityPlayer player, float partial) {
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-        GlStateManager.scale(2F, 2F, 2F);
+        GlStateManager.scale(0.97F, 0.97F, 0.97F);
         GlStateManager.translate(0.0F, -1.5F, -0.0625F);
         return 0.0625F;
     }

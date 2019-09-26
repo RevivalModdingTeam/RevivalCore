@@ -19,6 +19,9 @@ public class RCoreConfig {
         @Config.LangKey("config.rcore.updatechecker")
         @Config.Comment("Toggle the update checker")
         public boolean updatechecker = true;
+
+        /*@Config.LangKey("config.rcore.3dsuits")
+        public boolean use3DSuits = false;*/
     }
 
     @Mod.EventBusSubscriber

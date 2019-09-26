@@ -30,7 +30,4 @@ public abstract class ItemSuit extends ItemArmor
 
 	@SideOnly(Side.CLIENT)
 	public abstract ResourceLocation get3DTexture();
-
-	@SideOnly(Side.CLIENT)
-	public abstract ModelBiped get3DModel(EntityEquipmentSlot slot);
 }
