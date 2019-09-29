@@ -2,15 +2,11 @@ package com.revivalmodding.revivalcore.core.common.items;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlockRegistry;
-import com.revivalmodding.revivalcore.core.common.suits.ItemSuitMultiSeason;
 import com.revivalmodding.revivalcore.util.RCMods;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
-import com.revivalmodding.revivalcore.util.helper.ModHelper;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;

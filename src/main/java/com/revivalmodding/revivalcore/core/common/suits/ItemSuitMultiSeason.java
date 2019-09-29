@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
 import com.google.common.base.Preconditions;
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -42,14 +43,16 @@ public class ItemSuitMultiSeason extends ItemSuit {
             return this;
         }
 
-        public Builder addSeason(String prefix, ResourceLocation texture) {
-            this.seasons.add(new Season(prefix, texture));
+        public Builder addSeason(String prefix) {
+            this.seasons.add(new Season(prefix));
             return this;
         }
 
         public ItemSuitMultiSeason[] build(String name, CreativeTabs tab) {
             Preconditions.checkNotNull(name, "Registry name cannot be null!");
             Preconditions.checkState(!name.isEmpty(), "Registry name cannot be empty string!");
+            Preconditions.checkState(!seasons.isEmpty(), "You must define season!");
+            if(seasons.size() == 1) RevivalCore.logger.warn("Registering multiseason suit with only one season!");
             ItemSuitMultiSeason[] arr = new ItemSuitMultiSeason[seasons.size()*3];
             for(int s = 0; s < seasons.size(); s++) {
                 for(int i = 0; i < SuitRenderHandler.ARMOR.length; i++) {
@@ -66,20 +69,14 @@ public class ItemSuitMultiSeason extends ItemSuit {
 
     public static class Season {
 
-        private ResourceLocation location;
         private String prefix;
 
-        public Season(String seasonPrefix, ResourceLocation seasonSuitTexture) {
+        public Season(String seasonPrefix) {
             this.prefix = seasonPrefix;
-            this.location = seasonSuitTexture;
         }
 
         public String prefix() {
             return prefix;
-        }
-
-        public ResourceLocation location() {
-            return location;
         }
 
         @Override
@@ -89,7 +86,7 @@ public class ItemSuitMultiSeason extends ItemSuit {
                     return true;
                 } else {
                     Season season = (Season) obj;
-                    return season.prefix.equals(this.prefix) && season.location.equals(this.location);
+                    return season.prefix.equals(this.prefix);
                 }
             }
             return false;
@@ -97,7 +94,7 @@ public class ItemSuitMultiSeason extends ItemSuit {
 
         @Override
         public String toString() {
-            return "Season[prefix="+prefix+",textureLocation="+location+"]";
+            return "Season[prefix="+prefix+"]";
         }
     }
 }

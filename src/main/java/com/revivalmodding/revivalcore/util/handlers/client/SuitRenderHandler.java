@@ -84,7 +84,7 @@ public class SuitRenderHandler {
                 SUIT_2D.setLivingAnimations(player, f6, f5, partial);
                 SUIT_2D.setRotationAngles(f6, f5, f8, yaw, f7, f4, player);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-                GlStateManager.translate(0, -1.3, 0.08);
+                GlStateManager.translate(0, -1.3, 0.065);
                 GlStateManager.scale(1.8, 1.8, 1.8);
                 doSuitRender2D(player, f6, f5, f8, yaw, f7, f4, slot);
                 GlStateManager.disableRescaleNormal();

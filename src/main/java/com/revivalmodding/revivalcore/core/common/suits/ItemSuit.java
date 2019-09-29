@@ -1,9 +1,8 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,7 @@ import javax.annotation.Nullable;
 
 public abstract class ItemSuit extends ItemArmor
 {
-	public static final ResourceLocation EMPTY = new ResourceLocation("");
+	public static final ResourceLocation EMPTY = new ResourceLocation(RevivalCore.MODID + ":textures/empty.png");
 
 	public ItemSuit(String name, EntityEquipmentSlot slot) {
 		super(ItemRegistry.SUIT_MATERIAL, 0, slot);
