@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 
 public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<E> {
 
-    public ModelBiped mainModel;
     private final RenderLivingBase<?> renderer;
+    public ModelBiped mainModel;
 
     public LayerSuitBase(RenderLivingBase<?> renderer) {
         this.renderer = renderer;
@@ -25,7 +25,7 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
 
     @Override
     public void doRenderLayer(E entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        for(EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
+        for (EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
             this.renderLayerPart(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, slot);
         }
     }
@@ -37,7 +37,7 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
 
     private void renderLayerPart(E entity, float limbSwing, float limbSwingAmount, float partial, float age, float headYaw, float headPitch, float scale, EntityEquipmentSlot slot) {
         ItemStack stack = entity.getItemStackFromSlot(slot);
-        if(!stack.isEmpty() && stack.getItem() instanceof ItemSuit) {
+        if (!stack.isEmpty() && stack.getItem() instanceof ItemSuit) {
             ItemSuit suit = (ItemSuit) stack.getItem();
             mainModel.setModelAttributes(this.renderer.getMainModel());
             mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partial);
