@@ -20,6 +20,7 @@ public class RCoreConfig {
         @Config.Comment("Toggle the update checker")
         public boolean updatechecker = true;
 
+        // TODO implement
         /*@Config.LangKey("config.rcore.3dsuits")
         public boolean use3DSuits = false;*/
     }

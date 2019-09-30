@@ -37,10 +37,5 @@ public class ItemRegistry {
                 new ItemSuitMaker(CoreBlockRegistry.CoreBlocks.SUIT_MAKER),
                 new ItemInjection("empty_injection", InjectionTypes.EMPTY)
         );
-        if(RCMods.Mods.SPEEDSTERREBORN.isLoaded()) {
-            event.getRegistry().registerAll(
-                    new ItemInjection("speedforce_injection", InjectionTypes.SPEEDSTER)
-            );
-        }
     }
 }
