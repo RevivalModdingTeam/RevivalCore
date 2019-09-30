@@ -1,13 +1,10 @@
 package com.revivalmodding.revivalcore.util.handlers;
 
-import java.util.Random;
-
 import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.util.helper.Constants;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +18,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber
 public class EventHandler
