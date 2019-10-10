@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.suits.donators;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -20,6 +21,7 @@ public class ItemDonatorSuit extends ItemSuit {
         this.donator = donatorName;
         this.amount = amount;
         this.simpleSuit = simpleSuit;
+        this.setCreativeTab(RevivalCore.coretab);
     }
 
     @Override
