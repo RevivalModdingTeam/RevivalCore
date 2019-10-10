@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.core.common.suits;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
+import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
@@ -10,7 +11,7 @@ import java.awt.*;
 
 /**
  * Base class for suit system.
- * Every suit contains 4 armor items (ItemSuit instances)
+ * Every suit contains 3 armor items (ItemSuit instances)
  *
  * Every suit has to be registered in appropriate event - in this case it's RVRegistryEvent.SuitRegistryEvent
  */
@@ -19,7 +20,7 @@ public abstract class AbstractSuit implements IRegistryEntry
 	/** registry name for the suit, doesn't have to contain modID **/
 	private final String name;
 
-	/** color of trails which will be created by this suit *Trails are currently SHR thing, TODO move? **/
+	/** color of trails which will be created by this suit *Trails are currently SHR thing, TODO move, and rewrite? **/
 	private final Color color;
 	
 	public AbstractSuit(String name)
@@ -32,16 +33,15 @@ public abstract class AbstractSuit implements IRegistryEntry
 		this(name, new Color(red, green, blue));
 	}
 	
-	public AbstractSuit(String name, Color color)
-	{
+	public AbstractSuit(String name, Color color) {
 		this.name = name;
 		this.color = color;
 	}
 
 	/** As the name says, it get's the suit from the playerParameter, returns null if player doesn't have suit **/
     public static AbstractSuit getSuit(EntityPlayer player) {
-    	for(int i = 2; i < 6; ++i) {
-    		if(!(player.getItemStackFromSlot(EntityEquipmentSlot.values()[i]).getItem() instanceof ItemSuit)) {
+    	for(EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
+    		if(!(player.getItemStackFromSlot(slot).getItem() instanceof ItemSuit)) {
     			return null;
     		}
     	}
@@ -95,8 +95,7 @@ public abstract class AbstractSuit implements IRegistryEntry
 	/**
 	 * @return Color for trail
 	 */
-	public final Color getTrailRGB()
-	{
+	public final Color getTrailRGB() {
 		return color;
 	}
 	

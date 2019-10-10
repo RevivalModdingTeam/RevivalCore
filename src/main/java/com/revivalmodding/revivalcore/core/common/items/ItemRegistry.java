@@ -29,11 +29,19 @@ public class ItemRegistry {
         public static final ItemSuitMaker SUIT_MAKER = null;
         public static final ItemInjection EMPTY_INJECTION = null;
         public static final ItemInjection SPEEDFORCE_INJECTION = null;
+        public static final ItemDonatorSuit GRIMMLAWKE_HEAD = null;
+        public static final ItemDonatorSuit GRIMMLAWKE_CHEST = null;
+        public static final ItemDonatorSuit GRIMMLAWKE_LEGS = null;
+        public static final ItemDonatorSuit ROYAL_ZANO_HEAD = null;
+        public static final ItemDonatorSuit ROYAL_ZANO_CHEST = null;
+        public static final ItemDonatorSuit ROYAL_ZANO_LEGS = null;
+        public static final ItemDonatorSuit DARK_MESSIAH_HEAD = null;
+        public static final ItemDonatorSuit DARK_MESSIAH_CHEST = null;
+        public static final ItemDonatorSuit DARK_MESSIAH_LEGS = null;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemRegister(RegistryEvent.Register<Item> event) {
-        SUIT_MATERIAL = EnumHelper.addArmorMaterial("suit", "", -1, new int[4], 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
         event.getRegistry().registerAll(
                 new ItemEatable("coffee_mug", 3, 0F, true),
                 new ItemSuitMaker(CoreBlockRegistry.CoreBlocks.SUIT_MAKER),

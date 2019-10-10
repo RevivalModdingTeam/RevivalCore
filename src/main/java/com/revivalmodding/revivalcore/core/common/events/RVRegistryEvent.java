@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
 
 	public abstract void register(T entry);
-	public abstract void registerAll(T[] entries);
+	public abstract void registerAll(T... entries);
 	
     /**
      *  Event is called during <u>initialization</u> phase of RevivalCore
@@ -29,7 +29,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
         }
     	
     	@Override
-    	public void registerAll(RVRecipe[] entries) {
+    	public void registerAll(RVRecipe... entries) {
     		for(RVRecipe rec : entries) {
     			register(rec);
     		}
@@ -48,7 +48,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
     	}
     	
     	@Override
-    	public void registerAll(AbstractSuit[] entries) {
+    	public void registerAll(AbstractSuit... entries) {
     		for(AbstractSuit suit : entries) {
     			register(suit);
     		}
@@ -66,7 +66,7 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
     	}
     	
     	@Override
-    	public void registerAll(AbilityBase[] entries) {
+    	public void registerAll(AbilityBase... entries) {
     		for(AbilityBase base : entries) {
     			register(base);
     		}

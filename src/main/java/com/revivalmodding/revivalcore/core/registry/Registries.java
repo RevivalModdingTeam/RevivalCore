@@ -5,14 +5,19 @@ import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.AbilityVibrate;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
+import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
+import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -29,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -60,6 +66,67 @@ public class Registries {
                 }
             }
         }
+
+        @SubscribeEvent
+		public static void onSuitRegistry(RVRegistryEvent.SuitRegistryEvent e) {
+        	AbstractSuit grimmlawke = new AbstractSuit("grimmlawke", Color.LIGHT_GRAY) {
+				@Override
+				public ItemSuit getHelmet() {
+					return ItemRegistry.CoreItems.GRIMMLAWKE_HEAD;
+				}
+				@Override
+				public ItemSuit getChest() {
+					return ItemRegistry.CoreItems.GRIMMLAWKE_CHEST;
+				}
+				@Override
+				public ItemSuit getLeggings() {
+					return ItemRegistry.CoreItems.GRIMMLAWKE_LEGS;
+				}
+				@Override
+				public void handleEffects(EntityPlayer player) {
+				}
+			};
+        	AbstractSuit royalZano = new AbstractSuit("royal_zano", new Color(66, 220, 156)) {
+				@Override
+				public ItemSuit getHelmet() {
+					return ItemRegistry.CoreItems.ROYAL_ZANO_HEAD;
+				}
+				@Override
+				public ItemSuit getChest() {
+					return ItemRegistry.CoreItems.ROYAL_ZANO_CHEST;
+				}
+				@Override
+				public ItemSuit getLeggings() {
+					return ItemRegistry.CoreItems.ROYAL_ZANO_LEGS;
+				}
+				@Override
+				public void handleEffects(EntityPlayer player) {
+					if(!player.world.isRemote) player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 2, false, false));
+				}
+			};
+        	AbstractSuit darkMessiah = new AbstractSuit("dark_messiah", new Color(104, 32, 116)) {
+				@Override
+				public ItemSuit getHelmet() {
+					return ItemRegistry.CoreItems.DARK_MESSIAH_HEAD;
+				}
+
+				@Override
+				public ItemSuit getChest() {
+					return ItemRegistry.CoreItems.DARK_MESSIAH_CHEST;
+				}
+
+				@Override
+				public ItemSuit getLeggings() {
+					return ItemRegistry.CoreItems.DARK_MESSIAH_LEGS;
+				}
+
+				@Override
+				public void handleEffects(EntityPlayer player) {
+					if(!player.world.isRemote) player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 2, false, false));
+				}
+			};
+        	e.registerAll(grimmlawke, royalZano, darkMessiah);
+		}
 
         @SubscribeEvent
         public static void addEntities(RegistryEvent.Register<EntityEntry> e) {
