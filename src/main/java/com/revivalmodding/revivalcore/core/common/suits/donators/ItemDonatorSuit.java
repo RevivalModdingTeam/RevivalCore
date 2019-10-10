@@ -1,58 +1,43 @@
 package com.revivalmodding.revivalcore.core.common.suits.donators;
 
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
-import com.revivalmodding.revivalcore.util.helper.ModHelper;
-import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ItemDonatorSuit extends ItemSuit implements IDonatorSuit {
+public class ItemDonatorSuit extends ItemSuit {
 
     private final String donator;
     private final double amount;
-    public List<String> allowed = new ArrayList<>();
+    private final ISimpleSuit simpleSuit;
 
-    public ItemDonatorSuit(String name, EntityEquipmentSlot slot, String donatorName, String uuid, double amount) {
+    public ItemDonatorSuit(String name, EntityEquipmentSlot slot, String donatorName, double amount, ISimpleSuit simpleSuit) {
         super(name, slot);
         this.donator = donatorName;
         this.amount = amount;
-        this.allowed.add(uuid);
-        this.allowed.addAll(ModHelper.getTeamMembers());
+        this.simpleSuit = simpleSuit;
     }
 
     @Override
+    public ResourceLocation get3DTexture() {
+        return simpleSuit.getDonatorSuitTexture();
+    }
+
     public String getDonatorName() {
         return donator;
     }
 
-    @Override
     public double getDonatedAmount() {
         return amount;
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-
-        if (entityIn instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityIn;
-            if (!this.allowed.contains(player.getUniqueID().toString())) {
-                stack.setCount(0);
-                PlayerHelper.sendMessage(player, "[Suit] This suit doesn't belong to you!", true);
-            }
-        }
-    }
-
-    @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add("Donator Suit");
-        tooltip.add("Thanks " + this.getDonatorName() + " for donating " + this.getDonatedAmount() + "$");
+        tooltip.add("Thanks " + donator + " for donating " + amount + "$");
     }
 }
