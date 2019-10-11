@@ -55,6 +55,7 @@ public class Trail {
                     tessellator.draw();
                 }
             }
+            lastRenderVec = vec;
         }
     }
 
