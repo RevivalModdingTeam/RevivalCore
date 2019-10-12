@@ -23,7 +23,10 @@ public class Trail {
     }
 
     public void updateTrail(EntityPlayer player) {
-        this.addPoint(new TrailPos(player.getPosition(), 1.0F));
+        Vec3d base = new Vec3d(-0.5, 0, 0).rotateYaw(-player.rotationYaw * 0.017453292F - ((float)Math.PI / 2.0F));
+        base = base.add(new Vec3d(player.posX, player.posY, player.posZ));
+        TrailPos pos = new TrailPos(base.x, base.y, base.z, 1.0F);
+        this.addPoint(pos);
     }
 
     // TODO trails are not getting removed soon enough, alpha value ignored?
@@ -36,6 +39,7 @@ public class Trail {
         double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
+        GlStateManager.enableBlend();
         for(int p = 0; p < points.length; p++) {
             TrailPos trail = points[p];
             if(trail == null) continue;
@@ -43,7 +47,6 @@ public class Trail {
             trailWidth = trailWidth <= 0 ? 1 : trailWidth;
             GlStateManager.glLineWidth(trailWidth);
             float a = trail.alpha;
-            if(a > 1.0F) a = 1.0F;
             if(lastRenderVec != null) {
                 float r = (color >> 16) & 15;
                 float g = (color >>  8) & 15;
@@ -53,8 +56,9 @@ public class Trail {
                     BufferBuilder bufferBuilder = tessellator.getBuffer();
                     bufferBuilder.setTranslation(-x, -y, -z);
                     bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-                    Vec3d renderVec = trail.add(part.offset());
-                    Vec3d last = lastRenderVec.add(part.offset());
+                    Vec3d partVec = part.offset();
+                    Vec3d renderVec = trail.add(partVec.z, partVec.y, partVec.x);
+                    Vec3d last = lastRenderVec.add(partVec.z, partVec.y, partVec.x);
                     bufferBuilder.pos(renderVec.x, renderVec.y, renderVec.z).color(r, g, b, a).endVertex();
                     bufferBuilder.pos(last.x, last.y, last.z).color(r, g, b, a).endVertex();
                     tessellator.draw();
@@ -63,6 +67,7 @@ public class Trail {
             }
             lastRenderVec = trail;
         }
+        GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
     }
@@ -73,10 +78,16 @@ public class Trail {
     }
 
     private void addPoint(TrailPos trailPos) {
-        for(int i = this.length - 2; i > 0; i--) {
-            points[i] = points[i-1];
+        try {
+            for(int i = this.length - 2; i > 0; i--) {
+                if(points[i-1] == null) continue;
+                float alpha = 1 - ((i-1) / (float)this.length) + 0.1F;
+                points[i] = points[i-1].withAlpha(alpha > 1F ? 1.0F : alpha);
+            }
+            points[0] = trailPos;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        points[0] = trailPos;
     }
 
     public static void writeTrailToNBT(Trail trail, NBTTagCompound nbt) {
