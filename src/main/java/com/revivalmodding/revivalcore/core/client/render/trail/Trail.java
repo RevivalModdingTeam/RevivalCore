@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class Trail {
@@ -16,13 +17,13 @@ public class Trail {
     private int length;
     private int width;
     private int color;
-    private Vec3d[] points;
+    private TrailPos[] points;
 
     private Trail() {
     }
 
     public void updateTrail(EntityPlayer player) {
-        this.addPoint(new Vec3d(player.getPosition()));
+        this.addPoint(new TrailPos(player.getPosition(), 1.0F));
     }
 
     // TODO trails are not getting removed soon enough, alpha value ignored?
@@ -35,30 +36,32 @@ public class Trail {
         double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
-        GlStateManager.glLineWidth(this.width);
         for(int p = 0; p < points.length; p++) {
-            Vec3d vec = points[p];
-            if(vec == null) continue;
-            float a = 255 * (1 - p/(float)this.length) + 0.1F;
+            TrailPos trail = points[p];
+            if(trail == null) continue;
+            int trailWidth = this.width - p;
+            trailWidth = trailWidth <= 0 ? 1 : trailWidth;
+            GlStateManager.glLineWidth(trailWidth);
+            float a = trail.alpha;
             if(a > 1.0F) a = 1.0F;
             if(lastRenderVec != null) {
                 float r = (color >> 16) & 15;
                 float g = (color >>  8) & 15;
                 float b = color & 15;
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder bufferBuilder = tessellator.getBuffer();
-                bufferBuilder.setTranslation(-x, -y, -z);
                 for(TrailPart part : TrailPart.values()) {
-                    Vec3d renderVec = vec.add(part.offset());
-                    Vec3d last = lastRenderVec.add(part.offset());
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder bufferBuilder = tessellator.getBuffer();
+                    bufferBuilder.setTranslation(-x, -y, -z);
                     bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+                    Vec3d renderVec = trail.add(part.offset());
+                    Vec3d last = lastRenderVec.add(part.offset());
                     bufferBuilder.pos(renderVec.x, renderVec.y, renderVec.z).color(r, g, b, a).endVertex();
                     bufferBuilder.pos(last.x, last.y, last.z).color(r, g, b, a).endVertex();
                     tessellator.draw();
+                    bufferBuilder.setTranslation(0, 0, 0);
                 }
-                bufferBuilder.setTranslation(0, 0, 0);
             }
-            lastRenderVec = vec;
+            lastRenderVec = trail;
         }
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
@@ -69,11 +72,11 @@ public class Trail {
         return current - (current - previous) * partial;
     }
 
-    private void addPoint(Vec3d vec3d) {
+    private void addPoint(TrailPos trailPos) {
         for(int i = this.length - 2; i > 0; i--) {
             points[i] = points[i-1];
         }
-        points[0] = vec3d;
+        points[0] = trailPos;
     }
 
     public static void writeTrailToNBT(Trail trail, NBTTagCompound nbt) {
@@ -88,7 +91,7 @@ public class Trail {
         if(!nbt.hasKey("trail")) {
             RevivalCore.logger.error("Error when parsing NBT, didn't find any trail data! Creating new trail..");
             Trail trail = new Trail();
-            trail.width = 1; trail.length = 1; trail.color = 0xFFFFFF; trail.points = new Vec3d[0];
+            trail.width = 1; trail.length = 1; trail.color = 0xFFFFFF; trail.points = new TrailPos[0];
             return trail;
         }
         NBTTagCompound trailData = nbt.getCompoundTag("trail");
@@ -96,7 +99,7 @@ public class Trail {
         trail.length = trailData.getInteger("length");
         trail.width = trailData.getInteger("width");
         trail.color = trailData.getInteger("color");
-        trail.points = new Vec3d[trail.length];
+        trail.points = new TrailPos[trail.length];
         return trail;
     }
 
@@ -140,12 +143,39 @@ public class Trail {
             trail.color = this.color;
             trail.length = this.length;
             trail.width = this.width;
-            trail.points = new Vec3d[this.length];
+            trail.points = new TrailPos[this.length];
             return trail;
         }
 
         private float normalizeColor(float f) {
             return f > 1 ? 1 : f < 0 ? 0 : f;
+        }
+    }
+
+    public class TrailPos extends Vec3d {
+
+        public float alpha;
+
+        public TrailPos(BlockPos pos) {
+            this(pos, 1.0F);
+        }
+
+        public TrailPos(BlockPos pos, float a) {
+            this(pos.getX(), pos.getY(), pos.getZ(), a);
+        }
+
+        public TrailPos(double x, double y, double z) {
+            this(x, y, z, 1.0F);
+        }
+
+        public TrailPos(double x, double y, double z, float a) {
+            super(x, y, z);
+            this.alpha = a;
+        }
+
+        public TrailPos withAlpha(float a) {
+            this.alpha = a;
+            return this;
         }
     }
 }

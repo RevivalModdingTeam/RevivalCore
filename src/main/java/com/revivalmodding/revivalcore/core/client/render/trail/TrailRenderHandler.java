@@ -16,7 +16,7 @@ public class TrailRenderHandler {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent e) {
         if(e.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
-            if(playerTrail == null) playerTrail = Trail.TrailBuilder.create().trailLength(15).trailWidth(1).color(0.0F, 1.0F, 0.5F).build();
+            if(playerTrail == null) playerTrail = Trail.TrailBuilder.create().trailLength(15).trailWidth(15).color(0.0F, 1.0F, 0.5F).build();
             playerTrail.updateTrail(Minecraft.getMinecraft().player);
         }
     }
