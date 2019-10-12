@@ -4,40 +4,41 @@ import com.google.common.base.Preconditions;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.ArrayList;
-
 public class Trail {
 
     private int length;
     private int width;
     private int color;
-    private ArrayList<Vec3d> points;
+    private Vec3d[] points;
 
     private Trail() {
     }
 
-    public void updateTrail(EntityPlayer player, float partialTicks) {
-        points.remove(length-1);
-        points.add(0, new Vec3d(
-                this.interpolateAndOffset(player.posX, player.lastTickPosX, partialTicks),
-                this.interpolateAndOffset(player.posY, player.lastTickPosY, partialTicks),
-                this.interpolateAndOffset(player.posZ, player.lastTickPosZ, partialTicks)
-        ));
+    public void updateTrail(EntityPlayer player) {
+        this.addPoint(new Vec3d(player.getPosition()));
     }
 
-    // TODO finish
-    public void renderTrail(EntityPlayer player) {
+    // TODO trails are not getting removed soon enough, alpha value ignored?
+    public void renderTrail(EntityPlayer player, float partialTick) {
         AbstractSuit suit = AbstractSuit.getSuit(player);
         int color = suit != null ? suit.getTrailRGB().getRGB() : this.color;
         Vec3d lastRenderVec = null;
-        for(int p = 0; p < points.size(); p++) {
-            Vec3d vec = points.get(p);
+        double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
+        double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
+        double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableCull();
+        GlStateManager.glLineWidth(this.width);
+        for(int p = 0; p < points.length; p++) {
+            Vec3d vec = points[p];
+            if(vec == null) continue;
             float a = 255 * (1 - p/(float)this.length) + 0.1F;
             if(a > 1.0F) a = 1.0F;
             if(lastRenderVec != null) {
@@ -46,6 +47,7 @@ public class Trail {
                 float b = color & 15;
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder bufferBuilder = tessellator.getBuffer();
+                bufferBuilder.setTranslation(-x, -y, -z);
                 for(TrailPart part : TrailPart.values()) {
                     Vec3d renderVec = vec.add(part.offset());
                     Vec3d last = lastRenderVec.add(part.offset());
@@ -54,14 +56,24 @@ public class Trail {
                     bufferBuilder.pos(last.x, last.y, last.z).color(r, g, b, a).endVertex();
                     tessellator.draw();
                 }
+                bufferBuilder.setTranslation(0, 0, 0);
             }
             lastRenderVec = vec;
         }
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
     }
 
     // TODO apply random small offset
     private double interpolateAndOffset(double current, double previous, float partial) {
         return current - (current - previous) * partial;
+    }
+
+    private void addPoint(Vec3d vec3d) {
+        for(int i = this.length - 2; i > 0; i--) {
+            points[i] = points[i-1];
+        }
+        points[0] = vec3d;
     }
 
     public static void writeTrailToNBT(Trail trail, NBTTagCompound nbt) {
@@ -76,7 +88,7 @@ public class Trail {
         if(!nbt.hasKey("trail")) {
             RevivalCore.logger.error("Error when parsing NBT, didn't find any trail data! Creating new trail..");
             Trail trail = new Trail();
-            trail.width = 1; trail.length = 1; trail.color = 0xFFFFFF; trail.points = new ArrayList<>(1);
+            trail.width = 1; trail.length = 1; trail.color = 0xFFFFFF; trail.points = new Vec3d[0];
             return trail;
         }
         NBTTagCompound trailData = nbt.getCompoundTag("trail");
@@ -84,13 +96,13 @@ public class Trail {
         trail.length = trailData.getInteger("length");
         trail.width = trailData.getInteger("width");
         trail.color = trailData.getInteger("color");
-        trail.points = new ArrayList<>(trail.length);
+        trail.points = new Vec3d[trail.length];
         return trail;
     }
 
     public static class TrailBuilder {
 
-        int color, width, length;
+        private int color, width, length;
 
         private TrailBuilder() {}
 
@@ -128,7 +140,7 @@ public class Trail {
             trail.color = this.color;
             trail.length = this.length;
             trail.width = this.width;
-            trail.points = new ArrayList<>(this.length);
+            trail.points = new Vec3d[this.length];
             return trail;
         }
 

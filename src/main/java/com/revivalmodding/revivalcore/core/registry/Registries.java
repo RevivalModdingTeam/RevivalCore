@@ -122,7 +122,7 @@ public class Registries {
 
 				@Override
 				public void handleEffects(EntityPlayer player) {
-					if(!player.world.isRemote) player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 2, false, false));
+					if(!player.world.isRemote) player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 15, false, false));
 				}
 			};
         	e.registerAll(grimmlawke, royalZano, darkMessiah);
