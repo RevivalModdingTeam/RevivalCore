@@ -26,13 +26,15 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Random;
+
 @Mod(modid = RevivalCore.MODID, name = RevivalCore.NAME, version = RevivalCore.VERSION, updateJSON = RevivalCore.UPDATEURL)
 public class RevivalCore {
     public static final String MODID = "revivalcore";
     public static final String NAME = "Revival Core";
     public static final String VERSION = "0.3.8";
     public static final String UPDATEURL = "https://raw.githubusercontent.com/RevivalModdingTeam/RevivalModding-ModBugs/master/update/updatecore.json";
-
+    private static final Random random = new Random();
 
     @Instance
     public static RevivalCore instance;
@@ -70,6 +72,10 @@ public class RevivalCore {
     @EventHandler
     public static void serverStarting(FMLServerStartingEvent e) {
     	e.registerServerCommand(new CommandSuperpowers());
+    }
+
+    public static Random getRandom() {
+        return random;
     }
 }
 

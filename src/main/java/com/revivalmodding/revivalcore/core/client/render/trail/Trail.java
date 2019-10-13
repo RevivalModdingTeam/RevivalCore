@@ -23,23 +23,25 @@ public class Trail {
     }
 
     public void updateTrail(EntityPlayer player) {
-        Vec3d base = new Vec3d(-0.5, 0, 0).rotateYaw(-player.rotationYaw * 0.017453292F - ((float)Math.PI / 2.0F));
-        base = base.add(new Vec3d(player.posX, player.posY, player.posZ));
-        TrailPos pos = new TrailPos(base.x, base.y, base.z, 1.0F);
-        this.addPoint(pos);
+        this.addPoint(new TrailPos(this.offset(player.posX), this.offset(player.posY), this.offset(player.posZ)));
     }
 
-    // TODO trails are not getting removed soon enough, alpha value ignored?
     public void renderTrail(EntityPlayer player, float partialTick) {
+        this.color = 0xAAAA00;
         AbstractSuit suit = AbstractSuit.getSuit(player);
         int color = suit != null ? suit.getTrailRGB().getRGB() : this.color;
         Vec3d lastRenderVec = null;
-        double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
-        double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
-        double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;
+        double x = this.interpolate(player.posX, player.lastTickPosX, partialTick);
+        double y = this.interpolate(player.posY, player.lastTickPosY, partialTick);
+        double z = this.interpolate(player.posZ, player.lastTickPosZ, partialTick);
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
         GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.setTranslation(-x, -y, -z);
         for(int p = 0; p < points.length; p++) {
             TrailPos trail = points[p];
             if(trail == null) continue;
@@ -52,34 +54,35 @@ public class Trail {
                 float g = (color >>  8) & 15;
                 float b = color & 15;
                 for(TrailPart part : TrailPart.values()) {
-                    Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferBuilder = tessellator.getBuffer();
-                    bufferBuilder.setTranslation(-x, -y, -z);
                     bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-                    Vec3d partVec = part.offset();
-                    Vec3d renderVec = trail.add(partVec.z, partVec.y, partVec.x);
-                    Vec3d last = lastRenderVec.add(partVec.z, partVec.y, partVec.x);
+                    Vec3d partVec = part.offset().rotateYaw(-player.rotationYaw * 0.017453292F - ((float)Math.PI / 2.0F));
+                    Vec3d renderVec = trail.add(partVec.x, partVec.y, partVec.z);
+                    Vec3d last = lastRenderVec.add(partVec.x, partVec.y, partVec.z);
                     bufferBuilder.pos(renderVec.x, renderVec.y, renderVec.z).color(r, g, b, a).endVertex();
                     bufferBuilder.pos(last.x, last.y, last.z).color(r, g, b, a).endVertex();
                     tessellator.draw();
-                    bufferBuilder.setTranslation(0, 0, 0);
                 }
             }
             lastRenderVec = trail;
         }
+        bufferBuilder.setTranslation(0, 0, 0);
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
+        GlStateManager.disableAlpha();
     }
 
-    // TODO apply random small offset
-    private double interpolateAndOffset(double current, double previous, float partial) {
-        return current - (current - previous) * partial;
+    private double offset(double base) {
+        return base + (RevivalCore.getRandom().nextDouble()/6)-(RevivalCore.getRandom().nextDouble()/6);
+    }
+
+    private double interpolate(double current, double previous, float partial) {
+        return previous + (current - previous) * partial;
     }
 
     private void addPoint(TrailPos trailPos) {
         try {
-            for(int i = this.length - 2; i > 0; i--) {
+            for(int i = this.length - 1; i > 0; i--) {
                 if(points[i-1] == null) continue;
                 float alpha = 1 - ((i-1) / (float)this.length) + 0.1F;
                 points[i] = points[i-1].withAlpha(alpha > 1F ? 1.0F : alpha);
