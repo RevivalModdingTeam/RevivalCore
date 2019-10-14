@@ -14,10 +14,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class Trail {
 
-    private int length;
-    private int width;
-    private int color;
-    private TrailPos[] points;
+    protected int length;
+    protected int width;
+    protected int color;
+    protected TrailPos[] points;
 
     private Trail() {
     }
