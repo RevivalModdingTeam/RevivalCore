@@ -12,6 +12,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nullable;
+
 public class Trail {
 
     protected int length;
@@ -26,8 +28,8 @@ public class Trail {
         this.addPoint(new TrailPos(this.offset(player.posX), this.offset(player.posY), this.offset(player.posZ)));
     }
 
-    public void renderTrail(EntityPlayer player, float partialTick) {
-        this.color = 0xAAAA00;
+    // TODO implement the optional data
+    public void renderTrail(EntityPlayer player, float partialTick, @Nullable TrailOptionalData trailOptionalData) {
         AbstractSuit suit = AbstractSuit.getSuit(player);
         int color = suit != null ? suit.getTrailRGB().getRGB() : this.color;
         Vec3d lastRenderVec = null;

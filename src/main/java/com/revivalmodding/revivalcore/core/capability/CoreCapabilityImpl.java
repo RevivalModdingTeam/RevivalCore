@@ -60,6 +60,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
         NBTTagCompound nbt = new NBTTagCompound();
         this.getMetaPowerData().writeToNBT(nbt);
         this.getAbilityData().writeToNBT(nbt);
+        this.getTrailData().toNBT(nbt);
         return nbt;
     }
 
@@ -67,6 +68,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
     public void fromNBT(NBTTagCompound nbt) {
         this.getMetaPowerData().readFromNBT(nbt);
         this.getAbilityData().readFromNBT(nbt);
+        this.getTrailData().fromNBT(nbt);
     }
 
     @Override
