@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * - Made by Toma
  */
-public abstract class AbilityBase implements IRegistryEntry
+public abstract class Ability implements IRegistryEntry
 {
 	public final int maxCooldown;
 	public int currentCooldown;
@@ -36,12 +36,12 @@ public abstract class AbilityBase implements IRegistryEntry
 	private boolean active;
 
 
-	public AbilityBase(String name, int cooldown) {
+	public Ability(String name, int cooldown) {
 		this.name = name;
 		this.maxCooldown = cooldown;
 	}
 	
-	public AbilityBase(String name) {
+	public Ability(String name) {
 		this(name, 0);
 	}
 	
@@ -108,7 +108,7 @@ public abstract class AbilityBase implements IRegistryEntry
 	public static boolean hasAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
-			for(AbilityBase base : cap.getAbilities()) {
+			for(Ability base : cap.getAbilities()) {
 				if(base.getName().equalsIgnoreCase(abilityName)) {
 					return true;
 				}
@@ -117,8 +117,8 @@ public abstract class AbilityBase implements IRegistryEntry
 		return false;
 	}
 	
-	public static boolean hasAbility(AbilityBase ability, Collection<AbilityBase> collection) {
-		for(AbilityBase a : collection) {
+	public static boolean hasAbility(Ability ability, Collection<Ability> collection) {
+		for(Ability a : collection) {
 			if(a.getName().equalsIgnoreCase(ability.getName())) {
 				return true;
 			}
@@ -129,7 +129,7 @@ public abstract class AbilityBase implements IRegistryEntry
 	public static boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		if(cap != null) {
-			for(AbilityBase base : cap.getUnlockedAbilities()) {
+			for(Ability base : cap.getUnlockedAbilities()) {
 				if(base.getName().equalsIgnoreCase(abilityName)) {
 					return true;
 				}
@@ -138,12 +138,12 @@ public abstract class AbilityBase implements IRegistryEntry
 		return false;
 	}
 	
-	public static AbilityBase getAbility(EntityPlayer player, int powerKeybind) {
+	public static Ability getAbility(EntityPlayer player, int powerKeybind) {
 		if(powerKeybind > 2) {
 			return null;
 		}
 		IAbilityCap abilities = IAbilityCap.Impl.get(player);
-		List<AbilityBase> active = abilities.getAbilities();
+		List<Ability> active = abilities.getAbilities();
 		if(powerKeybind <= active.size() - 1) {
 			return active.get(powerKeybind);
 		}
@@ -155,8 +155,8 @@ public abstract class AbilityBase implements IRegistryEntry
 	 * @param key - the ability registry name
 	 * @return
 	 */
-	public static AbilityBase getAbilityFromKey(String key) {
-		for(AbilityBase base : Registries.ABILITIES) {
+	public static Ability getAbilityFromKey(String key) {
+		for(Ability base : Registries.ABILITIES) {
 			if(base.getName().equalsIgnoreCase(key)) {
 				return base;
 			}
@@ -171,7 +171,7 @@ public abstract class AbilityBase implements IRegistryEntry
 		return comp;
 	}
 	
-	public static AbilityBase readNBT(NBTTagCompound comp) {
+	public static Ability readNBT(NBTTagCompound comp) {
 		if(!comp.hasKey("abilityID"))
 			return null;
 		
@@ -185,8 +185,8 @@ public abstract class AbilityBase implements IRegistryEntry
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof AbilityBase) {
-			return ((AbilityBase)obj).getName().equals(this.getName());
+		if(obj instanceof Ability) {
+			return ((Ability)obj).getName().equals(this.getName());
 		}
 		return false;
 	}

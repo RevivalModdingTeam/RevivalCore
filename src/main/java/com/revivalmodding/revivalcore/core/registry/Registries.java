@@ -1,7 +1,7 @@
 package com.revivalmodding.revivalcore.core.registry;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.AbilityVibrate;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
@@ -45,7 +45,7 @@ public class Registries {
 	
 	public static final HashSet<AbstractSuit> SUITS = new HashSet<>();
 	public static final HashSet<RVRecipe> SUIT_RECIPES = new HashSet<>();
-	public static final HashSet<AbilityBase> ABILITIES = new HashSet<>();
+	public static final HashSet<Ability> ABILITIES = new HashSet<>();
 
     @EventBusSubscriber
     public static class Registry {
@@ -286,7 +286,7 @@ public class Registries {
 		}
     }
     
-    public static final class AbilityRegistry implements IRegistry<AbilityBase> {
+    public static final class AbilityRegistry implements IRegistry<Ability> {
     	
     	private static final AbilityRegistry INSTANCE = new AbilityRegistry();
     	
@@ -295,33 +295,33 @@ public class Registries {
     	}
     	
     	@Override
-    	public HashSet<AbilityBase> getRegistry() {
+    	public HashSet<Ability> getRegistry() {
     		return Registries.ABILITIES;
     	}
     	
     	@Override
-    	public void register(AbilityBase toRegister) {
+    	public void register(Ability toRegister) {
     		if(!containsObject(toRegister)) {
     			this.getRegistry().add(toRegister);
     		}
     	}
     	
     	@Override
-    	public void registerAll(AbilityBase[] toRegister) {
-    		for(AbilityBase base : toRegister) {
+    	public void registerAll(Ability[] toRegister) {
+    		for(Ability base : toRegister) {
     			register(base);
     		}
     		
     	}
     	
     	@Override
-    	public void registerAll(Collection<AbilityBase> toRegister) {
+    	public void registerAll(Collection<Ability> toRegister) {
     		registerAll(toRegister);
     	}
     	
     	@Override
-    	public boolean containsObject(AbilityBase object) {
-    		for(AbilityBase ability : this.getRegistry()) {
+    	public boolean containsObject(Ability object) {
+    		for(Ability ability : this.getRegistry()) {
     			if(object.getName().equalsIgnoreCase(ability.getName())) {
     				return true;
     			}

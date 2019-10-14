@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.events;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
@@ -58,16 +58,16 @@ public abstract class RVRegistryEvent<T extends IRegistryEntry> extends Event{
     /**
      *  Event is called during <u>initialization</u> phase of RevivalCore
      */
-    public static class AbilityRegistryEvent extends RVRegistryEvent<AbilityBase> {
+    public static class AbilityRegistryEvent extends RVRegistryEvent<Ability> {
     	
     	@Override
-    	public void register(AbilityBase entry) {
+    	public void register(Ability entry) {
     		AbilityRegistry.instance().register(entry);
     	}
     	
     	@Override
-    	public void registerAll(AbilityBase... entries) {
-    		for(AbilityBase base : entries) {
+    	public void registerAll(Ability... entries) {
+    		for(Ability base : entries) {
     			register(base);
     		}
     	}

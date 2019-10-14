@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore.network.packets;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.common.events.AbilityEvent;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
@@ -16,12 +16,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketDeactivateAbility implements IMessage {
 	
-	private AbilityBase ability;
+	private Ability ability;
 	
 	public PacketDeactivateAbility() {
 	}
 	
-	public PacketDeactivateAbility(AbilityBase ability) {
+	public PacketDeactivateAbility(Ability ability) {
 		this.ability = ability;
 	}
 	
@@ -32,7 +32,7 @@ public class PacketDeactivateAbility implements IMessage {
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		ability = AbilityBase.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
+		ability = Ability.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
 	}
 	
 	public static class Handler implements IMessageHandler<PacketDeactivateAbility, IMessage> {
@@ -42,7 +42,7 @@ public class PacketDeactivateAbility implements IMessage {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
-				AbilityBase ability = message.ability;
+				Ability ability = message.ability;
 				if(cap.containsAbility(cap.getAbilities(), ability)) {
 					cap.removeAbility(ability);
 					ability.onAbilityDeactivated(player);

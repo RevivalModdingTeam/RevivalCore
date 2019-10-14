@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 
@@ -97,7 +97,7 @@ public class CommandSuperpowers extends CommandBase {
 						throw new WrongUsageException("Unknown parameter");
 					if(args[1].equalsIgnoreCase("unlockAll")) {
 						Registries.ABILITIES.forEach(a -> {
-							if(!AbilityBase.hasUnlockedAbility(player, a.getName())) {
+							if(!Ability.hasUnlockedAbility(player, a.getName())) {
 								cap.unlockAbility(a.getName());
 							}
 						});
@@ -110,7 +110,7 @@ public class CommandSuperpowers extends CommandBase {
 						sendFeedback(player, "Locked all abilities");
 					} else if(args[1].equalsIgnoreCase("unlock")) {
 						if(args.length > 2) {
-							AbilityBase ability = AbilityBase.getAbilityFromKey(args[2]);
+							Ability ability = Ability.getAbilityFromKey(args[2]);
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
@@ -122,7 +122,7 @@ public class CommandSuperpowers extends CommandBase {
 						}
 					} else if(args[1].equalsIgnoreCase("lock")) {
 						if(args.length > 2) {
-							AbilityBase ability = AbilityBase.getAbilityFromKey(args[2]);
+							Ability ability = Ability.getAbilityFromKey(args[2]);
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
@@ -140,7 +140,7 @@ public class CommandSuperpowers extends CommandBase {
 						cap.setLevel(99);
 					}
 					Registries.ABILITIES.forEach(a -> {
-						if(!AbilityBase.hasAbility(a, cap.getUnlockedAbilities())) {
+						if(!Ability.hasAbility(a, cap.getUnlockedAbilities())) {
 							cap.unlockAbility(a.getName());
 						}
 					});

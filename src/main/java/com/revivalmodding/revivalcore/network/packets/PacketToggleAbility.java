@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore.network.packets;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 import io.netty.buffer.ByteBuf;
@@ -39,7 +39,7 @@ public class PacketToggleAbility implements IMessage {
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
 				if(message.id < cap.getAbilities().size()) {
-					AbilityBase ability = cap.getAbilities().get(message.id);
+					Ability ability = cap.getAbilities().get(message.id);
 					if(ability != null) {
 						ability.toggleAbility();
 						PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have used/toggled " + ability.getFullName().toLowerCase(), true);

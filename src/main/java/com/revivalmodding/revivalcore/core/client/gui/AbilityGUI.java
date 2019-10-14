@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import org.lwjgl.input.Mouse;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.network.NetworkManager;
@@ -22,13 +22,13 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AbilityGUI extends GuiScreen {
 	
-	private static final AbilityBase[] ABILITY_LIST = Registries.ABILITIES.toArray(new AbilityBase[0]);
+	private static final Ability[] ABILITY_LIST = Registries.ABILITIES.toArray(new Ability[0]);
 	private int left;
 	private int top;
 	private int xSize;
 	private int ySize;
 	private int scrollAmount, maxScrollAmount;
-	private List<AbilityBase> displayedAbilities = new ArrayList<>();
+	private List<Ability> displayedAbilities = new ArrayList<>();
 	private List<AbilityButton> buttonListA = new ArrayList<>();
 	
 	public AbilityGUI(EntityPlayer player) {
@@ -194,7 +194,7 @@ public class AbilityGUI extends GuiScreen {
 		this.maxScrollAmount = pageCount;
 	}
 	
-	private static void addAbilityToList(List<AbilityBase> list, int i) {
+	private static void addAbilityToList(List<Ability> list, int i) {
 		if(Registries.ABILITIES.size() > i) {
 			list.add(ABILITY_LIST[i]);
 		}

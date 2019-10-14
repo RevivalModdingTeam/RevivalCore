@@ -1,6 +1,6 @@
 package com.revivalmodding.revivalcore.network.packets;
 
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 
 import io.netty.buffer.ByteBuf;
@@ -12,12 +12,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketUnlockAbility implements IMessage {
 	
-	private AbilityBase ability;
+	private Ability ability;
 	
 	public PacketUnlockAbility() {
 	}
 	
-	public PacketUnlockAbility(AbilityBase ability) {
+	public PacketUnlockAbility(Ability ability) {
 		this.ability = ability;
 	}
 	
@@ -28,7 +28,7 @@ public class PacketUnlockAbility implements IMessage {
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		ability = AbilityBase.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
+		ability = Ability.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
 	}
 	
 	public static class Handler implements IMessageHandler<PacketUnlockAbility, IMessage> {
@@ -38,7 +38,7 @@ public class PacketUnlockAbility implements IMessage {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
 				IAbilityCap cap = IAbilityCap.Impl.get(player);
-				AbilityBase ability = message.ability;
+				Ability ability = message.ability;
 				if(!cap.containsAbility(cap.getUnlockedAbilities(), ability)) {
 					if(cap.getLevel() >= ability.getAbilityPrice()) {
 						cap.setLevel(cap.getLevel() - ability.getAbilityPrice());

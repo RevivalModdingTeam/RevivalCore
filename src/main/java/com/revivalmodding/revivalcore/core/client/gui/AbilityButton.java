@@ -1,11 +1,10 @@
 package com.revivalmodding.revivalcore.core.client.gui;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.core.abilities.AbilityBase;
+import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class AbilityButton extends GuiButton {
 	
-	private final AbilityBase ability;
+	private final Ability ability;
 	private final AbilityGUI parent;
 	private EnumButtonState state = EnumButtonState.INACTIVE;
 	private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(RevivalCore.MODID + ":textures/gui/abilitybutton.png");
@@ -24,7 +23,7 @@ public class AbilityButton extends GuiButton {
 	private List<String> abilityDescription = new ArrayList<>();
 	private int descWidth, descHeight;
 	
-	public AbilityButton(AbilityBase ability, int id, int left, int top, AbilityGUI parentGui) {
+	public AbilityButton(Ability ability, int id, int left, int top, AbilityGUI parentGui) {
 		super(id, left + 9, top + 1 + 20*(id+1), 150, 20, ability.getName());
 		this.parent = parentGui;
 		this.ability = ability;
@@ -103,7 +102,7 @@ public class AbilityButton extends GuiButton {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		IAbilityCap cap = IAbilityCap.Impl.get(player);
 		hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-		if(!AbilityBase.hasUnlockedAbility(player, ability.getName())) {
+		if(!Ability.hasUnlockedAbility(player, ability.getName())) {
 			if(cap.getLevel() >= ability.getAbilityPrice()) {
 				state = EnumButtonState.PURCHASABLE;
 				if(hovered) {
@@ -128,8 +127,8 @@ public class AbilityButton extends GuiButton {
 		}
 	}
 	
-	private static boolean containsAbility(String name, List<AbilityBase> list) {
-		for(AbilityBase base : list) {
+	private static boolean containsAbility(String name, List<Ability> list) {
+		for(Ability base : list) {
 			if(base.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
@@ -137,7 +136,7 @@ public class AbilityButton extends GuiButton {
 		return false;
 	}
 	
-	public AbilityBase getAbility() {
+	public Ability getAbility() {
 		return ability;
 	}
 	

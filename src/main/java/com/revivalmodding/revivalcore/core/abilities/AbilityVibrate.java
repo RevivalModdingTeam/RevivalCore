@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AbilityVibrate extends AbilityBase {
+public class AbilityVibrate extends Ability {
 
     private static final ResourceLocation ICON = new ResourceLocation(RevivalCore.MODID + ":textures/icons/abilityvibrate.png");
     private final String[] description;

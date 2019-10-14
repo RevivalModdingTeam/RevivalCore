@@ -31,19 +31,19 @@ import java.util.List;
 
 public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
-	void setAbilities(List<AbilityBase> abilities);
+	void setAbilities(List<Ability> abilities);
 	
-	List<AbilityBase> getAbilities();
+	List<Ability> getAbilities();
 	
-	void addAbility(AbilityBase ability);
+	void addAbility(Ability ability);
 	
-	void removeAbility(AbilityBase ability);
+	void removeAbility(Ability ability);
 	
-	boolean hasAbility(AbilityBase ability);
+	boolean hasAbility(Ability ability);
 	
-	boolean containsAbility(List<AbilityBase> list, AbilityBase ability);
+	boolean containsAbility(List<Ability> list, Ability ability);
 	
-	void setUnlockedAbilities(List<AbilityBase> abilityKeys);
+	void setUnlockedAbilities(List<Ability> abilityKeys);
 	
 	void unlockAbility(String key);
 	
@@ -51,7 +51,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	
 	void lockAbilities();
 	
-	List<AbilityBase> getUnlockedAbilities();
+	List<Ability> getUnlockedAbilities();
 	
 	void setLevel(int level);
 	
@@ -85,32 +85,32 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 	class Impl implements IAbilityCap {
 		
 		// all curently active abilities
-		private List<AbilityBase> abilities = new ArrayList<>();
+		private List<Ability> abilities = new ArrayList<>();
 		// all abilities player can unlock
-		private List<AbilityBase> unlockedAbilities = new ArrayList<>();
+		private List<Ability> unlockedAbilities = new ArrayList<>();
 		private int level;
 		private double xp;
 		
 		@Override
-		public void addAbility(AbilityBase ability) {
+		public void addAbility(Ability ability) {
 			if(!this.hasAbility(ability)) {
 				abilities.add(ability);
 			}
 		}
 		
 		@Override
-		public void setAbilities(List<AbilityBase> abilities) {
+		public void setAbilities(List<Ability> abilities) {
 			this.abilities = abilities;
 		}
 		
 		@Override
-		public List<AbilityBase> getAbilities() {
+		public List<Ability> getAbilities() {
 			return abilities;
 		}
 		
 		@Override
-		public boolean hasAbility(AbilityBase ability) {
-			for(AbilityBase a : this.getAbilities()) {
+		public boolean hasAbility(Ability ability) {
+			for(Ability a : this.getAbilities()) {
 				if(ability.getName().equalsIgnoreCase(a.getName())) {
 					return true;
 				}
@@ -119,29 +119,29 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
-		public void removeAbility(AbilityBase ability) {
+		public void removeAbility(Ability ability) {
 			if(this.hasAbility(ability)) {
 				abilities.remove(abilities.indexOf(ability));
 			}
 		}
 		
 		@Override
-		public List<AbilityBase> getUnlockedAbilities() {
+		public List<Ability> getUnlockedAbilities() {
 			return unlockedAbilities;
 		}
 		
 		@Override
 		public void unlockAbility(String key) {
-			if(AbilityBase.getAbilityFromKey(key) != null && !AbilityBase.hasAbility(AbilityBase.getAbilityFromKey(key), unlockedAbilities)) {
-				unlockedAbilities.add(AbilityBase.getAbilityFromKey(key));
+			if(Ability.getAbilityFromKey(key) != null && !Ability.hasAbility(Ability.getAbilityFromKey(key), unlockedAbilities)) {
+				unlockedAbilities.add(Ability.getAbilityFromKey(key));
 			} else RevivalCore.logger.error("Couldn't unlock ability from key '{}', ability doesn't exist!", key);
 		}
 		
 		@Override
 		public void lockAbility(String key) {
-			AbilityBase a = AbilityBase.getAbilityFromKey(key);
+			Ability a = Ability.getAbilityFromKey(key);
 			if(a != null) {
-				if(AbilityBase.hasAbility(a, unlockedAbilities)) {
+				if(Ability.hasAbility(a, unlockedAbilities)) {
 					unlockedAbilities.remove(a);
 				}
 			}
@@ -153,7 +153,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
-		public void setUnlockedAbilities(List<AbilityBase> abilities) {
+		public void setUnlockedAbilities(List<Ability> abilities) {
 			this.unlockedAbilities = abilities;
 		}
 		
@@ -183,12 +183,12 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 		}
 		
 		@Override
-		public boolean containsAbility(List<AbilityBase> list, AbilityBase ability) {
+		public boolean containsAbility(List<Ability> list, Ability ability) {
 			if(list.isEmpty()) {
 				return false;
 			}
 			
-			for(AbilityBase ab : list) {
+			for(Ability ab : list) {
 				if(ab != null && ab.getName().equalsIgnoreCase(ability.getName())) {
 					return true;
 				}
@@ -233,17 +233,17 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			NBTTagList unlocked = new NBTTagList();
 			
 			if(!unlockedAbilities.isEmpty()) {
-				for(AbilityBase unl : unlockedAbilities) {
+				for(Ability unl : unlockedAbilities) {
 					if(unl != null) {
-						unlocked.appendTag(AbilityBase.writeNBT(unl.getName()));
+						unlocked.appendTag(Ability.writeNBT(unl.getName()));
 					}
 				}
 			}
 			
 			if(!abilities.isEmpty()) {
-				for(AbilityBase act : abilities) {
+				for(Ability act : abilities) {
 					if(act != null) {
-						active.appendTag(AbilityBase.writeNBT(act.getName()));
+						active.appendTag(Ability.writeNBT(act.getName()));
 					}
 				}
 			}
@@ -264,11 +264,11 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 				NBTTagList unlocked = nbt.getTagList("unlockedAbilities", Constants.NBT.TAG_COMPOUND);
 				
 				for(int a = 0; a < active.tagCount(); a++) {
-					abilities.add(AbilityBase.getAbilityFromKey(active.getCompoundTagAt(a).getString("abilityID")));
+					abilities.add(Ability.getAbilityFromKey(active.getCompoundTagAt(a).getString("abilityID")));
 				}
 				
 				for(int u = 0; u < unlocked.tagCount(); u++) {
-					unlockedAbilities.add(AbilityBase.getAbilityFromKey(unlocked.getCompoundTagAt(u).getString("abilityID")));
+					unlockedAbilities.add(Ability.getAbilityFromKey(unlocked.getCompoundTagAt(u).getString("abilityID")));
 				}
 			}
 			else {
@@ -349,7 +349,7 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			IAbilityCap cap = IAbilityCap.Impl.get(e.player);
 			if(cap != null) {
 				if(!cap.getAbilities().isEmpty()) {
-					for(AbilityBase activeAbility : cap.getAbilities()) {
+					for(Ability activeAbility : cap.getAbilities()) {
 						if(activeAbility != null) {
 							activeAbility.update(e.player);
 						}
