@@ -22,4 +22,8 @@ public interface ICoreCapability {
     NBTTagCompound toNBT();
 
     void fromNBT(NBTTagCompound nbt);
+
+    void tick();
+
+    void sync();
 }

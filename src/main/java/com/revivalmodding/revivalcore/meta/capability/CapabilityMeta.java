@@ -117,7 +117,6 @@ public class CapabilityMeta implements IMetaCap {
     @Override
     public boolean canVibrate() {
         return canVibrate;
-        // TODO Once Superpower registry is in , let this check if the power itself allows vibrating
     }
 
     @Override

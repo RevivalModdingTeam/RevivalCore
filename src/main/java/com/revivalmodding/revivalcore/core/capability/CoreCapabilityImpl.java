@@ -3,6 +3,7 @@ package com.revivalmodding.revivalcore.core.capability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class CoreCapabilityImpl implements ICoreCapability {
@@ -10,6 +11,16 @@ public class CoreCapabilityImpl implements ICoreCapability {
     private PlayerMetaPowerData playerMetaPowerData;
     private PlayerAbilityData playerAbilityData;
     private PlayerTrailData playerTrailData;
+
+    private EntityPlayer capOwner;
+
+    public CoreCapabilityImpl() {
+        this(null);
+    }
+
+    public CoreCapabilityImpl(EntityPlayer owner) {
+        this.capOwner = owner;
+    }
 
     @Override
     public void setMetaPowerData(PlayerMetaPowerData metaPowerData) {
@@ -47,12 +58,24 @@ public class CoreCapabilityImpl implements ICoreCapability {
     @Override
     public NBTTagCompound toNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
+        this.getMetaPowerData().writeToNBT(nbt);
         this.getAbilityData().writeToNBT(nbt);
         return nbt;
     }
 
     @Override
     public void fromNBT(NBTTagCompound nbt) {
+        this.getMetaPowerData().readFromNBT(nbt);
         this.getAbilityData().readFromNBT(nbt);
+    }
+
+    @Override
+    public void sync() {
+
+    }
+
+    @Override
+    public void tick() {
+        this.getMetaPowerData().update(capOwner);
     }
 }
