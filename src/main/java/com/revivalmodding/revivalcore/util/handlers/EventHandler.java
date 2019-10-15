@@ -1,18 +1,24 @@
 package com.revivalmodding.revivalcore.util.handlers;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityProvider;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,6 +30,14 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class EventHandler
 {
+    @SubscribeEvent
+    public static void attachCapabilities(AttachCapabilitiesEvent<Entity> e) {
+        if(e.getObject() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) e.getObject();
+            e.addCapability(new ResourceLocation(RevivalCore.MODID, "core_cap"), new CoreCapabilityProvider(player));
+        }
+    }
+
     @SubscribeEvent
     public static void PlayerJoinWorld(PlayerEvent.PlayerLoggedInEvent playerEvent) {
         EntityPlayer player = playerEvent.player;

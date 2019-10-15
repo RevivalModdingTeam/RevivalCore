@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.capability;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,8 +14,11 @@ public class CoreCapabilityProvider implements ICapabilitySerializable<NBTTagCom
 
     @CapabilityInject(ICoreCapability.class)
     public static final Capability<ICoreCapability> DATA = null;
+    private ICoreCapability instance;
 
-    private ICoreCapability instance = DATA.getDefaultInstance();
+    public CoreCapabilityProvider(EntityPlayer player) {
+        this.instance = new CoreCapabilityImpl(player);
+    }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {

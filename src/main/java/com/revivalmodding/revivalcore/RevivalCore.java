@@ -2,6 +2,9 @@ package com.revivalmodding.revivalcore;
 
 import com.revivalmodding.revivalcore.command.CommandSuperpowers;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityStorage;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.tabs.CoreTab;
@@ -50,8 +53,7 @@ public class RevivalCore {
         proxy.preInit(event);
         NetworkManager.init();
         Registries.TileRegistry.init();
-        CapabilityManager.INSTANCE.register(IMetaCap.class, new CapMetaStorage(), CapabilityMeta::new);
-        CapabilityManager.INSTANCE.register(IAbilityCap.class, new IAbilityCap.Storage(), IAbilityCap.Impl::new);
+        CapabilityManager.INSTANCE.register(ICoreCapability.class, new CoreCapabilityStorage(), CoreCapabilityImpl::new);
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerRV());
         ModHelper.startupChecks();
     }

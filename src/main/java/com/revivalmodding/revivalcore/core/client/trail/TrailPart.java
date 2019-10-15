@@ -1,4 +1,4 @@
-package com.revivalmodding.revivalcore.core.client.render.trail;
+package com.revivalmodding.revivalcore.core.client.trail;
 
 import net.minecraft.util.math.Vec3d;
 

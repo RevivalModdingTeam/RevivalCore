@@ -12,7 +12,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
     private PlayerAbilityData playerAbilityData;
     private PlayerTrailData playerTrailData;
 
-    private EntityPlayer capOwner;
+    protected EntityPlayer capOwner;
 
     public CoreCapabilityImpl() {
         this(null);
@@ -22,9 +22,25 @@ public class CoreCapabilityImpl implements ICoreCapability {
         this.capOwner = owner;
     }
 
+    public static ICoreCapability getInstance(EntityPlayer player) {
+        return player.getCapability(CoreCapabilityProvider.DATA, null);
+    }
+
+    @Override
+    public PlayerMetaPowerData getMetaPowerData() {
+        if (playerMetaPowerData == null) playerMetaPowerData = new PlayerMetaPowerData();
+        return playerMetaPowerData;
+    }
+
     @Override
     public void setMetaPowerData(PlayerMetaPowerData metaPowerData) {
         this.playerMetaPowerData = metaPowerData;
+    }
+
+    @Override
+    public PlayerAbilityData getAbilityData() {
+        if (playerAbilityData == null) playerAbilityData = new PlayerAbilityData();
+        return playerAbilityData;
     }
 
     @Override
@@ -33,26 +49,14 @@ public class CoreCapabilityImpl implements ICoreCapability {
     }
 
     @Override
+    public PlayerTrailData getTrailData() {
+        if (playerTrailData == null) playerTrailData = new PlayerTrailData();
+        return playerTrailData;
+    }
+
+    @Override
     public void setTrailData(PlayerTrailData trailData) {
         this.playerTrailData = trailData;
-    }
-
-    @Override
-    public PlayerMetaPowerData getMetaPowerData() {
-        if(playerMetaPowerData == null) playerMetaPowerData = new PlayerMetaPowerData();
-        return playerMetaPowerData;
-    }
-
-    @Override
-    public PlayerAbilityData getAbilityData() {
-        if(playerAbilityData == null) playerAbilityData = new PlayerAbilityData();
-        return playerAbilityData;
-    }
-
-    @Override
-    public PlayerTrailData getTrailData() {
-        if(playerTrailData == null) playerTrailData = new PlayerTrailData();
-        return playerTrailData;
     }
 
     @Override

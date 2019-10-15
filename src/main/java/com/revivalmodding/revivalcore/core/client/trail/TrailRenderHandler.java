@@ -1,5 +1,7 @@
-package com.revivalmodding.revivalcore.core.client.render.trail;
+package com.revivalmodding.revivalcore.core.client.trail;
 
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -11,20 +13,18 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class TrailRenderHandler {
 
-    private static Trail playerTrail;
-
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent e) {
-        if(e.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
-            //playerTrail = null;
-            if(playerTrail == null) playerTrail = Trail.TrailBuilder.create().trailLength(8).trailWidth(7).color(0.0F, 1.0F, 0.5F).build();
-            playerTrail.updateTrail(Minecraft.getMinecraft().player);
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(e.phase == TickEvent.Phase.END && player != null) {
+            CoreCapabilityImpl.getInstance(player).getTrailData().onTick(player);
         }
     }
 
     @SubscribeEvent
     public static void renderTrails(RenderPlayerEvent.Post e) {
         EntityPlayer player = e.getEntityPlayer();
-        if(playerTrail != null) playerTrail.renderTrail(player, e.getPartialRenderTick());
+        PlayerTrailData trailData = CoreCapabilityImpl.getInstance(player).getTrailData();
+        trailData.getTrailRenderer().renderTrail(player, trailData.getTrail(), trailData.getAdditionalTrailData(), e.getPartialRenderTick());
     }
 }
