@@ -1,13 +1,10 @@
 package com.revivalmodding.revivalcore.command;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.revivalmodding.revivalcore.core.abilities.Ability;
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.registry.Registries;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -19,6 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Command for modifying player data like level,
@@ -47,7 +48,8 @@ public class CommandSuperpowers extends CommandBase {
 				throw new WrongUsageException("Command must be executed by player!");
 			}
 			EntityPlayerMP player = (EntityPlayerMP)sender;
-			IAbilityCap cap = IAbilityCap.Impl.get(player);
+			ICoreCapability coreCapability = CoreCapabilityImpl.getInstance(player);
+			PlayerAbilityData data = coreCapability.getAbilityData();
 			switch(args[0]) {
 				case "level": {
 					if(args.length == 1)
@@ -56,11 +58,11 @@ public class CommandSuperpowers extends CommandBase {
 						if(args.length > 2) {
 							try {
 								int amount = Integer.parseInt(args[2]);
-								int level = cap.getLevel();
+								int level = data.getLevel();
 								amount = amount > level ? level : amount;
-								cap.setLevel(level - amount);
-								cap.sync(player);
-								sendFeedback(player, "Updated level to " + cap.getLevel());
+								data.setLevel(level - amount);
+								coreCapability.sync();
+								sendFeedback(player, "Updated level to " + data.getLevel());
 							} catch(NumberFormatException e) {
 								throw new WrongUsageException("Invalid level value");
 							}
@@ -71,12 +73,12 @@ public class CommandSuperpowers extends CommandBase {
 						if(args.length > 2) {
 							try {
 								int amount = Integer.parseInt(args[2]);
-								cap.setLevel(cap.getLevel() + amount);
-								if(cap.getLevel() < 0) {
-									cap.setLevel(0);
+								data.setLevel(data.getLevel() + amount);
+								if(data.getLevel() < 0) {
+									data.setLevel(0);
 								}
-								cap.sync(player);
-								sendFeedback(player, "Updated level to " + cap.getLevel());
+								coreCapability.sync();
+								sendFeedback(player, "Updated level to " + data.getLevel());
 							} catch(NumberFormatException e) {
 								throw new WrongUsageException("Invalid level value");
 							}
@@ -84,8 +86,8 @@ public class CommandSuperpowers extends CommandBase {
 							throw new WrongUsageException("You must specify level!");
 						}
 					} else if(args[1].equalsIgnoreCase("reset")) {
-						cap.setLevel(0);
-						cap.sync(player);
+						data.setLevel(0);
+						coreCapability.sync();
 						sendFeedback(player, "Your level has been reset to 0");
 					} else {
 						throw new WrongUsageException("Unknown parameter");
@@ -98,15 +100,14 @@ public class CommandSuperpowers extends CommandBase {
 					if(args[1].equalsIgnoreCase("unlockAll")) {
 						Registries.ABILITIES.forEach(a -> {
 							if(!Ability.hasUnlockedAbility(player, a.getName())) {
-								cap.unlockAbility(a.getName());
+								data.unlockAbility(a);
 							}
 						});
-						cap.sync(player);
+						coreCapability.sync();
 						sendFeedback(player, "Unlocked all abilities");
 					} else if(args[1].equalsIgnoreCase("lockAll")) {
-						cap.getUnlockedAbilities().forEach(u -> {cap.lockAbility(u.getName());});
-						cap.reset(false, true, false, false);
-						cap.sync(player);
+						data.clear(false);
+						coreCapability.sync();
 						sendFeedback(player, "Locked all abilities");
 					} else if(args[1].equalsIgnoreCase("unlock")) {
 						if(args.length > 2) {
@@ -114,8 +115,8 @@ public class CommandSuperpowers extends CommandBase {
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
-							cap.unlockAbility(ability.getName());
-							cap.sync(player);
+							data.unlockAbility(ability);
+							coreCapability.sync();
 							sendFeedback(player, "Unlocked: " + ability.getFullName());
 						} else {
 							throw new WrongUsageException("You must specify ability");
@@ -126,8 +127,9 @@ public class CommandSuperpowers extends CommandBase {
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
-							cap.lockAbility(ability.getName());
-							cap.sync(player);
+							data.lockAbility(ability);
+							data.deactivateAbility(ability);
+							coreCapability.sync();
 							sendFeedback(player, "Locked: " + ability.getFullName());
 						} else {
 							throw new WrongUsageException("You must specify ability");
@@ -136,16 +138,16 @@ public class CommandSuperpowers extends CommandBase {
 					break;
 				}
 				case "all": {
-					if(cap.getLevel() < 99) {
-						cap.setLevel(99);
+					if(data.getLevel() < 99) {
+						data.setLevel(99);
 					}
 					Registries.ABILITIES.forEach(a -> {
-						if(!Ability.hasAbility(a, cap.getUnlockedAbilities())) {
-							cap.unlockAbility(a.getName());
+						if(!Ability.hasAbility(a, data.getUnlockedAbilities())) {
+							data.unlockAbility(a);
 						}
 					});
-					cap.sync(player);
-					MinecraftForge.EVENT_BUS.post(new SuperpowersCommandExecuteEvent(cap, player));
+					coreCapability.sync();
+					MinecraftForge.EVENT_BUS.post(new SuperpowersCommandExecuteEvent(data, player));
 					sendFeedback(player, "Unlocked everything!");
 					break;
 				}
@@ -197,8 +199,11 @@ public class CommandSuperpowers extends CommandBase {
 	}
 	
 	public static class SuperpowersCommandExecuteEvent extends Event {
-		public final IAbilityCap capability;
+		public final PlayerAbilityData abilityData;
 		public final EntityPlayerMP player;
-		public SuperpowersCommandExecuteEvent(IAbilityCap cap, EntityPlayerMP player) {this.capability = cap; this.player = player;}
+
+		public SuperpowersCommandExecuteEvent(PlayerAbilityData abilityData, EntityPlayerMP player) {
+			this.abilityData = abilityData; this.player = player;
+		}
 	}
 }

@@ -284,10 +284,6 @@ public interface IAbilityCap extends INBTSerializable<NBTTagCompound> {
 			}
 			return null;
 		}
-		
-		public static int getRequiredXPForNewLevel(IAbilityCap cap) {
-			return cap.getLevel() == 99 ? Integer.MAX_VALUE : 100 + (cap.getLevel()+1)*25;
-		}
 	}
 	
 	class Provider implements ICapabilitySerializable<NBTTagCompound> {

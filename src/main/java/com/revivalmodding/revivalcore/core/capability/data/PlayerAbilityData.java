@@ -39,6 +39,10 @@ public class PlayerAbilityData {
         return unlockedAbilities;
     }
 
+    public void lockAbility(Ability ability) {
+        unlockedAbilities.remove(ability);
+    }
+
     // Active abilities manager ========================================================================================
 
     public Ability[] getActiveAbilities() {
@@ -78,6 +82,14 @@ public class PlayerAbilityData {
         return false;
     }
 
+    public int getActiveAbilityCount() {
+        int c = 0;
+        for(Ability ability : this.getActiveAbilities()) {
+            if(ability != null) c++;
+        }
+        return c;
+    }
+
     // Level and XP manager ============================================================================================
 
     public void setLevel(int level) {
@@ -94,6 +106,14 @@ public class PlayerAbilityData {
 
     public float getXP() {
         return xp;
+    }
+
+    public int getRequiredXPForLevel() {
+        return this.getLevel() == 99 ? Integer.MAX_VALUE : 100 + (this.getLevel()+1)*25;
+    }
+
+    public void addXP(float xp) {
+        this.xp += xp;
     }
 
     // =================================================================================================================
@@ -136,6 +156,15 @@ public class PlayerAbilityData {
             Ability ability = Ability.getAbilityFromKey(active.getStringTagAt(i));
             if(ability == null) continue;
             activeAbilities[i] = ability;
+        }
+    }
+
+    public void clear(boolean resetLevel) {
+        this.lockAbilities();
+        this.setActiveAbilities(new Ability[3]);
+        if(resetLevel) {
+            this.setLevel(0);
+            this.setXP(0);
         }
     }
 }

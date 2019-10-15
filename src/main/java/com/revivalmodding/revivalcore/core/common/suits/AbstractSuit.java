@@ -88,8 +88,8 @@ public abstract class AbstractSuit implements IRegistryEntry
 	}
 	
 	/** Additional xp player will get when wearing this suit **/
-	public double getXPBonus() {
-		return 0.001d;
+	public float getXPBonus() {
+		return 0.001F;
 	}
 	
 	/**

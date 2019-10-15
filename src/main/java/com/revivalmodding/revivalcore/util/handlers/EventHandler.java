@@ -2,10 +2,8 @@ package com.revivalmodding.revivalcore.util.handlers;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.RCoreConfig;
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityProvider;
-import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.util.helper.Constants;
@@ -61,7 +59,7 @@ public class EventHandler
     		AbstractSuit suit = AbstractSuit.getSuit(player);
     		if(suit != null) {
     			suit.handleEffects(player);
-    			IAbilityCap.Impl.get(player).addXP(suit.getXPBonus());
+    			CoreCapabilityImpl.getInstance(player).getAbilityData().addXP(suit.getXPBonus());
     		}
     	}
     }

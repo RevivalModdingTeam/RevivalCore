@@ -2,7 +2,8 @@ package com.revivalmodding.revivalcore.core.client.gui;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.Ability;
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -32,7 +33,6 @@ public class AbilityButton extends GuiButton {
 	
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-		IAbilityCap cap = IAbilityCap.Impl.get(mc.player);
 		this.updateState(mouseX, mouseY);
 		ImageHelper.drawImageWithUV(mc, BUTTON_TEXTURE, x, y, width, height, 0, 0.14285714285*state.ordinal(), 1, 0.14285714285*state.ordinal()+0.14285714285, true);
 		GlStateManager.enableBlend();
@@ -100,10 +100,13 @@ public class AbilityButton extends GuiButton {
 	
 	private void updateState(int mouseX, int mouseY) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		IAbilityCap cap = IAbilityCap.Impl.get(player);
+		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
 		hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-		if(!Ability.hasUnlockedAbility(player, ability.getName())) {
-			if(cap.getLevel() >= ability.getAbilityPrice()) {
+		if(!ability.canActivateAbility(player)) {
+			state = EnumButtonState.INACTIVE;
+		}
+		else if(!Ability.hasUnlockedAbility(player, ability.getName())) {
+			if(abilityData.getLevel() >= ability.getAbilityPrice()) {
 				state = EnumButtonState.PURCHASABLE;
 				if(hovered) {
 					state = EnumButtonState.PURCHASABLE_HOVERED;
@@ -113,13 +116,13 @@ public class AbilityButton extends GuiButton {
 			}
 		} else {
 			// already unlocked abilities
-			boolean b = containsAbility(ability.getName(), cap.getAbilities());
+			boolean b = containsAbility(ability.getName(), abilityData.getActiveAbilities());
 			// active and not hovered
 			if(b && !hovered) {
 				state = EnumButtonState.ACTIVE;
 			} else if(b && hovered) { // active and hovered
 				state = EnumButtonState.READY_TO_REMOVE;
-			} else if(!b && hovered && cap.getAbilities().size() < 3) { // inactive and hovered
+			} else if(!b && hovered && abilityData.getActiveAbilityCount() < 3) { // inactive and hovered
 				state = EnumButtonState.AVAILABLE;
 			} else {
 				state = EnumButtonState.READY_TO_ACTIVATE;
@@ -127,8 +130,9 @@ public class AbilityButton extends GuiButton {
 		}
 	}
 	
-	private static boolean containsAbility(String name, List<Ability> list) {
+	private static boolean containsAbility(String name, Ability[] list) {
 		for(Ability base : list) {
+			if(base == null) continue;
 			if(base.getName().equalsIgnoreCase(name)) {
 				return true;
 			}

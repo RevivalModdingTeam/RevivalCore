@@ -1,16 +1,15 @@
 package com.revivalmodding.revivalcore.core.common.events;
 
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
-
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class LevelUpEvent extends Event {
 	public EntityPlayer player;
-	public IAbilityCap abilities;
+	public ICoreCapability capability;
 	
-	public LevelUpEvent(EntityPlayer player, IAbilityCap cap) {
+	public LevelUpEvent(EntityPlayer player, ICoreCapability cap) {
 		this.player = player;
-		this.abilities = cap;
+		this.capability = cap;
 	}
 }

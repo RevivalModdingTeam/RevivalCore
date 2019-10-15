@@ -2,6 +2,9 @@ package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.common.events.AbilityEvent;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
 
@@ -41,7 +44,8 @@ public class PacketDeactivateAbility implements IMessage {
 		public IMessage onMessage(PacketDeactivateAbility message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
-				IAbilityCap cap = IAbilityCap.Impl.get(player);
+				ICoreCapability coreCapability = CoreCapabilityImpl.getInstance(player);
+				PlayerAbilityData data = coreCapability.getAbilityData();
 				Ability ability = message.ability;
 				if(cap.containsAbility(cap.getAbilities(), ability)) {
 					cap.removeAbility(ability);

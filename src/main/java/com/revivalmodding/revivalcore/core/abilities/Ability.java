@@ -1,22 +1,21 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * Base class for all abilities
@@ -106,12 +105,10 @@ public abstract class Ability implements IRegistryEntry
 	 * @return if player has currently active ability with the name of abilityName
 	 */
 	public static boolean hasAbility(EntityPlayer player, String abilityName) {
-		IAbilityCap cap = IAbilityCap.Impl.get(player);
-		if(cap != null) {
-			for(Ability base : cap.getAbilities()) {
-				if(base.getName().equalsIgnoreCase(abilityName)) {
-					return true;
-				}
+		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
+		for(Ability base : abilityData.getActiveAbilities()) {
+			if(base.getName().equalsIgnoreCase(abilityName)) {
+				return true;
 			}
 		}
 		return false;
@@ -127,33 +124,27 @@ public abstract class Ability implements IRegistryEntry
 	}
 	
 	public static boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
-		IAbilityCap cap = IAbilityCap.Impl.get(player);
-		if(cap != null) {
-			for(Ability base : cap.getUnlockedAbilities()) {
-				if(base.getName().equalsIgnoreCase(abilityName)) {
-					return true;
-				}
+		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
+		for(Ability base : abilityData.getUnlockedAbilities()) {
+			if(base.getName().equalsIgnoreCase(abilityName)) {
+				return true;
 			}
 		}
 		return false;
 	}
-	
+
+	@Nullable
 	public static Ability getAbility(EntityPlayer player, int powerKeybind) {
-		if(powerKeybind > 2) {
+		if(powerKeybind > 2 || powerKeybind < 0) {
 			return null;
 		}
-		IAbilityCap abilities = IAbilityCap.Impl.get(player);
-		List<Ability> active = abilities.getAbilities();
-		if(powerKeybind <= active.size() - 1) {
-			return active.get(powerKeybind);
-		}
-		return null;
+		return CoreCapabilityImpl.getInstance(player).getAbilityData().getActiveAbilities()[powerKeybind];
 	}
 
 	/**
 	 * Called only during capability sync, you shouldn't have to call this method
 	 * @param key - the ability registry name
-	 * @return
+	 * @return ability, can be null
 	 */
 	public static Ability getAbilityFromKey(String key) {
 		for(Ability base : Registries.ABILITIES) {

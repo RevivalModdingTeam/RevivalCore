@@ -1,13 +1,8 @@
 package com.revivalmodding.revivalcore.core.client.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.revivalmodding.revivalcore.core.abilities.Ability;
-import org.lwjgl.input.Mouse;
-
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketActivateAbility;
@@ -15,10 +10,14 @@ import com.revivalmodding.revivalcore.network.packets.PacketDeactivateAbility;
 import com.revivalmodding.revivalcore.network.packets.PacketUnlockAbility;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbilityGUI extends GuiScreen {
 	
@@ -37,20 +36,20 @@ public class AbilityGUI extends GuiScreen {
 	
 	public void onAbilityButtonPressed(AbilityButton button) {
 		EnumButtonState state = button.getButtonState();
-		IAbilityCap abilities = IAbilityCap.Impl.get(mc.player);
+		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(mc.player).getAbilityData();
 		switch(state) {
 			case PURCHASABLE_HOVERED: {
 				NetworkManager.INSTANCE.sendToServer(new PacketUnlockAbility(button.getAbility()));
 				break;
 			}
 			case AVAILABLE: {
-				if(abilities.getAbilities().size() < 3 && button.getAbility().canActivateAbility(mc.player)) {
+				if(abilityData.getActiveAbilityCount() < 3 && button.getAbility().canActivateAbility(mc.player)) {
 					NetworkManager.INSTANCE.sendToServer(new PacketActivateAbility(button.getAbility()));
 				}
 				break;
 			}
 			case READY_TO_REMOVE: {
-				if(abilities.getAbilities().size() > 0) {
+				if(abilityData.getActiveAbilityCount() > 0) {
 					NetworkManager.INSTANCE.sendToServer(new PacketDeactivateAbility(button.getAbility()));
 				}
 				break;
@@ -117,7 +116,7 @@ public class AbilityGUI extends GuiScreen {
 	}
 	
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		if(mouseButton == 0) {
 			for(AbilityButton button : this.buttonListA) {
 				if(button.mousePressed(mc, mouseX, mouseY)) {
@@ -139,7 +138,7 @@ public class AbilityGUI extends GuiScreen {
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(GuiButton button) {
 		if(button instanceof ButtonChangePage) {
 			ButtonChangePage btn = (ButtonChangePage)button;
 			if(btn.visible) {
@@ -163,18 +162,17 @@ public class AbilityGUI extends GuiScreen {
 		this.drawLevelStuff();
 		if(displayedAbilities.isEmpty()) {
 			fontRenderer.drawStringWithShadow("NO ABILITIES", left - 45 + xSize / 2, top + ySize / 2, 0xFFFFFF);
-			return;
 		}
 	}
 	
 	private void drawLevelStuff() {
-		IAbilityCap abilities = IAbilityCap.Impl.get(mc.player);
-		float progress = (float)(abilities.getXP() / IAbilityCap.Impl.getRequiredXPForNewLevel(abilities));
+		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(mc.player).getAbilityData();
+		float progress = abilityData.getXP() / abilityData.getRequiredXPForLevel();
 		int guiX = left + xSize;
-		fontRenderer.drawStringWithShadow(abilities.getLevel()+"", abilities.getLevel() < 10 ? left+80.5f : left+77, top + 8, 0xE22C00);
-		fontRenderer.drawStringWithShadow(abilities.getLevel()+1+"", abilities.getLevel()+1 < 10 ? guiX-13.5f : guiX-17, top + 8, 0x36FF3B);
+		fontRenderer.drawStringWithShadow(abilityData.getLevel()+"", abilityData.getLevel() < 10 ? left+80.5f : left+77, top + 8, 0xE22C00);
+		fontRenderer.drawStringWithShadow(abilityData.getLevel()+1+"", abilityData.getLevel()+1 < 10 ? guiX-13.5f : guiX-17, top + 8, 0x36FF3B);
 		ImageHelper.drawImageWithUV(mc, Constants.Textures.ABILITY_GUI, left+92, top+9, 63*progress, 5, 0.68819607843, 0, 0.9294117647, 0.01960784313, false);
-		fontRenderer.drawStringWithShadow(abilities.getAbilities().size()+"/3", left + 10, top + 150, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow(abilityData.getActiveAbilityCount()+"/3", left + 10, top + 150, 0xFFFFFF);
 	}
 	
 	private void initGuiParameters() {

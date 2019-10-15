@@ -6,6 +6,8 @@ import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
+
 public class CoreCapabilityImpl implements ICoreCapability {
 
     private PlayerMetaPowerData playerMetaPowerData;
@@ -26,6 +28,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
         return player.getCapability(CoreCapabilityProvider.DATA, null);
     }
 
+    @Nonnull
     @Override
     public PlayerMetaPowerData getMetaPowerData() {
         if (playerMetaPowerData == null) playerMetaPowerData = new PlayerMetaPowerData();
@@ -37,6 +40,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
         this.playerMetaPowerData = metaPowerData;
     }
 
+    @Nonnull
     @Override
     public PlayerAbilityData getAbilityData() {
         if (playerAbilityData == null) playerAbilityData = new PlayerAbilityData();
@@ -48,6 +52,7 @@ public class CoreCapabilityImpl implements ICoreCapability {
         this.playerAbilityData = abilityData;
     }
 
+    @Nonnull
     @Override
     public PlayerTrailData getTrailData() {
         if (playerTrailData == null) playerTrailData = new PlayerTrailData();

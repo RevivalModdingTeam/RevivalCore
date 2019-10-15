@@ -1,10 +1,10 @@
 package com.revivalmodding.revivalcore.network.packets;
 
 import com.revivalmodding.revivalcore.core.abilities.Ability;
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.common.events.AbilityEvent;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextFormatting;
@@ -40,14 +40,14 @@ public class PacketActivateAbility implements IMessage {
 		public IMessage onMessage(PacketActivateAbility message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			player.getServer().addScheduledTask(() -> {
-				IAbilityCap cap = IAbilityCap.Impl.get(player);
+				PlayerAbilityData data = CoreCapabilityImpl.getInstance(player).getAbilityData();
 				Ability ability = message.ability;
-				if(cap.getAbilities().size() < 3 && ability.canActivateAbility(player)) {
-					cap.addAbility(ability);
+				if(data.getActiveAbilityCount() < 3 && ability.canActivateAbility(player)) {
+					data.activateAbility(ability);
 					PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated ability: " + ability.getFullName(), true);
 					MinecraftForge.EVENT_BUS.post(new AbilityEvent.Activate(ability, player));
 				}
-				cap.sync(player);
+				CoreCapabilityImpl.getInstance(player).sync();
 			});
 			return null;
 		}
