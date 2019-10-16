@@ -72,7 +72,6 @@ public class PacketAbilityAction implements IMessage {
                         if(abilityData.getActiveAbilityCount() < 3) {
                             abilityData.activateAbility(message.ability);
                             PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated " + message.ability.getFullName(), true);
-                            MinecraftForge.EVENT_BUS.post(new AbilityEvent.Activate(message.ability, player));
                         }
                         break;
                     }
@@ -85,7 +84,6 @@ public class PacketAbilityAction implements IMessage {
                             }
                             message.ability.onAbilityDeactivated(player);
                             PlayerHelper.sendMessage(player, TextFormatting.RED + "You have deactivated " + message.ability.getFullName(), true);
-                            MinecraftForge.EVENT_BUS.post(new AbilityEvent.Deactivate(message.ability, player));
                         }
                         break;
                     }
@@ -95,12 +93,12 @@ public class PacketAbilityAction implements IMessage {
                             if(abilityData.getLevel() >= ability.getAbilityPrice()) {
                                 abilityData.unlockAbility(ability);
                                 PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have unlocked " + ability.getFullName(), true);
-                                // TODO Events
                             }
                         }
                         break;
                     }
                 }
+                MinecraftForge.EVENT_BUS.post(new AbilityEvent(player, message.ability, message.action));
                 coreCapability.sync();
             });
             return null;
