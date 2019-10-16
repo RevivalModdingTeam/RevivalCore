@@ -1,10 +1,10 @@
 package com.revivalmodding.revivalcore.network.packets;
 
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import com.revivalmodding.revivalcore.core.common.events.PowerToggleEvent;
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,15 +33,11 @@ public class PacketSetPower implements IMessage {
         public IMessage onMessage(PacketSetPower message, MessageContext ctx) {
             ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
                 EntityPlayer player = ctx.getServerHandler().player;
-                IMetaCap data = CapabilityMeta.get(player);
-                if (data.isPowerEnabled()) {
-                    data.setPowerEnabled(false);
-                    PlayerHelper.sendMessage(player, "Power Disabled!", true);
-                } else {
-                    data.setPowerEnabled(true);
-                    PlayerHelper.sendMessage(player, "Power Enabled!", true);
-                }
-                MinecraftForge.EVENT_BUS.post(new PowerToggleEvent(player, data.isPowerEnabled()));
+                ICoreCapability data = CoreCapabilityImpl.getInstance(player);
+                PlayerMetaPowerData powerData = data.getMetaPowerData();
+                powerData.setPowerActivated(!powerData.isPowerActivated());
+                PlayerHelper.sendMessage(player, powerData.isPowerActivated() ? "Powers activated!" : "Powers deactivated!", true);
+                MinecraftForge.EVENT_BUS.post(new PowerToggleEvent(player, powerData.isPowerActivated()));
                 data.sync();
             });
             return null;

@@ -3,7 +3,10 @@ package com.revivalmodding.revivalcore.core.capability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
+import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.network.packets.PacketSyncAbilities;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -82,7 +85,9 @@ public class CoreCapabilityImpl implements ICoreCapability {
 
     @Override
     public void sync() {
-
+        if(capOwner != null && capOwner instanceof EntityPlayerMP) {
+            NetworkManager.INSTANCE.sendTo(new PacketSyncAbilities(this.toNBT(), capOwner.getUniqueID()), (EntityPlayerMP) capOwner);
+        }
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.revivalmodding.revivalcore.core.common.items;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import com.revivalmodding.revivalcore.meta.util.MetaHelper;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -31,22 +31,24 @@ public class ItemInjection extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack stack = player.getHeldItem(handIn);
+        PlayerMetaPowerData data = CoreCapabilityImpl.getInstance(player).getMetaPowerData();
         if (!injectionTypes.getName().equals(InjectionTypes.EMPTY.getName())) {
             if (!MetaHelper.hasPowers(player)) {
                 MetaHelper.setMetaPower(player, injectionTypes.getName());
-                CapabilityMeta.get(player).setPowerEnabled(true);
+                data.setPowerActivated(true);
                 changeItemInjection(player, stack, InjectionTypes.EMPTY);
             }
         }else{
             if (MetaHelper.hasPowers(player)) {
-                changeItemInjection(player, stack, MetaHelper.getMetaEnum(MetaHelper.getMetaPowerName(CapabilityMeta.get(player).getMetaPower())));
+                changeItemInjection(player, stack, MetaHelper.getMetaEnum(MetaHelper.getMetaPowerName(data.getMetaPower())));
                 MetaHelper.setEmptyPower(player);
-                CapabilityMeta.get(player).setPowerEnabled(false);
+                data.setPowerActivated(false);
             }
         }
         return super.onItemRightClick(worldIn, player, handIn);
     }
 
+    // TODO make InjectionRegistry
     private void changeItemInjection(EntityPlayer player, ItemStack stack, InjectionTypes types) {
 
         stack.shrink(1);

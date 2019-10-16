@@ -1,21 +1,20 @@
 package com.revivalmodding.revivalcore.meta.util;
 
-import java.util.Random;
-
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import com.revivalmodding.revivalcore.meta.util.PEnumHandler.MetaPower;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
-
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.Random;
 
 public class MetaHelper {
 
     public static void getRandomMetaPower(EntityPlayer player) {
         Random random = new Random();
-        IMetaCap cap = CapabilityMeta.get(player);
+        PlayerMetaPowerData powerData = CoreCapabilityImpl.getInstance(player).getMetaPowerData();
         int p = random.nextInt(MetaPower.values().length);
-        cap.setMetaPower(p);
+        powerData.setMetaPower(p);
     }
 
     public static String getMetaPowerName(int id) {
@@ -35,11 +34,10 @@ public class MetaHelper {
     }
 
     public static boolean hasPowers(EntityPlayer player) {
-        return CapabilityMeta.get(player).hasMetaPowers();
+        return CoreCapabilityImpl.getInstance(player).getMetaPowerData().hasMetaPowers();
     }
 
     public static boolean hasPower(EntityPlayer player, String name) {
-        IMetaCap cap = CapabilityMeta.get(player);
         for(MetaPower power : MetaPower.values()) {
             if(power.getName().equals(name))
                 return true;
@@ -48,12 +46,12 @@ public class MetaHelper {
     }
 
     public static void setEmptyPower(EntityPlayer player) {
-        CapabilityMeta.get(player).clear();
+        CoreCapabilityImpl.getInstance(player).getMetaPowerData().clear();
     }
 
     public static int getPowerId(String name) {
         for(MetaPower p : MetaPower.values()) {
-            if(p.getName() == name) {
+            if(p.getName().equals(name)) {
                 return p.getID();
             }
         }
@@ -61,10 +59,10 @@ public class MetaHelper {
     }
 
     public static void setMetaPower(EntityPlayer player, String name) {
-        IMetaCap cap = CapabilityMeta.get(player);
+        PlayerMetaPowerData powerData = CoreCapabilityImpl.getInstance(player).getMetaPowerData();
         for(MetaPower power : MetaPower.values()) {
             if(power.getName().equals(name)) {
-                cap.setMetaPower(power.getID());
+                powerData.setMetaPower(power.getID());
             }
         }
     }

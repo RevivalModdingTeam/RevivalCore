@@ -1,8 +1,9 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,7 +18,7 @@ public class AbilityVibrate extends Ability {
     public AbilityVibrate() {
         super("vibrate");
         // TODO better description
-        this.description = new String[] {"Who knows what's required for this","* Josia propably knows tho *"};
+        this.description = new String[] {"This ability is disabled!", "Will be unlocked in some amount of time!"};
     }
 
     @Nonnull
@@ -38,22 +39,23 @@ public class AbilityVibrate extends Ability {
 
     @Override
     public void update(EntityPlayer player) {
-        IMetaCap cap = CapabilityMeta.get(player);
+        ICoreCapability coreCapability = CoreCapabilityImpl.getInstance(player);
+        PlayerMetaPowerData cap = coreCapability.getMetaPowerData();
         if (isActive()) {
-            cap.setVibrating(!cap.isVibrating());
-            cap.sync();
+            cap.setVibratingState(!cap.isVibrating());
+            coreCapability.sync();
             toggleAbility();
         }
     }
 
     @Override
     public boolean canActivateAbility(EntityPlayer player) {
-        return CapabilityMeta.get(player).canVibrate();
+        return CoreCapabilityImpl.getInstance(player).getMetaPowerData().canVibrate();
     }
 
     @Nullable
     @Override
     public String[] getHoveredDescription() {
-        return null;
+        return description;
     }
 }

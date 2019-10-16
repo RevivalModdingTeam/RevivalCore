@@ -1,11 +1,8 @@
 package com.revivalmodding.revivalcore.core.client.trail.renderers;
 
-import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
@@ -18,8 +15,9 @@ public abstract class TrailRenderer {
 
     public void drawLine(Vec3d start, Vec3d end, float width, float r, float g, float b, float a, double xPos, double yPos, double zPos) {
         GlStateManager.enableBlend();
-        GlStateManager.enableTexture2D();
+        GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
+        GlStateManager.disableLighting();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         this.preRender(start, end, width, r, g, b, a);
         Tessellator tessellator = Tessellator.getInstance();
@@ -32,8 +30,9 @@ public abstract class TrailRenderer {
         tessellator.draw();
         bufferBuilder.setTranslation(0, 0, 0);
         this.postRender(start, end, width, r, g, b, a);
+        GlStateManager.enableLighting();
         GlStateManager.disableBlend();
-        GlStateManager.disableTexture2D();
+        GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
     }
 

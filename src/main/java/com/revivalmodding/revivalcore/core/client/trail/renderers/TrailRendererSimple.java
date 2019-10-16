@@ -4,35 +4,13 @@ import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
 import com.revivalmodding.revivalcore.core.client.trail.TrailPart;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
 
 public class TrailRendererSimple extends TrailRenderer {
-
-    public void drawLine(Vec3d start, Vec3d end, int width, float r, float g, float b, float a, double xPos, double yPos, double zPos) {
-        GlStateManager.enableBlend();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableCull();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.setTranslation(-xPos, -yPos, -zPos);
-        GlStateManager.glLineWidth(width);
-        bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(start.x, start.y, start.z).color(r, g, b, a).endVertex();
-        bufferBuilder.pos(end.x, end.y, end.z).color(r, g, b, a).endVertex();
-        tessellator.draw();
-        bufferBuilder.setTranslation(0, 0, 0);
-        GlStateManager.disableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableCull();
-    }
 
     @Override
     public void renderTrail(EntityPlayer player, Trail trailToRender, @Nullable TrailOptionalData trailData, float partialTick) {

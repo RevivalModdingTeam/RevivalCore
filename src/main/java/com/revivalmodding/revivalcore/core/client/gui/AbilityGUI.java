@@ -5,6 +5,7 @@ import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.network.packets.PacketAbilityAction;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.gui.GuiButton;
@@ -36,18 +37,18 @@ public class AbilityGUI extends GuiScreen {
 		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(mc.player).getAbilityData();
 		switch(state) {
 			case PURCHASABLE_HOVERED: {
-				NetworkManager.INSTANCE.sendToServer(new PacketUnlockAbility(button.getAbility()));
+				NetworkManager.INSTANCE.sendToServer(new PacketAbilityAction(button.getAbility(), PacketAbilityAction.AbilityAction.UNLOCK));
 				break;
 			}
 			case AVAILABLE: {
 				if(abilityData.getActiveAbilityCount() < 3 && button.getAbility().canActivateAbility(mc.player)) {
-					NetworkManager.INSTANCE.sendToServer(new PacketActivateAbility(button.getAbility()));
+					NetworkManager.INSTANCE.sendToServer(new PacketAbilityAction(button.getAbility(), PacketAbilityAction.AbilityAction.UNLOCK));
 				}
 				break;
 			}
 			case READY_TO_REMOVE: {
 				if(abilityData.getActiveAbilityCount() > 0) {
-					NetworkManager.INSTANCE.sendToServer(new PacketDeactivateAbility(button.getAbility()));
+					NetworkManager.INSTANCE.sendToServer(new PacketAbilityAction(button.getAbility(), PacketAbilityAction.AbilityAction.UNLOCK));
 				}
 				break;
 			}

@@ -47,7 +47,7 @@ public class PlayerTrailData {
     }
 
     public void onTick(EntityPlayer player) {
-        mainTrail.updateTrail(player);
+        this.getTrail().updateTrail(player);
     }
 
     public void toNBT(NBTTagCompound nbt) {

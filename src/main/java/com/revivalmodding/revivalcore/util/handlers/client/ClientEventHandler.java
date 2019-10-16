@@ -1,7 +1,8 @@
 package com.revivalmodding.revivalcore.util.handlers.client;
 
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
+import com.revivalmodding.revivalcore.RevivalCore;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.data.PlayerMetaPowerData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -17,12 +18,11 @@ public class ClientEventHandler
 
     @SubscribeEvent
     public static void renderPlayerPre(RenderPlayerEvent.Pre e) {
-        Random r = new Random();
+        Random r = RevivalCore.getRandom();
         EntityPlayer player = e.getEntityPlayer();
-        IMetaCap cap = CapabilityMeta.get(player);
+        PlayerMetaPowerData powerData = CoreCapabilityImpl.getInstance(player).getMetaPowerData();
         GlStateManager.pushMatrix();
-
-        if (cap.isVibrating()) {
+        if (powerData.isVibrating()) {
             GlStateManager.enableBlend();
             for (int i = 0; i < 1; i++) {
                 GlStateManager.translate((r.nextFloat() - 1F) / 80, 0, (r.nextFloat() - 1F) / 80);
@@ -34,9 +34,8 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void renderPlayerPost(RenderPlayerEvent.Post e) {
         EntityPlayer player = e.getEntityPlayer();
-        IMetaCap cap = CapabilityMeta.get(player);
-
-        if (cap.isVibrating()) {
+        PlayerMetaPowerData powerData = CoreCapabilityImpl.getInstance(player).getMetaPowerData();
+        if (powerData.isVibrating()) {
             GlStateManager.disableBlend();
         }
         GlStateManager.popMatrix();

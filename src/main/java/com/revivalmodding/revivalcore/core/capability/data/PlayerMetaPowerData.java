@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class PlayerMetaPowerData {
 
     private int metaPower;
+    private boolean powerActivated;
     private boolean hasPowerMalfunctioned;
     private boolean isVibrating;
     private boolean canVibrate;
@@ -21,6 +22,14 @@ public class PlayerMetaPowerData {
 
     public int getMetaPower() {
         return metaPower;
+    }
+
+    public void setPowerActivated(boolean activated) {
+        this.powerActivated = activated;
+    }
+
+    public boolean isPowerActivated() {
+        return powerActivated;
     }
 
     public void setMalfunctionState(boolean state) {
@@ -87,6 +96,7 @@ public class PlayerMetaPowerData {
     public void writeToNBT(NBTTagCompound nbt) {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("metaPowerID", metaPower);
+        tag.setBoolean("powerActivated", powerActivated);
         tag.setBoolean("powerMalfunctioned", hasPowerMalfunctioned);
         tag.setBoolean("isVibrating", isVibrating);
         tag.setBoolean("canVibrate", canVibrate);
@@ -98,6 +108,7 @@ public class PlayerMetaPowerData {
     public void readFromNBT(NBTTagCompound nbt) {
         NBTTagCompound tag = nbt.hasKey("playerMetaPowerData") ? nbt.getCompoundTag("playerMetaPowerData") : new NBTTagCompound();
         this.metaPower = tag.getInteger("metaPowerID");
+        this.powerActivated = tag.getBoolean("powerActivated");
         this.hasPowerMalfunctioned = tag.getBoolean("powerMalfunctioned");
         this.isVibrating = tag.getBoolean("isVibrating");
         this.canVibrate = tag.getBoolean("canVibrate");
