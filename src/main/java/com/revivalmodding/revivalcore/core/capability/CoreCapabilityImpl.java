@@ -88,5 +88,6 @@ public class CoreCapabilityImpl implements ICoreCapability {
     @Override
     public void tick() {
         this.getMetaPowerData().update(capOwner);
+        this.getAbilityData().update(capOwner);
     }
 }

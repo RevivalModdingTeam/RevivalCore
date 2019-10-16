@@ -8,7 +8,6 @@ import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
 import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.network.packets.PacketSetPower;
-import com.revivalmodding.revivalcore.network.packets.PacketToggleAbility;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

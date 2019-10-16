@@ -1,11 +1,10 @@
 package com.revivalmodding.revivalcore.network.packets;
 
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -45,7 +44,7 @@ public class PacketSyncAbilities implements IMessage {
                 EntityPlayer receiver = Minecraft.getMinecraft().player;
                 EntityPlayer fromClient = receiver.world.getPlayerEntityByUUID(message.player);
                 if(fromClient != null) {
-                    IAbilityCap.Impl.get(fromClient).deserializeNBT(message.comp);
+                    CoreCapabilityImpl.getInstance(fromClient).fromNBT(message.comp);
                 }
             });
             return null;

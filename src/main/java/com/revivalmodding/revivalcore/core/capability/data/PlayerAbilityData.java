@@ -2,9 +2,14 @@ package com.revivalmodding.revivalcore.core.capability.data;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.Ability;
+import com.revivalmodding.revivalcore.core.common.events.LevelUpEvent;
+import com.revivalmodding.revivalcore.util.helper.PlayerHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
@@ -61,6 +66,21 @@ public class PlayerAbilityData {
         return key >= 0 && key < activeAbilities.length && activeAbilities[key] != null;
     }
 
+    public boolean hasActiveAbility(Ability ability) {
+        for(Ability a : this.getActiveAbilities()) {
+            if(a != null && a.getName().equalsIgnoreCase(ability.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void toggleAbility(int key) {
+        if(this.hasActiveAbilityForKey(key)) {
+            this.getActiveAbilities()[key].toggleAbility();
+        }
+    }
+
     public boolean activateAbility(Ability ability) {
         for(int i = 0; i < activeAbilities.length; i++) {
             if(!hasActiveAbilityForKey(i)) {
@@ -88,6 +108,18 @@ public class PlayerAbilityData {
             if(ability != null) c++;
         }
         return c;
+    }
+
+    public Ability[] getNonnullActiveAbilities() {
+        Ability[] arr = new Ability[3];
+        int index = 0;
+        for (Ability ability : this.getActiveAbilities()) {
+            if(ability != null) {
+                arr[index] = ability;
+                index++;
+            }
+        }
+        return arr;
     }
 
     // Level and XP manager ============================================================================================
@@ -165,6 +197,19 @@ public class PlayerAbilityData {
         if(resetLevel) {
             this.setLevel(0);
             this.setXP(0);
+        }
+    }
+
+    public void update(EntityPlayer player) {
+        for(Ability ability : this.getActiveAbilities()) {
+            if(ability == null) continue;
+            ability.update(player);
+        }
+        if(this.getXP() >= this.getRequiredXPForLevel() && this.getLevel() < 99) {
+            this.setXP(0);
+            this.setLevel(this.getLevel() + 1);
+            MinecraftForge.EVENT_BUS.post(new LevelUpEvent(player, this.getLevel()));
+            if(!player.world.isRemote) PlayerHelper.sendMessage(player, TextFormatting.BOLD.toString() + TextFormatting.GREEN + "LEVEL UP! [" + this.getLevel() + "]", true);
         }
     }
 }

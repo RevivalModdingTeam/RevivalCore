@@ -16,9 +16,6 @@ public class NetworkManager {
         INSTANCE.registerMessage(PacketSyncProcessTileEntity.Handler.class, PacketSyncProcessTileEntity.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(PacketSetPower.Handler.class, PacketSetPower.class, id++, Side.SERVER);
         INSTANCE.registerMessage(PacketSyncAbilities.Handler.class, PacketSyncAbilities.class, id++, Side.CLIENT);
-        INSTANCE.registerMessage(PacketToggleAbility.Handler.class, PacketToggleAbility.class, id++, Side.SERVER);
-        INSTANCE.registerMessage(PacketUnlockAbility.Handler.class, PacketUnlockAbility.class, id++, Side.SERVER);
-        INSTANCE.registerMessage(PacketActivateAbility.Handler.class, PacketActivateAbility.class, id++, Side.SERVER);
-        INSTANCE.registerMessage(PacketDeactivateAbility.Handler.class, PacketDeactivateAbility.class, id++, Side.SERVER);
+        INSTANCE.registerMessage(PacketAbilityAction.Handler.class, PacketAbilityAction.class, id++, Side.SERVER);
     }
 }

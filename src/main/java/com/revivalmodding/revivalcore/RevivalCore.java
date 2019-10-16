@@ -1,16 +1,12 @@
 package com.revivalmodding.revivalcore;
 
 import com.revivalmodding.revivalcore.command.CommandSuperpowers;
-import com.revivalmodding.revivalcore.core.abilities.IAbilityCap;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityStorage;
 import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.tabs.CoreTab;
-import com.revivalmodding.revivalcore.meta.capability.CapMetaStorage;
-import com.revivalmodding.revivalcore.meta.capability.CapabilityMeta;
-import com.revivalmodding.revivalcore.meta.capability.IMetaCap;
 import com.revivalmodding.revivalcore.network.NetworkManager;
 import com.revivalmodding.revivalcore.proxy.IProxy;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
