@@ -90,10 +90,8 @@ public class TrailOptionalData {
     }
 
     private void setRainbowColorValues(Trail parent) {
-        // TODO
-        int[] rainbowColorTable = {0, 0, 0, 0};
         this.stageColors = new int[7];
-        System.arraycopy(stageColors, 0, rainbowColorTable, 0, 7);
+        System.arraycopy(stageColors, 0, new int[] {0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0x9400D3}, 0, 7);
     }
 
     private int getRainbowColorFor(int i) {
