@@ -16,26 +16,22 @@ public class TrailOptionalData {
 
     private int[] stageColors;
     private int secondaryColor;
-    private boolean isRainbow;
 
     public TrailOptionalData(Trail parent) {
         this(parent, -1);
     }
 
     public TrailOptionalData(Trail parent, int secondaryColor) {
-        this(parent, secondaryColor, false, null);
+        this(parent, secondaryColor, null);
     }
 
-    public TrailOptionalData(Trail parent, int secondaryColor, boolean isRainbow, @Nullable int[] stageColors) {
+    public TrailOptionalData(Trail parent, int secondaryColor, @Nullable int[] stageColors) {
         this.parent = parent;
         this.stageColors = new int[parent.length];
         this.secondaryColor = secondaryColor;
-        this.isRainbow = isRainbow;
         if(stageColors == null) return;
         if(stageColors.length < parent.length) throw new IllegalArgumentException("Stage color array length must be >= parent trail length!");
-        if(isRainbow) {
-            this.setRainbowColorValues(parent);
-        } else System.arraycopy(stageColors, 0, this.stageColors, 0, parent.length);
+        System.arraycopy(stageColors, 0, this.stageColors, 0, parent.length);
     }
 
     @SideOnly(Side.CLIENT)
@@ -49,10 +45,6 @@ public class TrailOptionalData {
         return secondaryColor > -1;
     }
 
-    public boolean isRainbowTrail() {
-        return isRainbow;
-    }
-
     public Trail getParent() {
         return parent;
     }
@@ -60,7 +52,6 @@ public class TrailOptionalData {
     public void saveToNBT(NBTTagCompound nbt) {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("secondaryColor", this.secondaryColor);
-        tag.setBoolean("rainbow", this.isRainbow);
         if(stageColors != null) {
             NBTTagList colorList = new NBTTagList();
             for(int i = 0; i < stageColors.length; i++) {
@@ -74,7 +65,6 @@ public class TrailOptionalData {
     public void readFromNBT(NBTTagCompound nbt) {
         NBTTagCompound tag = nbt.hasKey("trailData") ? nbt.getCompoundTag("trailData") : new NBTTagCompound();
         this.secondaryColor = tag.getInteger("secondaryColor");
-        this.isRainbow = tag.getBoolean("rainbow");
         this.stageColors = tag.hasKey("colorList") ? new int[0] : null;
         if(stageColors != null) {
             NBTTagList colors = tag.getTagList("colorList", Constants.NBT.TAG_INT);
@@ -87,14 +77,5 @@ public class TrailOptionalData {
 
     private int getColor(int trailPart, int defaultColor) {
         return stageColors == null ? defaultColor : stageColors.length <= trailPart ? defaultColor : stageColors[trailPart];
-    }
-
-    private void setRainbowColorValues(Trail parent) {
-        this.stageColors = new int[7];
-        System.arraycopy(stageColors, 0, new int[] {0xFF0000, 0xFF7F00, 0xFFFF00, 0x00FF00, 0x0000FF, 0x4B0082, 0x9400D3}, 0, 7);
-    }
-
-    private int getRainbowColorFor(int i) {
-        return 0;
     }
 }
