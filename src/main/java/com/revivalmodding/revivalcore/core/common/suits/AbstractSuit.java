@@ -1,9 +1,9 @@
 package com.revivalmodding.revivalcore.core.common.suits;
 
+import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
-import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
@@ -40,7 +40,7 @@ public abstract class AbstractSuit implements IRegistryEntry
 
 	/** As the name says, it get's the suit from the playerParameter, returns null if player doesn't have suit **/
     public static AbstractSuit getSuit(EntityPlayer player) {
-    	for(EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
+    	for(EntityEquipmentSlot slot : ItemRegistry.ARMOR) {
     		if(!(player.getItemStackFromSlot(slot).getItem() instanceof ItemSuit)) {
     			return null;
     		}

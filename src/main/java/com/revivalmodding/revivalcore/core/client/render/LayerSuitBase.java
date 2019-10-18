@@ -1,8 +1,8 @@
 package com.revivalmodding.revivalcore.core.client.render;
 
+import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
-import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -35,7 +35,7 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
 
     @Override
     public void doRenderLayer(E entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        for (EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
+        for (EntityEquipmentSlot slot : ItemRegistry.ARMOR) {
             this.renderLayerPart(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, slot);
         }
     }

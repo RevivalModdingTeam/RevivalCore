@@ -40,11 +40,14 @@ public class PacketSyncAbilities implements IMessage {
 
         @Override
         public IMessage onMessage(PacketSyncAbilities message, MessageContext ctx) {
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                EntityPlayer receiver = Minecraft.getMinecraft().player;
-                EntityPlayer fromClient = receiver.world.getPlayerEntityByUUID(message.player);
-                if(fromClient != null) {
-                    CoreCapabilityImpl.getInstance(fromClient).fromNBT(message.comp);
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    EntityPlayer receiver = Minecraft.getMinecraft().player;
+                    EntityPlayer fromClient = receiver.world.getPlayerEntityByUUID(message.player);
+                    if(fromClient != null) {
+                        CoreCapabilityImpl.getInstance(fromClient).fromNBT(message.comp);
+                    }
                 }
             });
             return null;

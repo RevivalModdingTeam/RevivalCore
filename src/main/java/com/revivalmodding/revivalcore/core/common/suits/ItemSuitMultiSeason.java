@@ -2,7 +2,7 @@ package com.revivalmodding.revivalcore.core.common.suits;
 
 import com.google.common.base.Preconditions;
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
+import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
@@ -55,8 +55,8 @@ public class ItemSuitMultiSeason extends ItemSuit {
             if(seasons.size() == 1) RevivalCore.logger.warn("Registering multiseason suit with only one season!");
             ItemSuitMultiSeason[] arr = new ItemSuitMultiSeason[seasons.size()*3];
             for(int s = 0; s < seasons.size(); s++) {
-                for(int i = 0; i < SuitRenderHandler.ARMOR.length; i++) {
-                    EntityEquipmentSlot slot = SuitRenderHandler.ARMOR[i];
+                for(int i = 0; i < ItemRegistry.ARMOR.length; i++) {
+                    EntityEquipmentSlot slot = ItemRegistry.ARMOR[i];
                     String registryName = seasons.get(s).prefix + "_" + name + "_" + slot.getName();
                     ItemSuitMultiSeason suitMultiSeason = new ItemSuitMultiSeason(registryName, slot, seasons.get(s));
                     suitMultiSeason.setCreativeTab(tab);

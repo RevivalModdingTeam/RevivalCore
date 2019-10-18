@@ -15,7 +15,6 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class SuitRenderHandler {
 
-    public static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
     private static List<UUID> playersWithRenderLayer = new ArrayList<>();
 
     @SubscribeEvent

@@ -4,7 +4,6 @@ import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.blocks.CoreBlockRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.donators.ISimpleSuit;
 import com.revivalmodding.revivalcore.core.common.suits.donators.ItemDonatorSuit;
-import com.revivalmodding.revivalcore.util.handlers.client.SuitRenderHandler;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -22,6 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ItemRegistry {
 
     public static ItemArmor.ArmorMaterial SUIT_MATERIAL = EnumHelper.addArmorMaterial("suit", "", -1, new int[4], 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
+    public static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
 
     @GameRegistry.ObjectHolder(RevivalCore.MODID)
     public static final class CoreItems {
@@ -54,7 +54,7 @@ public class ItemRegistry {
     }
 
     private static void registerDonatorSuit(RegistryEvent.Register<Item> event, String name, double amount, ISimpleSuit simpleSuit) {
-        for(EntityEquipmentSlot slot : SuitRenderHandler.ARMOR) {
+        for(EntityEquipmentSlot slot : ARMOR) {
             ItemDonatorSuit suit = new ItemDonatorSuit(name+"_"+slot.getName(), slot, formatString(name), amount, simpleSuit);
             event.getRegistry().register(suit);
         }
