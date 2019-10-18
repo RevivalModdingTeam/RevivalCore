@@ -1,16 +1,12 @@
 package com.revivalmodding.revivalcore.core.common.blocks;
 
-import javax.annotation.Nullable;
-
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalmodding.revivalcore.util.helper.IHaveItem;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
@@ -21,17 +17,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveItem {
+import javax.annotation.Nullable;
+
+public class BlockSuitMaker extends Block implements IHaveItem {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1.6, 0.6, -0.5);
@@ -149,7 +143,7 @@ public class BlockSuitMaker extends Block implements ITileEntityProvider, IHaveI
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntitySuitMaker();
     }
 

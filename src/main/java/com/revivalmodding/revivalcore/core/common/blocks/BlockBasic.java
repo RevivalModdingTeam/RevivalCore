@@ -5,7 +5,9 @@ import net.minecraft.block.material.Material;
 
 public class BlockBasic extends Block {
 
-    public BlockBasic(Material material) {
+    public BlockBasic(String name, Material material) {
         super(material);
+        this.setTranslationKey(name);
+        this.setRegistryName(name);
     }
 }

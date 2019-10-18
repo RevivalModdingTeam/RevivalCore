@@ -18,12 +18,14 @@ public class CoreBlockRegistry {
     public static final class CoreBlocks {
 
         public static final BlockSuitMaker SUIT_MAKER = null;
+        public static final BlockTrailEditor TRAIL_EDITOR = null;
     }
 
     @SubscribeEvent
     public static void onBlockRegister(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
-                new BlockSuitMaker(Material.ROCK).setRegistryName("suit_maker").setTranslationKey("suit_maker")
+                new BlockSuitMaker(Material.ROCK).setRegistryName("suit_maker").setTranslationKey("suit_maker"),
+                new BlockTrailEditor("trail_editor").setCreativeTab(RevivalCore.coretab)
         );
     }
 }

@@ -88,6 +88,18 @@ public class Trail {
         return points;
     }
 
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public static class TrailBuilder {
 
         private int color, width, length;
