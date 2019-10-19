@@ -5,6 +5,7 @@ import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
+import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -21,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class GuiTrailEditor extends GuiScreen {
 
@@ -30,16 +31,15 @@ public class GuiTrailEditor extends GuiScreen {
     private final EntityPlayer player;
     private final ICoreCapability editedCap;
     private final NBTTagCompound originalNBT;
-    private EditorType editor;
-    private boolean madeValidChanges = false;
-
     private final ArrayList<ColorSlider> sliders = new ArrayList<>();
     private final ArrayList<EditorPanelSwitch> editors = new ArrayList<>();
-
+    private EditorType editor;
+    private boolean madeValidChanges = false;
     private int x;
     private int y;
 
     private int selectedButtonIndex = 0;
+    private int totalCost = 0;
 
     public GuiTrailEditor(final EntityPlayer player) {
         this.player = player;
@@ -54,7 +54,7 @@ public class GuiTrailEditor extends GuiScreen {
         this.x = (this.width - 176) / 2;
         this.y = (this.height - 166) / 2;
         this.editors.clear();
-        for(EditorType editor : EditorType.values()) {
+        for (EditorType editor : EditorType.values()) {
             int i = editor.ordinal();
             this.editors.add(i, new EditorPanelSwitch(x - 20, y + 10 + i * 25, editor));
         }
@@ -79,13 +79,17 @@ public class GuiTrailEditor extends GuiScreen {
                 break;
             }
             case COLOR: {
-                for(int i = 0; i < trailLength; i++) {
-                    this.addButton(new TrailPartButton(i, x + (i/5 >= 1 ? 30 : 10) , y + 10 + (i%5) * 18));
+                for (int i = 0; i < trailLength; i++) {
+                    int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null ? trailData.getAdditionalTrailData().stageColors[i] : trailData.getTrail().getColor();
+                    this.addButton(new TrailPartButton(i, color, x + (i / 5 >= 1 ? 30 : 10), y + 10 + (i % 5) * 18));
                 }
                 this.sliders.add(new ColorSlider("RED", x + 66, y + 10, 100, 16));
                 this.sliders.add(new ColorSlider("GREEN", x + 66, y + 28, 100, 16));
                 this.sliders.add(new ColorSlider("BLUE", x + 66, y + 46, 100, 16));
                 this.updateTrailColorSliders(0);
+                GuiButton button = new GuiButton(10, x + 10, y + 136, 156, 20, "Apply [1 Level]");
+                button.enabled = false;
+                this.addButton(button);
                 break;
             }
         }
@@ -104,7 +108,7 @@ public class GuiTrailEditor extends GuiScreen {
                         this.addToTrailLength(1);
                         int length = this.editedCap.getTrailData().getTrail().getLength();
                         int width = this.editedCap.getTrailData().getTrail().getWidth();
-                        if(length > width) {
+                        if (length > width) {
                             editedCap.getTrailData().getTrail().setWidth(length);
                         }
                         break;
@@ -122,10 +126,20 @@ public class GuiTrailEditor extends GuiScreen {
                 break;
             }
             case COLOR: {
-                if(button instanceof TrailPartButton) {
+                if (button instanceof TrailPartButton) {
                     TrailPartButton trailPartButton = (TrailPartButton) button;
                     this.selectedButtonIndex = trailPartButton.trailIndex;
                     this.updateTrailColorSliders(this.selectedButtonIndex);
+                    GuiButton btn = this.buttonList.get(editedCap.getTrailData().getTrail().getLength());
+                    TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
+                    int savedColor = data == null || data.stageColors == null ? -1 : data.stageColors[this.selectedButtonIndex];
+                    btn.enabled = this.getSlidersColor() != savedColor;
+                } else if (button.id == 10) {
+                    TrailPartButton currentTrailPart = (TrailPartButton) this.buttonList.get(this.selectedButtonIndex);
+                    int partColor = this.getSlidersColor();
+                    this.saveTrailColorPart(partColor);
+                    GuiButton btn = this.buttonList.get(editedCap.getTrailData().getTrail().getLength());
+                    btn.enabled = false;
                 }
                 break;
             }
@@ -142,20 +156,32 @@ public class GuiTrailEditor extends GuiScreen {
         this.editor.handleTypeDataRender(this.mc, mouseX, mouseY, partialTicks, x, y, this);
     }
 
+    public void sliderMoved(int sliderIndex, int colorModifier) {
+        int index = this.editedCap.getTrailData().getTrail().getLength();
+        if(this.buttonList.size() <= index) {
+            RevivalCore.logger.fatal("Fatal error occured while getting Save button!");
+            return;
+        }
+        GuiButton button = this.buttonList.get(index);
+        TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
+        int savedColor = data == null || data.stageColors == null ? -1 : data.stageColors[this.selectedButtonIndex];
+        button.enabled = this.getSlidersColor() != savedColor;
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        if(mouseButton == 0) {
-            for(EditorPanelSwitch panelSwitch : this.editors) {
-                if(panelSwitch.mouseOver && panelSwitch.editorType != this.editor) {
+        if (mouseButton == 0) {
+            for (EditorPanelSwitch panelSwitch : this.editors) {
+                if (panelSwitch.mouseOver && panelSwitch.editorType != this.editor) {
                     this.editor = panelSwitch.editorType;
                     this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     this.updateGUIElements();
                     break;
                 }
             }
-            for(ColorSlider slider : this.sliders) {
-                if(slider.mousePressed(this.mc, mouseX, mouseY)) {
+            for (ColorSlider slider : this.sliders) {
+                if (slider.mousePressed(this.mc, mouseX, mouseY)) {
                     this.selectedButton = slider;
                     break;
                 }
@@ -174,170 +200,35 @@ public class GuiTrailEditor extends GuiScreen {
     private void updateTrailColorSliders(int index) {
         PlayerTrailData trailData = this.editedCap.getTrailData();
         int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null ? trailData.getAdditionalTrailData().stageColors[index] : trailData.getTrail().getColor();
-        int red = (int)(((color >> 16) & 255) / 255F * 100);
-        int green = (int)(((color >> 8) & 255) / 255F * 100);
-        int blue = (int)((color & 255) / 255F * 100);
+        int red = (int) (((color >> 16) & 255) / 255F * 100);
+        int green = (int) (((color >> 8) & 255) / 255F * 100);
+        int blue = (int) ((color & 255) / 255F * 100);
         this.sliders.get(0).colorModifier = red;
         this.sliders.get(1).colorModifier = green;
         this.sliders.get(2).colorModifier = blue;
     }
 
-    private class Button extends GuiButton {
-
-        private final boolean isAddBtn;
-
-        public Button(int id, boolean button, int x, int y) {
-            super(id, x, y, 20, 20, "");
-            this.isAddBtn = button;
-        }
-
-        public Button state(boolean state) {
-            this.enabled = state;
-            return this;
-        }
-
-        @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-            this.hovered = mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
-            int variant = this.enabled ? this.hovered ? 1 : 0 : 2;
-            double uStart = variant == 0 ? 0.0D : variant == 1 ? 20/256D : 40/256D;
-            double uEnd = uStart + 20/256D;
-            double vStart = isAddBtn ? 166/256D : 186/256D;
-            double vEnd = vStart + 20/256D;
-            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.width, this.height, uStart, vStart, uEnd, vEnd, false);
+    private void saveTrailColorPart(int color) {
+        Trail trail = editedCap.getTrailData().getTrail();
+        TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
+        if(data == null) {
+            data = new TrailOptionalData(trail, -1, new int[trail.getLength()]);
+            editedCap.getTrailData().setAdditionalTrailData(data);
+            Arrays.fill(data.stageColors, trail.getColor());
+            data.stageColors[selectedButtonIndex] = color;
+        } else if(data.stageColors.length != trail.getLength()) {
+            int[] newColors = new int[trail.getLength()];
+            for(int i = 0; i < trail.getLength(); i++) {
+                newColors[i] = i < data.stageColors.length ? data.stageColors[i] : trail.getColor();
+            }
+            editedCap.getTrailData().setAdditionalTrailData(new TrailOptionalData(trail, data.secondaryColor, newColors));
+        } else {
+            data.stageColors[selectedButtonIndex] = color;
         }
     }
 
-    private class TrailPartButton extends GuiButton {
-
-        public int trailIndex;
-
-        public TrailPartButton(int trailIndex, int x, int y) {
-            super(-1, x, y, 16, 16, "");
-            this.trailIndex = trailIndex;
-        }
-
-        @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-            this.hovered = GuiTrailEditor.this.selectedButtonIndex == trailIndex || mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
-            int variant = this.enabled ? this.hovered ? 1 : 0 : 2;
-            double uStart = variant == 0 ? 60/256D : variant == 1 ? 80/256D : 100/256D;
-            double uEnd = uStart + 20/256D;
-            double vStart = 166/256D;
-            double vEnd = vStart + 20/256D;
-            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.width, this.height, uStart, vStart, uEnd, vEnd, false);
-            mc.fontRenderer.drawString(trailIndex +"", this.x + 5, this.y + 4, 0xFFFFFF);
-        }
-    }
-
-    private class ColorSlider extends GuiButton {
-
-        /** The color modifier, <0; 100> */
-        private int colorModifier;
-        private String displayText;
-        private boolean isMouseBtnDown = false;
-
-        public ColorSlider(String name, int x, int y, int w, int h) {
-            super(0, x, y, w, h, "");
-            this.displayText = name;
-        }
-
-        @Override
-        public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-            if(this.isMouseOnSlider(mouseX, mouseY)) {
-                int modifier = mouseX - this.x;
-                this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
-                this.isMouseBtnDown = true;
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void mouseReleased(int mouseX, int mouseY) {
-            this.isMouseBtnDown = false;
-        }
-
-        @Override
-        protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
-            if(isMouseBtnDown) {
-                int modifier = mouseX - this.x;
-                this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
-            }
-        }
-
-        @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-            this.hovered = isMouseOnSliderIcon(mouseX, mouseY);
-            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x - 3, this.y, width + 6, height, 0, 206/256D, 100/256D, 225/256D, false);
-            String text = displayText + ": " + colorModifier;
-            mc.fontRenderer.drawString(text, this.x + (width - mc.fontRenderer.getStringWidth(text)) / 2, this.y + 5, this.getTextColor());
-            this.renderSliderIcon(mc, mouseX, mouseY);
-            this.mouseDragged(mc, mouseX, mouseY);
-        }
-
-        public void renderSliderIcon(Minecraft mc, int x, int y) {
-            int sliderCenter = this.x + (int)(this.width * (colorModifier / 100.0F));
-            double u = hovered ? 7/256D : 0;
-            double uEnd = u + 7/256D;
-            ImageHelper.drawImageWithUV(mc, TEXTURE, sliderCenter - 3, this.y, 6, 16, u, 226/256D, uEnd, 246/256D, false);
-        }
-
-        public void moveSliderTo(int x) {
-            int modifier = x - this.x;
-            this.colorModifier = modifier < 0 ? 0 : modifier > 100 ? 100 : modifier;
-        }
-
-        public boolean isMouseOnSlider(int mx, int my) {
-            return mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height;
-        }
-
-        public boolean isMouseOnSliderIcon(int mx, int my) {
-            int btnCenter = this.x + (int)(this.width * (colorModifier / 100.0F));
-            return this.isMouseOnSliderIcon(btnCenter, mx, my);
-        }
-
-        public boolean isMouseOnSliderIcon(int btnCenter, int mx, int my) {
-            return my >= this.y && my <= this.y + this.height && mx >= btnCenter - 3 && mx <= btnCenter + 3;
-        }
-
-        private int getTextColor() {
-            switch (displayText) {
-                case "RED": return (int)(0xFF * (colorModifier/100F)) << 16;
-                case "GREEN": return (int)(0xFF * (colorModifier/100F)) << 8;
-                case "BLUE": return (int)(0xFF * (colorModifier/100F));
-                default: return 0;
-            }
-        }
-    }
-
-    private class EditorPanelSwitch {
-
-        private float progress;
-        private int x;
-        private int y;
-        private String text;
-        private EditorType editorType;
-        public boolean mouseOver;
-
-        public EditorPanelSwitch(int x, int y, EditorType type) {
-            this.x = x;
-            this.y = y;
-            this.editorType = type;
-        }
-
-        public void drawPanel(Minecraft mc, int mx, int my, float partialTicks) {
-            float animationSpeed = 0.025F;
-            int xStart = this.x - (int)(40 * progress);
-            boolean selected = this.editorType == GuiTrailEditor.this.editor;
-            this.mouseOver = my >= this.y && my <= this.y + 20 && mx >= xStart && mx <= xStart + 20 + 40 * progress;
-            this.progress = this.mouseOver || selected ? progress < 1.0F ? progress + animationSpeed : 1.0F : progress > 0.0F ? progress - animationSpeed : 0.0F;
-            this.progress = progress > 1.0F ? 1.0F : progress < 0.0F ? 0.0F : progress;
-            double vStart = selected ? 20/256D : 0D;
-            ImageHelper.drawImageWithUV(mc, TEXTURE, xStart, y, 80, 20, 176/256D, vStart, 1, vStart + 20/256D, false);
-            ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 224/256D, (128+editorType.ordinal()*32)/256D, 1, (160+editorType.ordinal()*32)/256D, false);
-            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, 0xFFFFFF);
-        }
+    private int getSlidersColor() {
+        return Trail.TrailColorHelper.convertToInt(this.sliders.get(0).colorModifier / 100.0F, this.sliders.get(1).colorModifier / 100.0F, this.sliders.get(2).colorModifier / 100.0F);
     }
 
     private enum EditorType {
@@ -368,7 +259,7 @@ public class GuiTrailEditor extends GuiScreen {
                     break;
                 }
                 case COLOR: {
-                    if(parentGUI.sliders == null || parentGUI.sliders.size() < 3) return;
+                    if (parentGUI.sliders == null || parentGUI.sliders.size() < 3) return;
                     float r = parentGUI.sliders.get(0).colorModifier / 100F;
                     float g = parentGUI.sliders.get(1).colorModifier / 100F;
                     float b = parentGUI.sliders.get(2).colorModifier / 100F;
@@ -377,9 +268,9 @@ public class GuiTrailEditor extends GuiScreen {
                     GlStateManager.disableTexture2D();
                     bufferBuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
                     bufferBuilder.pos(x + 63, y + 70, 0).color(r, g, b, 1F).endVertex();
-                    bufferBuilder.pos( x + 63, y + 80, 0).color(r, g, b, 1F).endVertex();
-                    bufferBuilder.pos( x + 169, y + 80, 0).color(r, g, b, 1F).endVertex();
-                    bufferBuilder.pos( x + 169, y + 70, 0).color(r, g, b, 1F).endVertex();
+                    bufferBuilder.pos(x + 63, y + 80, 0).color(r, g, b, 1F).endVertex();
+                    bufferBuilder.pos(x + 169, y + 80, 0).color(r, g, b, 1F).endVertex();
+                    bufferBuilder.pos(x + 169, y + 70, 0).color(r, g, b, 1F).endVertex();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                     int color = Trail.TrailColorHelper.convertToInt(r, g, b);
@@ -391,12 +282,169 @@ public class GuiTrailEditor extends GuiScreen {
         }
     }
 
-    private interface IMouseDraggable {
+    private class Button extends GuiButton {
 
-        void mouseClicked(Minecraft mc, int mx, int my, int button);
+        private final boolean isAddBtn;
 
-        void mouseReleased(Minecraft mc, int mx, int my);
+        public Button(int id, boolean button, int x, int y) {
+            super(id, x, y, 20, 20, "");
+            this.isAddBtn = button;
+        }
 
-        void dragMouse(Minecraft mc, int mx, int my);
+        public Button state(boolean state) {
+            this.enabled = state;
+            return this;
+        }
+
+        @Override
+        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+            this.hovered = mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+            int variant = this.enabled ? this.hovered ? 1 : 0 : 2;
+            double uStart = variant == 0 ? 0.0D : variant == 1 ? 20 / 256D : 40 / 256D;
+            double uEnd = uStart + 20 / 256D;
+            double vStart = isAddBtn ? 166 / 256D : 186 / 256D;
+            double vEnd = vStart + 20 / 256D;
+            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.width, this.height, uStart, vStart, uEnd, vEnd, false);
+        }
+    }
+
+    private class TrailPartButton extends GuiButton {
+
+        public final int trailIndex;
+
+        public TrailPartButton(int trailIndex, int originalColor, int x, int y) {
+            super(-1, x, y, 16, 16, "");
+            this.trailIndex = trailIndex;
+        }
+
+        @Override
+        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+            this.hovered = GuiTrailEditor.this.selectedButtonIndex == trailIndex || mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+            int variant = this.enabled ? this.hovered ? 1 : 0 : 2;
+            double uStart = variant == 0 ? 60 / 256D : variant == 1 ? 80 / 256D : 100 / 256D;
+            double uEnd = uStart + 20 / 256D;
+            double vStart = 166 / 256D;
+            double vEnd = vStart + 20 / 256D;
+            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.width, this.height, uStart, vStart, uEnd, vEnd, false);
+            mc.fontRenderer.drawString(trailIndex + "", this.x + 5, this.y + 4, 0xFFFFFF);
+        }
+    }
+
+    private class ColorSlider extends GuiButton {
+
+        /**
+         * The color modifier, <0; 100>
+         */
+        private int colorModifier;
+        private String displayText;
+        private boolean isMouseBtnDown = false;
+
+        public ColorSlider(String name, int x, int y, int w, int h) {
+            super(0, x, y, w, h, "");
+            this.displayText = name;
+        }
+
+        @Override
+        public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+            if (this.isMouseOnSlider(mouseX, mouseY)) {
+                int modifier = mouseX - this.x;
+                this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
+                GuiTrailEditor.this.sliderMoved(displayText.equals("RED") ? 0 : displayText.equals("GREEN") ? 1 : 2, colorModifier);
+                this.isMouseBtnDown = true;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void mouseReleased(int mouseX, int mouseY) {
+            this.isMouseBtnDown = false;
+        }
+
+        @Override
+        protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+            if (isMouseBtnDown) {
+                int modifier = mouseX - this.x;
+                this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
+                GuiTrailEditor.this.sliderMoved(displayText.equals("RED") ? 0 : displayText.equals("GREEN") ? 1 : 2, colorModifier);
+            }
+        }
+
+        @Override
+        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+            this.hovered = isMouseOnSliderIcon(mouseX, mouseY);
+            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x - 3, this.y, width + 6, height, 0, 206 / 256D, 100 / 256D, 225 / 256D, false);
+            String text = displayText + ": " + colorModifier;
+            mc.fontRenderer.drawString(text, this.x + (width - mc.fontRenderer.getStringWidth(text)) / 2, this.y + 5, this.getTextColor());
+            this.renderSliderIcon(mc, mouseX, mouseY);
+            this.mouseDragged(mc, mouseX, mouseY);
+        }
+
+        public void renderSliderIcon(Minecraft mc, int x, int y) {
+            int sliderCenter = this.x + (int) (this.width * (colorModifier / 100.0F));
+            double u = hovered ? 7 / 256D : 0;
+            double uEnd = u + 7 / 256D;
+            ImageHelper.drawImageWithUV(mc, TEXTURE, sliderCenter - 3, this.y, 6, 16, u, 226 / 256D, uEnd, 246 / 256D, false);
+        }
+
+        public void moveSliderTo(int x) {
+            int modifier = x - this.x;
+            this.colorModifier = modifier < 0 ? 0 : modifier > 100 ? 100 : modifier;
+        }
+
+        public boolean isMouseOnSlider(int mx, int my) {
+            return mx >= this.x && mx <= this.x + this.width && my >= this.y && my <= this.y + this.height;
+        }
+
+        public boolean isMouseOnSliderIcon(int mx, int my) {
+            int btnCenter = this.x + (int) (this.width * (colorModifier / 100.0F));
+            return this.isMouseOnSliderIcon(btnCenter, mx, my);
+        }
+
+        public boolean isMouseOnSliderIcon(int btnCenter, int mx, int my) {
+            return my >= this.y && my <= this.y + this.height && mx >= btnCenter - 3 && mx <= btnCenter + 3;
+        }
+
+        private int getTextColor() {
+            switch (displayText) {
+                case "RED":
+                    return (int) (0xFF * (colorModifier / 100F)) << 16;
+                case "GREEN":
+                    return (int) (0xFF * (colorModifier / 100F)) << 8;
+                case "BLUE":
+                    return (int) (0xFF * (colorModifier / 100F));
+                default:
+                    return 0;
+            }
+        }
+    }
+
+    private class EditorPanelSwitch {
+
+        public boolean mouseOver;
+        private float progress;
+        private int x;
+        private int y;
+        private String text;
+        private EditorType editorType;
+
+        public EditorPanelSwitch(int x, int y, EditorType type) {
+            this.x = x;
+            this.y = y;
+            this.editorType = type;
+        }
+
+        public void drawPanel(Minecraft mc, int mx, int my, float partialTicks) {
+            float animationSpeed = 0.025F;
+            int xStart = this.x - (int) (40 * progress);
+            boolean selected = this.editorType == GuiTrailEditor.this.editor;
+            this.mouseOver = my >= this.y && my <= this.y + 20 && mx >= xStart && mx <= xStart + 20 + 40 * progress;
+            this.progress = this.mouseOver || selected ? progress < 1.0F ? progress + animationSpeed : 1.0F : progress > 0.0F ? progress - animationSpeed : 0.0F;
+            this.progress = progress > 1.0F ? 1.0F : progress < 0.0F ? 0.0F : progress;
+            double vStart = selected ? 20 / 256D : 0D;
+            ImageHelper.drawImageWithUV(mc, TEXTURE, xStart, y, 80, 20, 176 / 256D, vStart, 1, vStart + 20 / 256D, false);
+            ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 224 / 256D, (128 + editorType.ordinal() * 32) / 256D, 1, (160 + editorType.ordinal() * 32) / 256D, false);
+            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, 0xFFFFFF);
+        }
     }
 }
