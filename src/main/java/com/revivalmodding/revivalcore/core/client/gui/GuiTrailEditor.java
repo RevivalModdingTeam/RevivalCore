@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 public class GuiTrailEditor extends GuiScreen {
 
@@ -56,7 +57,7 @@ public class GuiTrailEditor extends GuiScreen {
         this.editors.clear();
         for (EditorType editor : EditorType.values()) {
             int i = editor.ordinal();
-            this.editors.add(i, new EditorPanelSwitch(x - 20, y + 10 + i * 25, editor));
+            this.editors.add(i, new EditorPanelSwitch(x - 20, y + 10 + i * 22, editor));
         }
 
         this.updateGUIElements();
@@ -130,16 +131,9 @@ public class GuiTrailEditor extends GuiScreen {
                     TrailPartButton trailPartButton = (TrailPartButton) button;
                     this.selectedButtonIndex = trailPartButton.trailIndex;
                     this.updateTrailColorSliders(this.selectedButtonIndex);
-                    GuiButton btn = this.buttonList.get(editedCap.getTrailData().getTrail().getLength());
-                    TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
-                    int savedColor = data == null || data.stageColors == null ? -1 : data.stageColors[this.selectedButtonIndex];
-                    btn.enabled = this.getSlidersColor() != savedColor;
                 } else if (button.id == 10) {
-                    TrailPartButton currentTrailPart = (TrailPartButton) this.buttonList.get(this.selectedButtonIndex);
                     int partColor = this.getSlidersColor();
                     this.saveTrailColorPart(partColor);
-                    GuiButton btn = this.buttonList.get(editedCap.getTrailData().getTrail().getLength());
-                    btn.enabled = false;
                 }
                 break;
             }
@@ -154,18 +148,6 @@ public class GuiTrailEditor extends GuiScreen {
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.editor.handleTypeDataRender(this.mc, mouseX, mouseY, partialTicks, x, y, this);
-    }
-
-    public void sliderMoved(int sliderIndex, int colorModifier) {
-        int index = this.editedCap.getTrailData().getTrail().getLength();
-        if(this.buttonList.size() <= index) {
-            RevivalCore.logger.fatal("Fatal error occured while getting Save button!");
-            return;
-        }
-        GuiButton button = this.buttonList.get(index);
-        TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
-        int savedColor = data == null || data.stageColors == null ? -1 : data.stageColors[this.selectedButtonIndex];
-        button.enabled = this.getSlidersColor() != savedColor;
     }
 
     @Override
@@ -349,7 +331,6 @@ public class GuiTrailEditor extends GuiScreen {
             if (this.isMouseOnSlider(mouseX, mouseY)) {
                 int modifier = mouseX - this.x;
                 this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
-                GuiTrailEditor.this.sliderMoved(displayText.equals("RED") ? 0 : displayText.equals("GREEN") ? 1 : 2, colorModifier);
                 this.isMouseBtnDown = true;
                 return true;
             }
@@ -366,7 +347,6 @@ public class GuiTrailEditor extends GuiScreen {
             if (isMouseBtnDown) {
                 int modifier = mouseX - this.x;
                 this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
-                GuiTrailEditor.this.sliderMoved(displayText.equals("RED") ? 0 : displayText.equals("GREEN") ? 1 : 2, colorModifier);
             }
         }
 
@@ -445,6 +425,30 @@ public class GuiTrailEditor extends GuiScreen {
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart, y, 80, 20, 176 / 256D, vStart, 1, vStart + 20 / 256D, false);
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 224 / 256D, (128 + editorType.ordinal() * 32) / 256D, 1, (160 + editorType.ordinal() * 32) / 256D, false);
             mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, 0xFFFFFF);
+        }
+    }
+
+    private class ColorInputField {
+
+        private int x, y, w, h;
+        private boolean hex;
+        private String value = "";
+        private final Predicate<Character> textValidator;
+
+        public ColorInputField(int x, int y, int w, int h, boolean hex) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.hex = hex;
+            // TODO validate properly
+            textValidator = c -> ColorInputField.this.hex ? Character.isDigit(c) || (c > 0 && c < 1) : Character.isDigit(c);
+        }
+
+        public void addCharacter(char c) {
+            if(textValidator.test(c)) {
+                value = value + c;
+            }
         }
     }
 }
