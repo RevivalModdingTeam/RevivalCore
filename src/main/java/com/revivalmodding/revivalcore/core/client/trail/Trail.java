@@ -126,7 +126,7 @@ public class Trail {
         }
 
         public TrailBuilder color(int red, int green, int blue) {
-            return this.color((red&0xff)<<16|(green&0xff)<<8|(blue&0xff));
+            return this.color(TrailColorHelper.convertToInt(red, green, blue));
         }
 
         public TrailBuilder color(float r, float g, float b) {
@@ -173,6 +173,17 @@ public class Trail {
         public TrailPos withAlpha(float a) {
             this.alpha = a;
             return this;
+        }
+    }
+
+    public static class TrailColorHelper {
+
+        public static int convertToInt(int r, int g, int b) {
+            return (r&0xff)<<16|(g&0xff)<<8|(b&0xff);
+        }
+
+        public static int convertToInt(float r, float g, float b) {
+            return convertToInt((int)(r * 255), (int)(g * 255), (int)(b * 255));
         }
     }
 }

@@ -14,7 +14,7 @@ public class TrailOptionalData {
 
     private final Trail parent;
 
-    private int[] stageColors;
+    public int[] stageColors;
     private int secondaryColor;
 
     public TrailOptionalData(Trail parent) {
