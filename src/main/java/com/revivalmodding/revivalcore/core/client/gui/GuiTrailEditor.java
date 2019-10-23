@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ public class GuiTrailEditor extends GuiScreen {
     private final EntityPlayer player;
     private final ICoreCapability editedCap;
     private final NBTTagCompound originalNBT;
+
     private final ArrayList<ColorSlider> sliders = new ArrayList<>();
     private final ArrayList<EditorPanelSwitch> editors = new ArrayList<>();
+    private ColorInputField[] inputFields = null;
+
     private EditorType editor;
     private boolean madeValidChanges = false;
     private int x;
@@ -63,9 +67,22 @@ public class GuiTrailEditor extends GuiScreen {
         this.updateGUIElements();
     }
 
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        super.keyTyped(typedChar, keyCode);
+        if(this.inputFields != null) {
+            for(ColorInputField field : this.inputFields) {
+                if(field.isListening) {
+                    field.addCharacter(typedChar);
+                }
+            }
+        }
+    }
+
     public void updateGUIElements() {
         this.buttonList.clear();
         this.sliders.clear();
+        this.inputFields = null;
 
         PlayerTrailData trailData = this.editedCap.getTrailData();
         int trailLength = trailData.getTrail().getLength();
@@ -91,6 +108,9 @@ public class GuiTrailEditor extends GuiScreen {
                 GuiButton button = new GuiButton(10, x + 10, y + 136, 156, 20, "Apply [1 Level]");
                 button.enabled = false;
                 this.addButton(button);
+                this.inputFields = new ColorInputField[2];
+                this.inputFields[0] = new ColorInputField(x + 85, y + 85, 84, 16, false);
+                this.inputFields[1] = new ColorInputField(x + 85, y + 102, 84, 16, true);
                 break;
             }
         }
@@ -147,6 +167,11 @@ public class GuiTrailEditor extends GuiScreen {
         this.drawTexturedModalRect(x, y, 0, 0, 176, 166);
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
+        if(this.inputFields != null) {
+            for(ColorInputField field : this.inputFields) {
+                field.draw(this.mc, mouseX, mouseY);
+            }
+        }
         this.editor.handleTypeDataRender(this.mc, mouseX, mouseY, partialTicks, x, y, this);
     }
 
@@ -166,6 +191,11 @@ public class GuiTrailEditor extends GuiScreen {
                 if (slider.mousePressed(this.mc, mouseX, mouseY)) {
                     this.selectedButton = slider;
                     break;
+                }
+            }
+            if(inputFields != null) {
+                for(ColorInputField inputField : this.inputFields) {
+                    inputField.updateStatus(mouseX, mouseY);
                 }
             }
         }
@@ -255,9 +285,8 @@ public class GuiTrailEditor extends GuiScreen {
                     bufferBuilder.pos(x + 169, y + 70, 0).color(r, g, b, 1F).endVertex();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
-                    int color = Trail.TrailColorHelper.convertToInt(r, g, b);
-                    mc.fontRenderer.drawString("[DEC]: " + color, x + 63, y + 90, 0x555555);
-                    mc.fontRenderer.drawString("[HEX]: #" + Integer.toHexString(color).toUpperCase(), x + 63, y + 100, 0x555555);
+                    mc.fontRenderer.drawString("DEC:", x + 63, y + 90, 0x555555);
+                    mc.fontRenderer.drawString("HEX:", x + 63, y + 106, 0x555555);
                     break;
                 }
             }
@@ -434,6 +463,8 @@ public class GuiTrailEditor extends GuiScreen {
         private boolean hex;
         private String value = "";
         private final Predicate<Character> textValidator;
+        private boolean isListening = false;
+        private byte cursorTimer = -128;
 
         public ColorInputField(int x, int y, int w, int h, boolean hex) {
             this.x = x;
@@ -442,12 +473,40 @@ public class GuiTrailEditor extends GuiScreen {
             this.h = h;
             this.hex = hex;
             // TODO validate properly
-            textValidator = c -> ColorInputField.this.hex ? Character.isDigit(c) || (c > 0 && c < 1) : Character.isDigit(c);
+            this.textValidator = c -> ColorInputField.this.hex ? Character.isDigit(c) : Character.isDigit(c);
+        }
+
+        public void draw(Minecraft mc, int mx, int my) {
+            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.w, this.h, 176/256D, 40/256D, 1.0D, 60/256D, false);
+            this.renderCursorIcon(mc);
+            mc.fontRenderer.drawString(value, this.x + 3, this.y + 4, 0xFFFFFF);
+        }
+
+        public void updateStatus(int mx, int my) {
+            this.isListening = mx >= x && mx <= x + w && my >= y && my <= y + h;
         }
 
         public void addCharacter(char c) {
-            if(textValidator.test(c)) {
+            if(c == '\b') {
+                if(value.length() > 0) {
+                    value = value.substring(0, value.length() - 1);
+                }
+            } else if(textValidator.test(c)) {
                 value = value + c;
+            }
+        }
+
+        private void renderCursorIcon(Minecraft mc) {
+            if(isListening && cursorTimer++ >= 0) {
+                int start = mc.fontRenderer.getStringWidth(value);
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder builder = tessellator.getBuffer();
+                builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+                GlStateManager.disableTexture2D();
+                builder.pos(x + 3 + start, y + 2, 0).color(1f, 1f, 1f, 1f).endVertex();
+                builder.pos(x + 3 + start, y + h - 2, 0).color(1f, 1f, 1f, 1f).endVertex();
+                tessellator.draw();
+                GlStateManager.enableTexture2D();
             }
         }
     }
