@@ -110,6 +110,7 @@ public class GuiTrailEditor extends GuiScreen {
                 this.inputFields = new ColorInputField[2];
                 this.inputFields[0] = new ColorInputField(x + 85, y + 85, 84, 16, false);
                 this.inputFields[1] = new ColorInputField(x + 85, y + 102, 84, 16, true);
+                this.onColorValueModified(0);
                 break;
             }
         }
@@ -172,6 +173,33 @@ public class GuiTrailEditor extends GuiScreen {
             }
         }
         this.editor.handleTypeDataRender(this.mc, mouseX, mouseY, partialTicks, x, y, this);
+    }
+
+    /**
+     *
+     * @param mode - 2 = Decimal field update; 1 = Hexadecimal field update; 0 = Slider update
+     */
+    public void onColorValueModified(int mode) {
+        if(mode == 0) {
+            int newColor = this.getSlidersColor();
+            for(ColorInputField field : this.inputFields) {
+                field.value = field.hex ? Integer.toHexString(newColor).toUpperCase() : newColor + "";
+            }
+        } else {
+            try {
+                if(mode == 1) {
+                    int color = Integer.decode("0x" + this.inputFields[1].value.toLowerCase());
+                    this.setSliderColors(color);
+                    this.inputFields[0].value = color + "";
+                } else if(mode == 2) {
+                    int color = Integer.parseInt(this.inputFields[0].value);
+                    this.setSliderColors(color);
+                    this.inputFields[1].value = Integer.toHexString(color).toUpperCase();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -240,6 +268,15 @@ public class GuiTrailEditor extends GuiScreen {
 
     private int getSlidersColor() {
         return Trail.TrailColorHelper.convertToInt(this.sliders.get(0).colorModifier / 100.0F, this.sliders.get(1).colorModifier / 100.0F, this.sliders.get(2).colorModifier / 100.0F);
+    }
+
+    public void setSliderColors(int color) {
+        int red = (int) (((color >> 16) & 255) / 255F * 100);
+        int green = (int) (((color >> 8) & 255) / 255F * 100);
+        int blue = (int) ((color & 255) / 255F * 100);
+        this.sliders.get(0).colorModifier = red;
+        this.sliders.get(1).colorModifier = green;
+        this.sliders.get(2).colorModifier = blue;
     }
 
     private enum EditorType {
@@ -360,6 +397,7 @@ public class GuiTrailEditor extends GuiScreen {
                 int modifier = mouseX - this.x;
                 this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
                 this.isMouseBtnDown = true;
+                GuiTrailEditor.this.onColorValueModified(0);
                 return true;
             }
             return false;
@@ -375,6 +413,7 @@ public class GuiTrailEditor extends GuiScreen {
             if (isMouseBtnDown) {
                 int modifier = mouseX - this.x;
                 this.colorModifier = modifier > 100 ? 100 : modifier < 0 ? 0 : modifier;
+                GuiTrailEditor.this.onColorValueModified(0);
             }
         }
 
@@ -488,6 +527,7 @@ public class GuiTrailEditor extends GuiScreen {
             if(c == '\b') {
                 if(value.length() > 0) {
                     value = value.substring(0, value.length() - 1);
+                    GuiTrailEditor.this.onColorValueModified(hex ? 1 : 2);
                 }
             } else if(textValidator.test(c)) {
                 if(c > 70) c -= 32;
@@ -495,10 +535,12 @@ public class GuiTrailEditor extends GuiScreen {
                     int newValue = Integer.parseInt(value + c);
                     if(newValue > 16777215) {
                         this.value = "16777215";
+                        GuiTrailEditor.this.onColorValueModified(2);
                         return;
                     }
                 }
                 value = value + c;
+                GuiTrailEditor.this.onColorValueModified(hex ? 1 : 2);
             }
         }
 
