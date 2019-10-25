@@ -472,8 +472,7 @@ public class GuiTrailEditor extends GuiScreen {
             this.w = w;
             this.h = h;
             this.hex = hex;
-            // TODO validate properly
-            this.textValidator = c -> ColorInputField.this.hex ? Character.isDigit(c) : Character.isDigit(c);
+            this.textValidator = c -> ColorInputField.this.hex ? (Character.isDigit(c) || (c > 64 && c < 71) || (c > 96 && c < 103)) && ColorInputField.this.value.length() < 6 : Character.isDigit(c) && ColorInputField.this.value.length() < 8;
         }
 
         public void draw(Minecraft mc, int mx, int my) {
@@ -492,6 +491,7 @@ public class GuiTrailEditor extends GuiScreen {
                     value = value.substring(0, value.length() - 1);
                 }
             } else if(textValidator.test(c)) {
+                if(c > 70) c -= 32;
                 value = value + c;
             }
         }
