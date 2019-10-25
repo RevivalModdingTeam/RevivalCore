@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -492,21 +491,31 @@ public class GuiTrailEditor extends GuiScreen {
                 }
             } else if(textValidator.test(c)) {
                 if(c > 70) c -= 32;
+                if(!hex) {
+                    int newValue = Integer.parseInt(value + c);
+                    if(newValue > 16777215) {
+                        this.value = "16777215";
+                        return;
+                    }
+                }
                 value = value + c;
             }
         }
 
         private void renderCursorIcon(Minecraft mc) {
-            if(isListening && cursorTimer++ >= 0) {
-                int start = mc.fontRenderer.getStringWidth(value);
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder builder = tessellator.getBuffer();
-                builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-                GlStateManager.disableTexture2D();
-                builder.pos(x + 3 + start, y + 2, 0).color(1f, 1f, 1f, 1f).endVertex();
-                builder.pos(x + 3 + start, y + h - 2, 0).color(1f, 1f, 1f, 1f).endVertex();
-                tessellator.draw();
-                GlStateManager.enableTexture2D();
+            if(isListening) {
+                this.cursorTimer += 2;
+                if(cursorTimer >= 0) {
+                    int start = mc.fontRenderer.getStringWidth(value);
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder builder = tessellator.getBuffer();
+                    builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+                    GlStateManager.disableTexture2D();
+                    builder.pos(x + 3 + start, y + 2, 0).color(1f, 1f, 1f, 1f).endVertex();
+                    builder.pos(x + 3 + start, y + h - 2, 0).color(1f, 1f, 1f, 1f).endVertex();
+                    tessellator.draw();
+                    GlStateManager.enableTexture2D();
+                }
             }
         }
     }
