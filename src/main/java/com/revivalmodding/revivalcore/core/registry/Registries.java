@@ -10,7 +10,6 @@ import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
-import com.revivalmodding.revivalcore.util.helper.IHaveItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -60,10 +59,7 @@ public class Registries {
 			ForgeRegistries.ITEMS.getValuesCollection().stream().filter(i -> i.getRegistryName().getNamespace().equals(RevivalCore.MODID))
 					.forEach(i -> ModelLoader.setCustomModelResourceLocation(i, 0, new ModelResourceLocation(i.getRegistryName(), "inventory")));
             for(Block block : ForgeRegistries.BLOCKS.getValuesCollection().stream().filter(b -> b.getRegistryName().getNamespace().equals(RevivalCore.MODID)).collect(Collectors.toList())) {
-                if(block instanceof IHaveItem) {
-                    if(((IHaveItem) block).hasItem())
-                        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "normal"));
-                }
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "normal"));
             }
         }
 

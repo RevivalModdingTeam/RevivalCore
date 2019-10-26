@@ -5,8 +5,6 @@ import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.tileentity.IProcessCraftSystem;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
-import com.revivalmodding.revivalcore.util.helper.IHaveItem;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
@@ -25,7 +23,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSuitMaker extends Block implements IHaveItem {
+public class BlockSuitMaker extends BlockBasic {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     protected static final AxisAlignedBB MODEL_NORTH_AABB = new AxisAlignedBB(0, 0, 0, 1.6, 0.6, -0.5);
@@ -34,8 +32,8 @@ public class BlockSuitMaker extends Block implements IHaveItem {
     protected static final AxisAlignedBB MODEL_EAST_AABB = new AxisAlignedBB(-0.2, 0, -1, 1, 0.6, 1);
     protected static final AxisAlignedBB MODEL_UP_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.6, 1);
 
-    public BlockSuitMaker(Material material) {
-        super(material);
+    public BlockSuitMaker(String name, Material material) {
+        super(name, material);
         setCreativeTab(RevivalCore.coretab);
     }
 
@@ -155,10 +153,5 @@ public class BlockSuitMaker extends Block implements IHaveItem {
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         return super.addDestroyEffects(world, pos, manager);
-    }
-
-    @Override
-    public boolean hasItem() {
-        return false;
     }
 }

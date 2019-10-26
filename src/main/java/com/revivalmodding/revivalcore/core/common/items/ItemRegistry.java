@@ -5,10 +5,12 @@ import com.revivalmodding.revivalcore.core.common.blocks.CoreBlockRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.donators.ISimpleSuit;
 import com.revivalmodding.revivalcore.core.common.suits.donators.ItemDonatorSuit;
 import com.revivalmodding.revivalcore.util.helper.EnumHelper.InjectionTypes;
+import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -17,11 +19,14 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.ArrayList;
+
 @Mod.EventBusSubscriber
 public class ItemRegistry {
 
     public static ItemArmor.ArmorMaterial SUIT_MATERIAL = EnumHelper.addArmorMaterial("suit", "", -1, new int[4], 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
     public static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
+    public static ArrayList<ItemBlock> ITEMBLOCK_QUEUE;
 
     @GameRegistry.ObjectHolder(RevivalCore.MODID)
     public static final class CoreItems {
@@ -51,6 +56,18 @@ public class ItemRegistry {
         registerDonatorSuit(event, "grimmlawke", 100, () -> getSuitForName("grimmlawke"));
         registerDonatorSuit(event, "royal_zano", 10, () -> getSuitForName("royal_zano"));
         registerDonatorSuit(event, "dark_messiah", 6, () -> getSuitForName("dark_messiah"));
+
+        event.getRegistry().registerAll(ITEMBLOCK_QUEUE.toArray(new ItemBlock[0]));
+        ITEMBLOCK_QUEUE = null;
+    }
+
+    public static void registerItemBlock(Block block) {
+        if(ITEMBLOCK_QUEUE == null) {
+            throw new IllegalStateException("Attempted to register outside Forge registry event!");
+        }
+        ItemBlock block1 = new ItemBlock(block);
+        block1.setRegistryName(block.getRegistryName());
+        ITEMBLOCK_QUEUE.add(block1);
     }
 
     private static void registerDonatorSuit(RegistryEvent.Register<Item> event, String name, double amount, ISimpleSuit simpleSuit) {
