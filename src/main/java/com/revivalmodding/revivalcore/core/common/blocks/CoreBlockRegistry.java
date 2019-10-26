@@ -25,7 +25,8 @@ public class CoreBlockRegistry {
     public static void onBlockRegister(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
                 new BlockSuitMaker(Material.ROCK).setRegistryName("suit_maker").setTranslationKey("suit_maker"),
-                new BlockTrailEditor("trail_editor").setCreativeTab(RevivalCore.coretab)
+                new BlockTrailEditor("trail_editor", 1).setCreativeTab(RevivalCore.coretab),
+                new BlockTrailEditor("trail_editor_advanced", 2).setCreativeTab(RevivalCore.coretab)
         );
     }
 }

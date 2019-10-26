@@ -32,6 +32,7 @@ public class GuiTrailEditor extends GuiScreen {
     private final EntityPlayer player;
     private final ICoreCapability editedCap;
     private final NBTTagCompound originalNBT;
+    private final int playerPermissionLevel;
 
     private final ArrayList<ColorSlider> sliders = new ArrayList<>();
     private final ArrayList<EditorPanelSwitch> editors = new ArrayList<>();
@@ -45,12 +46,13 @@ public class GuiTrailEditor extends GuiScreen {
     private int selectedButtonIndex = 0;
     private int totalCost = 0;
 
-    public GuiTrailEditor(final EntityPlayer player) {
+    public GuiTrailEditor(final EntityPlayer player, int playerPermissionLevel) {
         this.player = player;
         this.editedCap = new CoreCapabilityImpl(player);
         this.originalNBT = CoreCapabilityImpl.getInstance(player).toNBT();
         this.editedCap.fromNBT(originalNBT);
         editor = EditorType.GENERAL;
+        this.playerPermissionLevel = playerPermissionLevel;
     }
 
     @Override
@@ -164,6 +166,7 @@ public class GuiTrailEditor extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.editors.forEach(editMode -> editMode.drawPanel(this.mc, mouseX, mouseY, partialTicks));
         this.mc.getTextureManager().bindTexture(TEXTURE);
+        GlStateManager.color(1f, 1f, 1f, 1f);
         this.drawTexturedModalRect(x, y, 0, 0, 176, 166);
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
@@ -186,18 +189,16 @@ public class GuiTrailEditor extends GuiScreen {
                 field.value = field.hex ? Integer.toHexString(newColor).toUpperCase() : newColor + "";
             }
         } else {
-            try {
-                if(mode == 1) {
-                    int color = Integer.decode("0x" + this.inputFields[1].value.toLowerCase());
-                    this.setSliderColors(color);
-                    this.inputFields[0].value = color + "";
-                } else if(mode == 2) {
-                    int color = Integer.parseInt(this.inputFields[0].value);
-                    this.setSliderColors(color);
-                    this.inputFields[1].value = Integer.toHexString(color).toUpperCase();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(mode == 1) {
+                if(this.inputFields[1].value.isEmpty()) return;
+                int color = Integer.decode("0x" + this.inputFields[1].value.toLowerCase());
+                this.setSliderColors(color);
+                this.inputFields[0].value = color + "";
+            } else if(mode == 2) {
+                if (this.inputFields[0].value.isEmpty()) return;
+                int color = Integer.parseInt(this.inputFields[0].value);
+                this.setSliderColors(color);
+                this.inputFields[1].value = Integer.toHexString(color).toUpperCase();
             }
         }
     }
@@ -207,7 +208,7 @@ public class GuiTrailEditor extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseButton == 0) {
             for (EditorPanelSwitch panelSwitch : this.editors) {
-                if (panelSwitch.mouseOver && panelSwitch.editorType != this.editor) {
+                if (panelSwitch.mouseOver && panelSwitch.editorType != this.editor && !panelSwitch.isLocked) {
                     this.editor = panelSwitch.editorType;
                     this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     this.updateGUIElements();
@@ -280,15 +281,17 @@ public class GuiTrailEditor extends GuiScreen {
     }
 
     private enum EditorType {
-        GENERAL("General"),
-        COLOR("Colors"),
-        PREVIEW("Preview"),
-        PRESETS("Presets");
+        GENERAL("General", 0),
+        COLOR("Colors", 1),
+        PREVIEW("Preview", 1),
+        PRESETS("Presets", 2);
 
-        private String name;
+        private final String name;
+        private final int permissionAccessLevel;
 
-        EditorType(String name) {
+        EditorType(String name, int permissionAccessLevel) {
             this.name = name;
+            this.permissionAccessLevel = permissionAccessLevel;
         }
 
         public String getName() {
@@ -474,11 +477,13 @@ public class GuiTrailEditor extends GuiScreen {
         private int y;
         private String text;
         private EditorType editorType;
+        private final boolean isLocked;
 
         public EditorPanelSwitch(int x, int y, EditorType type) {
             this.x = x;
             this.y = y;
             this.editorType = type;
+            this.isLocked = GuiTrailEditor.this.playerPermissionLevel < type.permissionAccessLevel;
         }
 
         public void drawPanel(Minecraft mc, int mx, int my, float partialTicks) {
@@ -491,7 +496,10 @@ public class GuiTrailEditor extends GuiScreen {
             double vStart = selected ? 20 / 256D : 0D;
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart, y, 80, 20, 176 / 256D, vStart, 1, vStart + 20 / 256D, false);
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 224 / 256D, (128 + editorType.ordinal() * 32) / 256D, 1, (160 + editorType.ordinal() * 32) / 256D, false);
-            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, 0xFFFFFF);
+            if(isLocked) {
+                ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 192 / 256D, 224 / 256D, 224 / 256D, 1, false);
+            }
+            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, isLocked ? 0xDD0000: 0xFFFFFF);
         }
     }
 
