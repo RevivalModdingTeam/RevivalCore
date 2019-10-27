@@ -56,10 +56,10 @@ public class Trail {
         }
         NBTTagCompound trailData = nbt.getCompoundTag("trail");
         Trail trail = new Trail();
-        trail.length = trailData.getInteger("length");
-        trail.width = trailData.getInteger("width");
-        trail.color = trailData.getInteger("color");
-        trail.points = new TrailPos[trail.length];
+        this.length = trailData.getInteger("length");
+        this.width = trailData.getInteger("width");
+        this.color = trailData.getInteger("color");
+        this.points = new TrailPos[this.length];
         return trail;
     }
 

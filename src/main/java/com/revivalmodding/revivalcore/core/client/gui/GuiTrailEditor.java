@@ -6,6 +6,7 @@ import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
+import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -326,6 +327,17 @@ public class GuiTrailEditor extends GuiScreen {
                     GlStateManager.enableTexture2D();
                     mc.fontRenderer.drawString("DEC:", x + 63, y + 90, 0x555555);
                     mc.fontRenderer.drawString("HEX:", x + 63, y + 106, 0x555555);
+                    break;
+                }
+                case PREVIEW: {
+                    ICoreCapability tempCap = new CoreCapabilityImpl(parentGUI.player);
+                    NBTTagCompound nbt = parentGUI.editedCap.toNBT();
+                    tempCap.fromNBT(nbt);
+                    Trail trail = tempCap.getTrailData().getTrail();
+                    TrailOptionalData optionalData = tempCap.getTrailData().getAdditionalTrailData();
+                    TrailRenderer trailRenderer = tempCap.getTrailData().getTrailRenderer();
+                    trailRenderer.renderTrailIntoGUI(trail, optionalData, x + 10, y + 40, 156, 110);
+                    mc.fontRenderer.drawString("Current trail preview", x + 10, y + 10, 0x333333);
                     break;
                 }
             }

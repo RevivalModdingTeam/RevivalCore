@@ -2,6 +2,8 @@ package com.revivalmodding.revivalcore.core.client.trail.renderers;
 
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
+import com.revivalmodding.revivalcore.util.helper.ImageHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,8 +38,26 @@ public abstract class TrailRenderer {
         GlStateManager.enableCull();
     }
 
-    public void renderTrailIntoGUI() {
-
+    public void renderTrailIntoGUI(Trail trail, @Nullable TrailOptionalData optionalData, int x, int y, int w, int h) {
+        ImageHelper.drawColorShape(x, y, w, h, 0.2F, 0.2F, 0.2F);
+        for(int i = 0; i < trail.getLength(); i++) {
+            int modifier = 10;
+            int separator = x + (int)(w * ((float)i / trail.getLength()));
+            int j = i + 1;
+            int next = x + (int)(w * ((float)j / trail.getLength()));
+            int color = trail.getColor();
+            float r = ((color >> 16) & 255) / 255F;
+            float g = ((color >>  8) & 255) / 255F;
+            float b = (color & 255) / 255F;
+            ImageHelper.drawColorLine(separator, (y + h / 2) + (i % 2 == 0 ? modifier : -modifier), next, (y + h / 2) + (i % 2 == 0 ? -modifier : modifier), r, g, b, trail.getWidth() - i);
+            if(i == 0) continue;
+            ImageHelper.drawColorLine(separator, y - 1, separator, y + h + 1, 1.0F, 0.0F, 0.0F, 2);
+        }
+        for(int i = 0; i < trail.getLength(); i++) {
+            // Because of font renderer weirdness ¯\_(ツ)_/¯
+            int separator = x + (int)(w * ((float)i / trail.getLength()));
+            Minecraft.getMinecraft().fontRenderer.drawString(i + "", separator, y - 10, 0x121212);
+        }
     }
 
     public void preRender(Vec3d start, Vec3d end, float width, float r, float g, float b, float a) {

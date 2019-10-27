@@ -51,11 +51,14 @@ public class PlayerTrailData {
     }
 
     public void toNBT(NBTTagCompound nbt) {
-
+        NBTTagCompound tag = new NBTTagCompound();
+        this.getTrail().writeTrailToNBT(tag);
+        nbt.setTag("trailData", tag);
     }
 
     public void fromNBT(NBTTagCompound nbt) {
-        // TODO
+        NBTTagCompound tag = nbt.hasKey("trailData") ? nbt.getCompoundTag("trailData") : new NBTTagCompound();
+        this.getTrail().readTrailFromNBT(tag);
         this.trailRenderer = new TrailRendererSimple();
     }
 }
