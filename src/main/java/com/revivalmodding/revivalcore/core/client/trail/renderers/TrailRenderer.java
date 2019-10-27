@@ -36,6 +36,10 @@ public abstract class TrailRenderer {
         GlStateManager.enableCull();
     }
 
+    public void renderTrailIntoGUI() {
+
+    }
+
     public void preRender(Vec3d start, Vec3d end, float width, float r, float g, float b, float a) {
 
     }
