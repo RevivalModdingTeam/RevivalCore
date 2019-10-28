@@ -1,9 +1,9 @@
 package com.revivalmodding.revivalcore.core.capability.data;
 
-import com.revivalmodding.revivalcore.core.client.trail.TrailPreset;
-import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
+import com.revivalmodding.revivalcore.core.client.trail.TrailPreset;
+import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
 import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRendererSimple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

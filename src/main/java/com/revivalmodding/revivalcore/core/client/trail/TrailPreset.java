@@ -7,11 +7,14 @@ import javax.annotation.Nullable;
 public class TrailPreset {
 
     private TrailInfo trailInfo;
-    private NBTTagCompound trailData;
+    public Trail trail;
+    public TrailOptionalData data;
 
-    public void updatePreset(Trail trail, @Nullable TrailOptionalData optionalData) {
+    public TrailPreset updatePreset(Trail trail, @Nullable TrailOptionalData optionalData) {
+        this.trail = trail;
+        this.data = optionalData;
         this.getTrailInfo().forceUpdate();
-        this.trailData = this.saveToNBT(trail, optionalData);
+        return this;
     }
 
     public TrailInfo getTrailInfo() {
@@ -21,11 +24,11 @@ public class TrailPreset {
         return trailInfo;
     }
 
-    public NBTTagCompound saveToNBT(Trail trail, @Nullable TrailOptionalData optionalData) {
+    public NBTTagCompound saveToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         trail.writeTrailToNBT(nbt);
-        if(optionalData != null) {
-            optionalData.saveToNBT(nbt);
+        if(data != null) {
+            data.saveToNBT(nbt);
         }
         return nbt;
     }
@@ -33,29 +36,21 @@ public class TrailPreset {
     public void loadFromNBT(NBTTagCompound nbt) {
         Trail trail = Trail.createDefaultTrail();
         trail.readTrailFromNBT(nbt);
-        TrailOptionalData optionalData;
+        this.data = null;
         if(nbt.hasKey("trailData")) {
-            optionalData = new TrailOptionalData(trail);
-            optionalData.readFromNBT(nbt);
-        } else optionalData = null;
-        this.trailData = nbt;
+            this.data = new TrailOptionalData(trail);
+            this.data.readFromNBT(nbt);
+        }
         this.trailInfo = new TrailInfo().forceUpdate();
     }
 
     public Trail getTrail() {
-        Trail trail = Trail.createDefaultTrail();
-        if(trailData.hasKey("trail")) trail.readTrailFromNBT(trailData);
         return trail;
     }
 
     @Nullable
     public TrailOptionalData getOptionalData() {
-        if(trailData.hasKey("trailData")) {
-            TrailOptionalData optionalData = new TrailOptionalData(this.getTrail());
-            optionalData.readFromNBT(trailData);
-            return optionalData;
-        }
-        return null;
+        return data;
     }
 
     public class TrailInfo {
@@ -67,21 +62,22 @@ public class TrailPreset {
             Trail trail = preset.getTrail();
             TrailOptionalData optionalData = preset.getOptionalData();
             StringBuilder builder = new StringBuilder();
-            builder.append("Main trail attributes\n");
-            builder.append("Length: ").append(trail.getLength()).append("\n");
-            builder.append("Width: ").append(trail.getWidth()).append("\n");
-            builder.append("Color: ").append("\n");
-            builder.append("Additional trail attributes:\n");
+            builder.append("Main trail attributes/");
+            builder.append("Length: ").append(trail.getLength()).append("/");
+            builder.append("Width: ").append(trail.getWidth()).append("/");
+            builder.append("Color: ").append("/");
+            builder.append("Additional trail attributes:/");
             if(optionalData == null) {
-                builder.append("None\n");
+                builder.append("None/");
+                this.formattedTrailInfo = builder.toString();
                 return this;
             }
-            builder.append("Secondary color: ").append(optionalData.secondaryColor == -1 ? "-" : "").append("\n");
-            builder.append("Stage colors: ").append(optionalData.stageColors == null ? "-" : "\n");
+            builder.append("Secondary color: ").append(optionalData.secondaryColor == -1 ? "-" : "").append("/");
+            builder.append("Stage colors: ").append(optionalData.stageColors == null ? "-" : "/");
             if(optionalData.stageColors != null) {
                 for(int i = 0; i < optionalData.stageColors.length; i++) {
                     boolean last = i == optionalData.stageColors.length - 1;
-                    builder.append("[").append(i).append("]:").append(last ? "" : "\n");
+                    builder.append("[").append(i).append("]:").append(last ? "" : "/");
                 }
             }
             this.formattedTrailInfo = builder.toString();

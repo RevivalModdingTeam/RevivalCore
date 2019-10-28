@@ -2,6 +2,7 @@ package com.revivalmodding.revivalcore.core.client.gui;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityProvider;
 import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
@@ -121,7 +122,8 @@ public class GuiTrailEditor extends GuiScreen {
             }
             case PRESETS: {
                 for(int i = 0; i < 6; i++) {
-                    this.presets.add(this.new Preset(i, x + 10, y + 10 + i * 25));
+                    TrailPreset preset = this.editedCap.getTrailData().getPresets()[i];
+                    this.presets.add(this.new Preset(i, x + 10, y + 10 + i * 25, preset));
                 }
                 break;
             }
@@ -602,7 +604,7 @@ public class GuiTrailEditor extends GuiScreen {
 
         private int index;
         private int x, y;
-        public GuiButton load, save;
+        public GuiButton load, save, delete;
         private TrailPreset storedPreset;
 
         public Preset(int id, int x, int y, TrailPreset preset) {
@@ -610,15 +612,18 @@ public class GuiTrailEditor extends GuiScreen {
             this.x = x;
             this.y = y;
             this.storedPreset = preset;
-            this.load = new GuiButton(id, x + 60, y, 40, 20, "Load");
-            this.save = new GuiButton(id, x + 110, y, 40, 20, "Save");
+            this.load = new GuiButton(id, x + 50, y, 40, 20, "Load");
+            this.save = new GuiButton(id, x + 95, y, 40, 20, "Save");
+            this.delete = new GuiButton(id, x + 140, y, 20, 20, "X");
             this.load.enabled = this.storedPreset != null;
+            this.delete.enabled = this.load.enabled;
         }
 
         public void draw(Minecraft mc, int mx, int my, float partialTicks) {
             this.load.drawButton(mc, mx, my, partialTicks);
             this.save.drawButton(mc, mx, my, partialTicks);
-            boolean mouseOver = mx >= x && mx <= x + 50 && my >= y && my <= y + 20;
+            this.delete.drawButton(mc, mx, my, partialTicks);
+            boolean mouseOver = mx >= x && mx <= x + 43 && my >= y && my <= y + 20;
             if(mouseOver) {
                 GlStateManager.pushMatrix();
                 GlStateManager.disableTexture2D();
@@ -626,8 +631,21 @@ public class GuiTrailEditor extends GuiScreen {
                 ImageHelper.drawColorShape(mx, my + 5, 100, 50, 0.1F, 0.1F, 0.1F);
                 GlStateManager.enableTexture2D();
                 GlStateManager.popMatrix();
+                boolean flag = storedPreset == null;
+                try {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(0, 0, 2);
+                    String[] info = flag ? new String[] {"Empty"} : storedPreset.getTrailInfo().getFormattedTrailInfo().split("/");
+                    for(int i = 0; i < info.length; i++) {
+                        String display = info[i];
+                        mc.fontRenderer.drawString(display, mx + 3, my + 8 + i * 15, 0xFFFFFF);
+                    }
+                    GlStateManager.popMatrix();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            mc.fontRenderer.drawString("Preset " + (index+1), x + 5, y + 6, mouseOver ? 0xFFFF44 : 0x444444);
+            mc.fontRenderer.drawString("Preset " + (index+1), x, y + 6, mouseOver ? 0xFFFF44 : 0x444444);
         }
 
         public boolean onClick(Minecraft mc, int mx, int my) {
@@ -643,11 +661,26 @@ public class GuiTrailEditor extends GuiScreen {
                     return true;
                 }
             }
+            if(delete.enabled) {
+                if(delete.mousePressed(mc, mx, my)) {
+                    this.storedPreset = null;
+                    this.load.enabled = false;
+                    this.delete.enabled = false;
+                    return true;
+                }
+            }
+            // TODO sync on server
+            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(GuiTrailEditor.this.editedCap.toNBT());
             return false;
         }
 
         private void saveButtonClicked() {
-            // TODO save
+            PlayerTrailData trailData = GuiTrailEditor.this.editedCap.getTrailData();
+            TrailPreset preset = new TrailPreset().updatePreset(trailData.getTrail(), trailData.getAdditionalTrailData());
+            trailData.getPresets()[this.index] = preset;
+            this.storedPreset = preset;
+            this.load.enabled = true;
+            this.delete.enabled = true;
         }
 
         private void loadButtonClicked() {
