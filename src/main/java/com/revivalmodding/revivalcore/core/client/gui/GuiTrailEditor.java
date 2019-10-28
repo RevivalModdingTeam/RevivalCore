@@ -6,6 +6,7 @@ import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerTrailData;
 import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
+import com.revivalmodding.revivalcore.core.client.trail.TrailPreset;
 import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
@@ -602,13 +603,16 @@ public class GuiTrailEditor extends GuiScreen {
         private int index;
         private int x, y;
         public GuiButton load, save;
+        private TrailPreset storedPreset;
 
-        public Preset(int id, int x, int y) {
+        public Preset(int id, int x, int y, TrailPreset preset) {
             this.index = id;
             this.x = x;
             this.y = y;
+            this.storedPreset = preset;
             this.load = new GuiButton(id, x + 60, y, 40, 20, "Load");
             this.save = new GuiButton(id, x + 110, y, 40, 20, "Save");
+            this.load.enabled = this.storedPreset != null;
         }
 
         public void draw(Minecraft mc, int mx, int my, float partialTicks) {
