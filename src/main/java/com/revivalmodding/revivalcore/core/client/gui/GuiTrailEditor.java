@@ -37,6 +37,7 @@ public class GuiTrailEditor extends GuiScreen {
 
     private final ArrayList<ColorSlider> sliders = new ArrayList<>();
     private final ArrayList<EditorPanelSwitch> editors = new ArrayList<>();
+    private final ArrayList<Preset> presets = new ArrayList<>();
     private ColorInputField[] inputFields = null;
 
     private EditorType editor;
@@ -84,6 +85,7 @@ public class GuiTrailEditor extends GuiScreen {
     public void updateGUIElements() {
         this.buttonList.clear();
         this.sliders.clear();
+        this.presets.clear();
         this.inputFields = null;
 
         PlayerTrailData trailData = this.editedCap.getTrailData();
@@ -114,6 +116,12 @@ public class GuiTrailEditor extends GuiScreen {
                 this.inputFields[0] = new ColorInputField(x + 85, y + 85, 84, 16, false);
                 this.inputFields[1] = new ColorInputField(x + 85, y + 102, 84, 16, true);
                 this.onColorValueModified(0);
+                break;
+            }
+            case PRESETS: {
+                for(int i = 0; i < 6; i++) {
+                    this.presets.add(this.new Preset(i, x + 10, y + 10 + i * 25));
+                }
                 break;
             }
         }
@@ -169,6 +177,7 @@ public class GuiTrailEditor extends GuiScreen {
         this.mc.getTextureManager().bindTexture(TEXTURE);
         GlStateManager.color(1f, 1f, 1f, 1f);
         this.drawTexturedModalRect(x, y, 0, 0, 176, 166);
+        this.presets.forEach(preset -> preset.draw(mc, mouseX, mouseY, partialTicks));
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
         if(this.inputFields != null) {
@@ -225,6 +234,12 @@ public class GuiTrailEditor extends GuiScreen {
             if(inputFields != null) {
                 for(ColorInputField inputField : this.inputFields) {
                     inputField.updateStatus(mouseX, mouseY);
+                }
+            }
+            for(Preset preset : presets) {
+                if(preset.onClick(mc, mouseX, mouseY)) {
+                    this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    break;
                 }
             }
         }
@@ -579,6 +594,60 @@ public class GuiTrailEditor extends GuiScreen {
                     GlStateManager.enableTexture2D();
                 }
             }
+        }
+    }
+
+    private class Preset {
+
+        private int index;
+        private int x, y;
+        public GuiButton load, save;
+
+        public Preset(int id, int x, int y) {
+            this.index = id;
+            this.x = x;
+            this.y = y;
+            this.load = new GuiButton(id, x + 60, y, 40, 20, "Load");
+            this.save = new GuiButton(id, x + 110, y, 40, 20, "Save");
+        }
+
+        public void draw(Minecraft mc, int mx, int my, float partialTicks) {
+            this.load.drawButton(mc, mx, my, partialTicks);
+            this.save.drawButton(mc, mx, my, partialTicks);
+            boolean mouseOver = mx >= x && mx <= x + 50 && my >= y && my <= y + 20;
+            if(mouseOver) {
+                GlStateManager.pushMatrix();
+                GlStateManager.disableTexture2D();
+                GlStateManager.translate(0, 0, 1);
+                ImageHelper.drawColorShape(mx, my + 5, 100, 50, 0.1F, 0.1F, 0.1F);
+                GlStateManager.enableTexture2D();
+                GlStateManager.popMatrix();
+            }
+            mc.fontRenderer.drawString("Preset " + (index+1), x + 5, y + 6, mouseOver ? 0xFFFF44 : 0x444444);
+        }
+
+        public boolean onClick(Minecraft mc, int mx, int my) {
+            if(load.enabled) {
+                if(load.mousePressed(mc, mx, my)) {
+                    this.loadButtonClicked();
+                    return true;
+                }
+            }
+            if(save.enabled) {
+                if(save.mousePressed(mc, mx, my)) {
+                    this.saveButtonClicked();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void saveButtonClicked() {
+            // TODO save
+        }
+
+        private void loadButtonClicked() {
+            // TODO load
         }
     }
 }
