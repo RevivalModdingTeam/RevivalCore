@@ -10,7 +10,7 @@ import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
 import com.revivalmodding.revivalcore.core.client.trail.TrailPreset;
 import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
 import com.revivalmodding.revivalcore.network.NetworkManager;
-import com.revivalmodding.revivalcore.network.packets.PacketSyncAbilities;
+import com.revivalmodding.revivalcore.network.packets.PacketSendCapabilitiesToServer;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import org.apache.logging.log4j.core.Core;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class GuiTrailEditor extends GuiScreen {
     private final ArrayList<EditorPanelSwitch> editors = new ArrayList<>();
     private final ArrayList<Preset> presets = new ArrayList<>();
     private ColorInputField[] inputFields = null;
+    private ColorInputField basicInput = null;
 
     private EditorType editor;
     private boolean madeValidChanges = false;
@@ -85,6 +85,11 @@ public class GuiTrailEditor extends GuiScreen {
                 }
             }
         }
+        if (this.basicInput != null) {
+            if(this.basicInput.isListening) {
+                this.basicInput.addCharacter(typedChar);
+            }
+        }
     }
 
     public void updateGUIElements(boolean updateNBT) {
@@ -92,6 +97,7 @@ public class GuiTrailEditor extends GuiScreen {
         this.sliders.clear();
         this.presets.clear();
         this.inputFields = null;
+        this.basicInput = null;
 
         if(updateNBT && savedData != null) {
             this.editedCap.fromNBT(savedData);
@@ -111,6 +117,8 @@ public class GuiTrailEditor extends GuiScreen {
                 this.addButton(new Button(3, true, x + 146, y + 35).state(trailWidth < 15));
                 this.addButton(new GuiButton(4, x + 10,y + 136, 156, 20, "Save"));
                 this.buttonList.get(4).enabled = !updateNBT && this.buttonList.get(4).enabled;
+                this.basicInput = new ColorInputField(x + 80, y + 60, 80, 20, true);
+                this.basicInput.value = Integer.toHexString(this.editedCap.getTrailData().getTrail().getColor());
                 break;
             }
             case COLOR: {
@@ -184,7 +192,7 @@ public class GuiTrailEditor extends GuiScreen {
                         this.buttonList.get(4).enabled = false;
                         NBTTagCompound nbt = this.editedCap.toNBT();
                         player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
-                        NetworkManager.INSTANCE.sendToServer(new PacketSyncAbilities(nbt, player.getUniqueID()));
+                        NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, player.getUniqueID()));
                         this.savedData = nbt;
                         return;
                     }
@@ -227,6 +235,7 @@ public class GuiTrailEditor extends GuiScreen {
      * @param mode - 2 = Decimal field update; 1 = Hexadecimal field update; 0 = Slider update
      */
     public void onColorValueModified(int mode) {
+        if(this.basicInput != null) return;
         if (mode == 0) {
             int newColor = this.getSlidersColor();
             for (ColorInputField field : this.inputFields) {
@@ -245,6 +254,16 @@ public class GuiTrailEditor extends GuiScreen {
                 this.inputFields[1].value = Integer.toHexString(color).toUpperCase();
             }
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        if(savedData != null) {
+            this.editedCap.fromNBT(savedData);
+        }
+        NBTTagCompound nbt = this.editedCap.toNBT();
+        mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
+        NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, player.getUniqueID()));
     }
 
     @Override
@@ -701,12 +720,14 @@ public class GuiTrailEditor extends GuiScreen {
                     this.storedPreset = null;
                     this.load.enabled = false;
                     this.delete.enabled = false;
+                    GuiTrailEditor.this.editedCap.getTrailData().getPresets()[this.index] = null;
+                    NBTTagCompound nbt = GuiTrailEditor.this.editedCap.toNBT();
+                    GuiTrailEditor.this.savedData = nbt;
+                    mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
+                    NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, mc.player.getUniqueID()));
                     return true;
                 }
             }
-            NBTTagCompound nbtTagCompound = GuiTrailEditor.this.editedCap.toNBT();
-            NetworkManager.INSTANCE.sendToServer(new PacketSyncAbilities(nbtTagCompound, mc.player.getUniqueID()));
-            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbtTagCompound);
             return false;
         }
 
@@ -717,7 +738,10 @@ public class GuiTrailEditor extends GuiScreen {
             this.storedPreset = preset;
             this.load.enabled = true;
             this.delete.enabled = true;
-            GuiTrailEditor.this.savedData = GuiTrailEditor.this.editedCap.toNBT();
+            NBTTagCompound nbt = GuiTrailEditor.this.editedCap.toNBT();
+            GuiTrailEditor.this.savedData = nbt;
+            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
+            NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, mc.player.getUniqueID()));
         }
 
         private void loadButtonClicked(Minecraft mc) {
@@ -726,7 +750,11 @@ public class GuiTrailEditor extends GuiScreen {
                 PlayerTrailData trailData = GuiTrailEditor.this.editedCap.getTrailData();
                 trailData.setTrail(storedPreset.trail);
                 trailData.setAdditionalTrailData(storedPreset.data);
-                GuiTrailEditor.this.savedData = GuiTrailEditor.this.editedCap.toNBT();
+                NBTTagCompound nbt = GuiTrailEditor.this.editedCap.toNBT();
+                GuiTrailEditor.this.savedData = nbt;
+                mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
+                NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, mc.player.getUniqueID()));
+
             }
         }
     }

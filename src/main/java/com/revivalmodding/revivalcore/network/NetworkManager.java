@@ -1,10 +1,7 @@
 package com.revivalmodding.revivalcore.network;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.network.packets.PacketAbilityAction;
-import com.revivalmodding.revivalcore.network.packets.PacketSetPower;
-import com.revivalmodding.revivalcore.network.packets.PacketSyncAbilities;
-import com.revivalmodding.revivalcore.network.packets.PacketSyncProcessTileEntity;
+import com.revivalmodding.revivalcore.network.packets.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,5 +16,6 @@ public class NetworkManager {
         INSTANCE.registerMessage(PacketSetPower.Handler.class, PacketSetPower.class, id++, Side.SERVER);
         INSTANCE.registerMessage(PacketSyncAbilities.Handler.class, PacketSyncAbilities.class, id++, Side.CLIENT);
         INSTANCE.registerMessage(PacketAbilityAction.Handler.class, PacketAbilityAction.class, id++, Side.SERVER);
+        INSTANCE.registerMessage(PacketSendCapabilitiesToServer.Handler.class, PacketSendCapabilitiesToServer.class, id++, Side.SERVER);
     }
 }

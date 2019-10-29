@@ -47,20 +47,18 @@ public class Trail {
         nbt.setTag("trail", nbt1);
     }
 
-    public Trail readTrailFromNBT(NBTTagCompound nbt) {
+    public void readTrailFromNBT(NBTTagCompound nbt) {
         if(!nbt.hasKey("trail")) {
             RevivalCore.logger.error("Error when parsing NBT, didn't find any trail data! Creating new trail..");
             Trail trail = new Trail();
             trail.width = 1; trail.length = 1; trail.color = 0xFFCC00; trail.points = new TrailPos[0];
-            return trail;
+            return;
         }
         NBTTagCompound trailData = nbt.getCompoundTag("trail");
-        Trail trail = new Trail();
         this.length = trailData.getInteger("length");
         this.width = trailData.getInteger("width");
         this.color = trailData.getInteger("color");
         this.points = new TrailPos[this.length];
-        return trail;
     }
 
     public static Trail createDefaultTrail() {

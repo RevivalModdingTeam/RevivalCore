@@ -1,7 +1,6 @@
 package com.revivalmodding.revivalcore.core.common.blocks;
 
 import com.revivalmodding.revivalcore.RevivalCore;
-import com.revivalmodding.revivalcore.core.client.gui.GuiTrailEditor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +21,7 @@ public class BlockTrailEditor extends BlockBasic {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(worldIn.isRemote) {
-            RevivalCore.proxy.displayGuiScreen(new GuiTrailEditor(playerIn, accessLevel));
+            RevivalCore.proxy.displayTrailEditorGui(playerIn, accessLevel);
         }
         return true;
     }

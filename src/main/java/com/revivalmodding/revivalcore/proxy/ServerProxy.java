@@ -1,6 +1,7 @@
 package com.revivalmodding.revivalcore.proxy;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -24,7 +25,7 @@ public class ServerProxy implements IProxy {
     }
 
     @Override
-    public void displayGuiScreen(GuiScreen screen) {
+    public void displayTrailEditorGui(EntityPlayer player, int accessLevel) {
 
     }
 }
