@@ -36,7 +36,7 @@ public class TrailRendererSimple extends TrailRenderer {
                     Vec3d partVec = part.offset().rotateYaw(-player.rotationYaw * 0.017453292F - ((float)Math.PI / 2.0F));
                     Vec3d renderVec = trail.add(partVec.x, partVec.y, partVec.z);
                     Vec3d last = lastRenderVec.add(partVec.x, partVec.y, partVec.z);
-                    boolean specialRender = trailData != null && trailData.onTrailRender(renderVec, last, color, trailWidth, p, a);
+                    boolean specialRender = trailData != null && trailData.onTrailRender(this, renderVec, last, color, trailWidth, p, a, x, y, z);
                     if(!specialRender) {
                         this.drawLine(renderVec, last, trailWidth, r, g, b, a, x, y, z);
                     }

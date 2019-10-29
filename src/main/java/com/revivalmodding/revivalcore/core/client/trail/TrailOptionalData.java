@@ -1,5 +1,8 @@
 package com.revivalmodding.revivalcore.core.client.trail;
 
+import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
+import com.revivalmodding.revivalcore.util.helper.ImageHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
@@ -35,10 +38,16 @@ public class TrailOptionalData {
     }
 
     @SideOnly(Side.CLIENT)
-    public boolean onTrailRender(Vec3d from, Vec3d to, int primaryColor, int primaryTrailWidth, int trailPart, float alpha) {
-        // TODO render secondary trail, but smaller
+    public boolean onTrailRender(TrailRenderer renderer, Vec3d from, Vec3d to, int primaryColor, int primaryTrailWidth, int trailPart, float alpha, double x, double y, double z) {
         int color = this.getColor(trailPart, primaryColor);
-        return false;
+        if(color == primaryColor) {
+            return false;
+        }
+        float r = ((color >> 16) & 255) / 255.0F;
+        float g = ((color >> 8) & 255) / 255.0F;
+        float b = (color & 255) / 255.0F;
+        renderer.drawLine(from, to, primaryTrailWidth, r, g, b, alpha, x, y, z);
+        return true;
     }
 
     public boolean hasSecondaryColor() {

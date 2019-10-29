@@ -45,7 +45,7 @@ public abstract class TrailRenderer {
             int separator = x + (int)(w * ((float)i / trail.getLength()));
             int j = i + 1;
             int next = x + (int)(w * ((float)j / trail.getLength()));
-            int color = trail.getColor();
+            int color = optionalData != null && optionalData.stageColors != null && i < optionalData.stageColors.length ? optionalData.stageColors[i] : trail.getColor();
             float r = ((color >> 16) & 255) / 255F;
             float g = ((color >>  8) & 255) / 255F;
             float b = (color & 255) / 255F;

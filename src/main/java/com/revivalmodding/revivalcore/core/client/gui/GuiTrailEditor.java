@@ -131,7 +131,7 @@ public class GuiTrailEditor extends GuiScreen {
                 this.sliders.add(new ColorSlider("BLUE", x + 66, y + 46, 100, 16));
                 this.updateTrailColorSliders(0);
                 GuiButton button = new GuiButton(10, x + 10, y + 136, 156, 20, "Apply [1 Level]");
-                button.enabled = false;
+                button.enabled = player.isCreative() || this.editedCap.getAbilityData().getLevel() > 0;
                 this.addButton(button);
                 this.inputFields = new ColorInputField[2];
                 this.inputFields[0] = new ColorInputField(x + 85, y + 85, 84, 16, false);
@@ -346,6 +346,9 @@ public class GuiTrailEditor extends GuiScreen {
             editedCap.getTrailData().setAdditionalTrailData(new TrailOptionalData(trail, data.secondaryColor, newColors));
         } else {
             data.stageColors[selectedButtonIndex] = color;
+            NBTTagCompound nbt = this.editedCap.toNBT();
+            this.savedData = nbt;
+            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(savedData);
         }
     }
 
