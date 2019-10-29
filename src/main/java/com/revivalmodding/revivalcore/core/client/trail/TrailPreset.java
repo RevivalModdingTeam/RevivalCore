@@ -34,7 +34,7 @@ public class TrailPreset {
     }
 
     public void loadFromNBT(NBTTagCompound nbt) {
-        Trail trail = Trail.createDefaultTrail();
+        this.trail = Trail.createDefaultTrail();
         trail.readTrailFromNBT(nbt);
         this.data = null;
         if(nbt.hasKey("trailData")) {

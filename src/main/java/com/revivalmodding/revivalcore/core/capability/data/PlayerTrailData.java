@@ -77,7 +77,7 @@ public class PlayerTrailData {
             }
         }
         if(!presetList.isEmpty()) {
-            nbt.setTag("presets", presetList);
+            tag.setTag("presets", presetList);
         }
         nbt.setTag("trailData", tag);
     }

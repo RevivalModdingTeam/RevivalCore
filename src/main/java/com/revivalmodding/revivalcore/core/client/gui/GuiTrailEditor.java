@@ -9,6 +9,8 @@ import com.revivalmodding.revivalcore.core.client.trail.Trail;
 import com.revivalmodding.revivalcore.core.client.trail.TrailOptionalData;
 import com.revivalmodding.revivalcore.core.client.trail.TrailPreset;
 import com.revivalmodding.revivalcore.core.client.trail.renderers.TrailRenderer;
+import com.revivalmodding.revivalcore.network.NetworkManager;
+import com.revivalmodding.revivalcore.network.packets.PacketSyncAbilities;
 import com.revivalmodding.revivalcore.util.helper.ImageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import org.apache.logging.log4j.core.Core;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +37,6 @@ public class GuiTrailEditor extends GuiScreen {
 
     private final EntityPlayer player;
     private final ICoreCapability editedCap;
-    private final NBTTagCompound originalNBT;
     private final int playerPermissionLevel;
 
     private final ArrayList<ColorSlider> sliders = new ArrayList<>();
@@ -46,16 +48,17 @@ public class GuiTrailEditor extends GuiScreen {
     private boolean madeValidChanges = false;
     private int x;
     private int y;
+    private NBTTagCompound savedData;
 
     private int selectedButtonIndex = 0;
     private int totalCost = 0;
 
     public GuiTrailEditor(final EntityPlayer player, int playerPermissionLevel) {
         this.player = player;
+        NBTTagCompound nbt = CoreCapabilityImpl.getInstance(player).toNBT();
         this.editedCap = new CoreCapabilityImpl(player);
-        this.originalNBT = CoreCapabilityImpl.getInstance(player).toNBT();
-        this.editedCap.fromNBT(originalNBT);
-        editor = EditorType.GENERAL;
+        this.editedCap.fromNBT(nbt);
+        this.editor = EditorType.GENERAL;
         this.playerPermissionLevel = playerPermissionLevel;
     }
 
@@ -69,37 +72,45 @@ public class GuiTrailEditor extends GuiScreen {
             this.editors.add(i, new EditorPanelSwitch(x - 20, y + 10 + i * 22, editor));
         }
 
-        this.updateGUIElements();
+        this.updateGUIElements(true);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
-        if(this.inputFields != null) {
-            for(ColorInputField field : this.inputFields) {
-                if(field.isListening) {
+        if (this.inputFields != null) {
+            for (ColorInputField field : this.inputFields) {
+                if (field.isListening) {
                     field.addCharacter(typedChar);
                 }
             }
         }
     }
 
-    public void updateGUIElements() {
+    public void updateGUIElements(boolean updateNBT) {
         this.buttonList.clear();
         this.sliders.clear();
         this.presets.clear();
         this.inputFields = null;
 
+        if(updateNBT && savedData != null) {
+            this.editedCap.fromNBT(savedData);
+        }
         PlayerTrailData trailData = this.editedCap.getTrailData();
         int trailLength = trailData.getTrail().getLength();
         int trailWidth = trailData.getTrail().getWidth();
 
         switch (editor) {
             case GENERAL: {
+                if(updateNBT) {
+                    this.savedData = this.editedCap.toNBT();
+                }
                 this.addButton(new Button(0, false, x + 80, y + 10).state(trailLength > 2));
                 this.addButton(new Button(1, true, x + 146, y + 10).state(trailLength < 10));
                 this.addButton(new Button(2, false, x + 80, y + 35).state(trailLength < trailWidth));
                 this.addButton(new Button(3, true, x + 146, y + 35).state(trailWidth < 15));
+                this.addButton(new GuiButton(4, x + 10,y + 136, 156, 20, "Save"));
+                this.buttonList.get(4).enabled = !updateNBT && this.buttonList.get(4).enabled;
                 break;
             }
             case COLOR: {
@@ -121,7 +132,7 @@ public class GuiTrailEditor extends GuiScreen {
                 break;
             }
             case PRESETS: {
-                for(int i = 0; i < 6; i++) {
+                for (int i = 0; i < 6; i++) {
                     TrailPreset preset = this.editedCap.getTrailData().getPresets()[i];
                     this.presets.add(this.new Preset(i, x + 10, y + 10 + i * 25, preset));
                 }
@@ -134,9 +145,16 @@ public class GuiTrailEditor extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         switch (editor) {
             case GENERAL: {
+                int originalLength = this.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("length");
+                int originalWidth = this.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("width");
+                int level = mc.player.getCapability(CoreCapabilityProvider.DATA, null).getAbilityData().getLevel();
+                int totalCost = 0;
+                boolean canSave = mc.player.getCapability(CoreCapabilityProvider.DATA, null).getAbilityData().getLevel() >= totalCost;
                 switch (button.id) {
                     case 0: {
                         this.addToTrailLength(-1);
+                        totalCost = Math.abs(editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(editedCap.getTrailData().getTrail().getWidth() - originalWidth);
+                        this.buttonList.get(4).enabled = level >= totalCost && totalCost > 0;
                         break;
                     }
                     case 1: {
@@ -146,18 +164,32 @@ public class GuiTrailEditor extends GuiScreen {
                         if (length > width) {
                             editedCap.getTrailData().getTrail().setWidth(length);
                         }
+                        totalCost = Math.abs(editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(editedCap.getTrailData().getTrail().getWidth() - originalWidth);
+                        this.buttonList.get(4).enabled = level >= totalCost && totalCost > 0;
                         break;
                     }
                     case 2: {
                         this.addToTrailWidth(-1);
+                        totalCost = Math.abs(editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(editedCap.getTrailData().getTrail().getWidth() - originalWidth);
+                        this.buttonList.get(4).enabled = level >= totalCost && totalCost > 0;
                         break;
                     }
                     case 3: {
                         this.addToTrailWidth(1);
+                        totalCost = Math.abs(editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(editedCap.getTrailData().getTrail().getWidth() - originalWidth);
+                        this.buttonList.get(4).enabled = level >= totalCost && totalCost > 0;
                         break;
                     }
+                    case 4: {
+                        this.buttonList.get(4).enabled = false;
+                        NBTTagCompound nbt = this.editedCap.toNBT();
+                        player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
+                        NetworkManager.INSTANCE.sendToServer(new PacketSyncAbilities(nbt, player.getUniqueID()));
+                        this.savedData = nbt;
+                        return;
+                    }
                 }
-                this.updateGUIElements();
+                this.updateGUIElements(false);
                 break;
             }
             case COLOR: {
@@ -183,8 +215,8 @@ public class GuiTrailEditor extends GuiScreen {
         this.presets.forEach(preset -> preset.draw(mc, mouseX, mouseY, partialTicks));
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
-        if(this.inputFields != null) {
-            for(ColorInputField field : this.inputFields) {
+        if (this.inputFields != null) {
+            for (ColorInputField field : this.inputFields) {
                 field.draw(this.mc, mouseX, mouseY);
             }
         }
@@ -192,22 +224,21 @@ public class GuiTrailEditor extends GuiScreen {
     }
 
     /**
-     *
      * @param mode - 2 = Decimal field update; 1 = Hexadecimal field update; 0 = Slider update
      */
     public void onColorValueModified(int mode) {
-        if(mode == 0) {
+        if (mode == 0) {
             int newColor = this.getSlidersColor();
-            for(ColorInputField field : this.inputFields) {
+            for (ColorInputField field : this.inputFields) {
                 field.value = field.hex ? Integer.toHexString(newColor).toUpperCase() : newColor + "";
             }
         } else {
-            if(mode == 1) {
-                if(this.inputFields[1].value.isEmpty()) return;
+            if (mode == 1) {
+                if (this.inputFields[1].value.isEmpty()) return;
                 int color = Integer.decode("0x" + this.inputFields[1].value.toLowerCase());
                 this.setSliderColors(color);
                 this.inputFields[0].value = color + "";
-            } else if(mode == 2) {
+            } else if (mode == 2) {
                 if (this.inputFields[0].value.isEmpty()) return;
                 int color = Integer.parseInt(this.inputFields[0].value);
                 this.setSliderColors(color);
@@ -224,7 +255,7 @@ public class GuiTrailEditor extends GuiScreen {
                 if (panelSwitch.mouseOver && panelSwitch.editorType != this.editor && !panelSwitch.isLocked) {
                     this.editor = panelSwitch.editorType;
                     this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                    this.updateGUIElements();
+                    this.updateGUIElements(true);
                     break;
                 }
             }
@@ -234,13 +265,13 @@ public class GuiTrailEditor extends GuiScreen {
                     break;
                 }
             }
-            if(inputFields != null) {
-                for(ColorInputField inputField : this.inputFields) {
+            if (inputFields != null) {
+                for (ColorInputField inputField : this.inputFields) {
                     inputField.updateStatus(mouseX, mouseY);
                 }
             }
-            for(Preset preset : presets) {
-                if(preset.onClick(mc, mouseX, mouseY)) {
+            for (Preset preset : presets) {
+                if (preset.onClick(mc, mouseX, mouseY)) {
                     this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     break;
                 }
@@ -270,14 +301,14 @@ public class GuiTrailEditor extends GuiScreen {
     private void saveTrailColorPart(int color) {
         Trail trail = editedCap.getTrailData().getTrail();
         TrailOptionalData data = editedCap.getTrailData().getAdditionalTrailData();
-        if(data == null) {
+        if (data == null) {
             data = new TrailOptionalData(trail, -1, new int[trail.getLength()]);
             editedCap.getTrailData().setAdditionalTrailData(data);
             Arrays.fill(data.stageColors, trail.getColor());
             data.stageColors[selectedButtonIndex] = color;
-        } else if(data.stageColors.length != trail.getLength()) {
+        } else if (data.stageColors.length != trail.getLength()) {
             int[] newColors = new int[trail.getLength()];
-            for(int i = 0; i < trail.getLength(); i++) {
+            for (int i = 0; i < trail.getLength(); i++) {
                 newColors[i] = i < data.stageColors.length ? data.stageColors[i] : trail.getColor();
             }
             editedCap.getTrailData().setAdditionalTrailData(new TrailOptionalData(trail, data.secondaryColor, newColors));
@@ -326,6 +357,10 @@ public class GuiTrailEditor extends GuiScreen {
                     String width = parentGUI.editedCap.getTrailData().getTrail().getWidth() + "";
                     mc.fontRenderer.drawString(length, x + 90 + (66 - mc.fontRenderer.getStringWidth(length)) / 2, y + 16, 0x555555);
                     mc.fontRenderer.drawString(width, x + 90 + (66 - mc.fontRenderer.getStringWidth(width)) / 2, y + 42, 0x555555);
+                    int originalLength = parentGUI.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("length");
+                    int originalWidth = parentGUI.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("width");
+                    int totalCost = Math.abs(parentGUI.editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(parentGUI.editedCap.getTrailData().getTrail().getWidth() - originalWidth);
+                    mc.fontRenderer.drawString("Total cost: " + totalCost, x + 10, y + 121, 0x555555);
                     break;
                 }
                 case COLOR: {
@@ -501,13 +536,13 @@ public class GuiTrailEditor extends GuiScreen {
 
     private class EditorPanelSwitch {
 
+        private final boolean isLocked;
         public boolean mouseOver;
         private float progress;
         private int x;
         private int y;
         private String text;
         private EditorType editorType;
-        private final boolean isLocked;
 
         public EditorPanelSwitch(int x, int y, EditorType type) {
             this.x = x;
@@ -526,19 +561,19 @@ public class GuiTrailEditor extends GuiScreen {
             double vStart = selected ? 20 / 256D : 0D;
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart, y, 80, 20, 176 / 256D, vStart, 1, vStart + 20 / 256D, false);
             ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 224 / 256D, (128 + editorType.ordinal() * 32) / 256D, 1, (160 + editorType.ordinal() * 32) / 256D, false);
-            if(isLocked) {
+            if (isLocked) {
                 ImageHelper.drawImageWithUV(mc, TEXTURE, xStart + 3, y + 3, 14, 14, 192 / 256D, 224 / 256D, 224 / 256D, 1, false);
             }
-            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, isLocked ? 0xDD0000: 0xFFFFFF);
+            mc.fontRenderer.drawString(editorType.getName(), xStart + 20, this.y + 6, isLocked ? 0xDD0000 : 0xFFFFFF);
         }
     }
 
     private class ColorInputField {
 
+        private final Predicate<Character> textValidator;
         private int x, y, w, h;
         private boolean hex;
         private String value = "";
-        private final Predicate<Character> textValidator;
         private boolean isListening = false;
         private byte cursorTimer = -128;
 
@@ -552,7 +587,7 @@ public class GuiTrailEditor extends GuiScreen {
         }
 
         public void draw(Minecraft mc, int mx, int my) {
-            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.w, this.h, 176/256D, 40/256D, 1.0D, 60/256D, false);
+            ImageHelper.drawImageWithUV(mc, TEXTURE, this.x, this.y, this.w, this.h, 176 / 256D, 40 / 256D, 1.0D, 60 / 256D, false);
             this.renderCursorIcon(mc);
             mc.fontRenderer.drawString(value, this.x + 3, this.y + 4, 0xFFFFFF);
         }
@@ -562,16 +597,16 @@ public class GuiTrailEditor extends GuiScreen {
         }
 
         public void addCharacter(char c) {
-            if(c == '\b') {
-                if(value.length() > 0) {
+            if (c == '\b') {
+                if (value.length() > 0) {
                     value = value.substring(0, value.length() - 1);
                     GuiTrailEditor.this.onColorValueModified(hex ? 1 : 2);
                 }
-            } else if(textValidator.test(c)) {
-                if(c > 70) c -= 32;
-                if(!hex) {
+            } else if (textValidator.test(c)) {
+                if (c > 70) c -= 32;
+                if (!hex) {
                     int newValue = Integer.parseInt(value + c);
-                    if(newValue > 16777215) {
+                    if (newValue > 16777215) {
                         this.value = "16777215";
                         GuiTrailEditor.this.onColorValueModified(2);
                         return;
@@ -583,9 +618,9 @@ public class GuiTrailEditor extends GuiScreen {
         }
 
         private void renderCursorIcon(Minecraft mc) {
-            if(isListening) {
+            if (isListening) {
                 this.cursorTimer += 2;
-                if(cursorTimer >= 0) {
+                if (cursorTimer >= 0) {
                     int start = mc.fontRenderer.getStringWidth(value);
                     Tessellator tessellator = Tessellator.getInstance();
                     BufferBuilder builder = tessellator.getBuffer();
@@ -602,9 +637,9 @@ public class GuiTrailEditor extends GuiScreen {
 
     private class Preset {
 
+        public GuiButton load, save, delete;
         private int index;
         private int x, y;
-        public GuiButton load, save, delete;
         private TrailPreset storedPreset;
 
         public Preset(int id, int x, int y, TrailPreset preset) {
@@ -624,7 +659,7 @@ public class GuiTrailEditor extends GuiScreen {
             this.save.drawButton(mc, mx, my, partialTicks);
             this.delete.drawButton(mc, mx, my, partialTicks);
             boolean mouseOver = mx >= x && mx <= x + 43 && my >= y && my <= y + 20;
-            if(mouseOver) {
+            if (mouseOver) {
                 GlStateManager.pushMatrix();
                 GlStateManager.disableTexture2D();
                 GlStateManager.translate(0, 0, 1);
@@ -635,8 +670,8 @@ public class GuiTrailEditor extends GuiScreen {
                 try {
                     GlStateManager.pushMatrix();
                     GlStateManager.translate(0, 0, 2);
-                    String[] info = flag ? new String[] {"Empty"} : storedPreset.getTrailInfo().getFormattedTrailInfo().split("/");
-                    for(int i = 0; i < info.length; i++) {
+                    String[] info = flag ? new String[]{"Empty"} : storedPreset.getTrailInfo().getFormattedTrailInfo().split("/");
+                    for (int i = 0; i < info.length; i++) {
                         String display = info[i];
                         mc.fontRenderer.drawString(display, mx + 3, my + 8 + i * 15, 0xFFFFFF);
                     }
@@ -645,32 +680,33 @@ public class GuiTrailEditor extends GuiScreen {
                     e.printStackTrace();
                 }
             }
-            mc.fontRenderer.drawString("Preset " + (index+1), x, y + 6, mouseOver ? 0xFFFF44 : 0x444444);
+            mc.fontRenderer.drawString("Preset " + (index + 1), x, y + 6, mouseOver ? 0xFFFF44 : 0x444444);
         }
 
         public boolean onClick(Minecraft mc, int mx, int my) {
-            if(load.enabled) {
-                if(load.mousePressed(mc, mx, my)) {
-                    this.loadButtonClicked();
+            if (load.enabled) {
+                if (load.mousePressed(mc, mx, my)) {
+                    this.loadButtonClicked(mc);
                     return true;
                 }
             }
-            if(save.enabled) {
-                if(save.mousePressed(mc, mx, my)) {
+            if (save.enabled) {
+                if (save.mousePressed(mc, mx, my)) {
                     this.saveButtonClicked();
                     return true;
                 }
             }
-            if(delete.enabled) {
-                if(delete.mousePressed(mc, mx, my)) {
+            if (delete.enabled) {
+                if (delete.mousePressed(mc, mx, my)) {
                     this.storedPreset = null;
                     this.load.enabled = false;
                     this.delete.enabled = false;
                     return true;
                 }
             }
-            // TODO sync on server
-            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(GuiTrailEditor.this.editedCap.toNBT());
+            NBTTagCompound nbtTagCompound = GuiTrailEditor.this.editedCap.toNBT();
+            NetworkManager.INSTANCE.sendToServer(new PacketSyncAbilities(nbtTagCompound, mc.player.getUniqueID()));
+            mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbtTagCompound);
             return false;
         }
 
@@ -681,10 +717,17 @@ public class GuiTrailEditor extends GuiScreen {
             this.storedPreset = preset;
             this.load.enabled = true;
             this.delete.enabled = true;
+            GuiTrailEditor.this.savedData = GuiTrailEditor.this.editedCap.toNBT();
         }
 
-        private void loadButtonClicked() {
-            // TODO load
+        private void loadButtonClicked(Minecraft mc) {
+            // just in case
+            if (storedPreset != null) {
+                PlayerTrailData trailData = GuiTrailEditor.this.editedCap.getTrailData();
+                trailData.setTrail(storedPreset.trail);
+                trailData.setAdditionalTrailData(storedPreset.data);
+                GuiTrailEditor.this.savedData = GuiTrailEditor.this.editedCap.toNBT();
+            }
         }
     }
 }
