@@ -117,8 +117,8 @@ public class GuiTrailEditor extends GuiScreen {
                 this.addButton(new Button(3, true, x + 146, y + 35).state(trailWidth < 15));
                 this.addButton(new GuiButton(4, x + 10,y + 136, 156, 20, "Save"));
                 this.buttonList.get(4).enabled = !updateNBT && this.buttonList.get(4).enabled;
-                this.basicInput = new ColorInputField(x + 80, y + 60, 80, 20, true);
-                this.basicInput.value = Integer.toHexString(this.editedCap.getTrailData().getTrail().getColor());
+                this.basicInput = new ColorInputField(x + 80, y + 60, 86, 16, true);
+                this.basicInput.value = Integer.toHexString(this.editedCap.getTrailData().getTrail().getColor()).toUpperCase();
                 break;
             }
             case COLOR: {
@@ -190,6 +190,8 @@ public class GuiTrailEditor extends GuiScreen {
                     }
                     case 4: {
                         this.buttonList.get(4).enabled = false;
+                        int color = Integer.decode("0x" + (this.basicInput.value.isEmpty() ? "0" : this.basicInput.value));
+                        this.editedCap.getTrailData().getTrail().setColor(color);
                         NBTTagCompound nbt = this.editedCap.toNBT();
                         player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
                         NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, player.getUniqueID()));
@@ -223,6 +225,7 @@ public class GuiTrailEditor extends GuiScreen {
         this.presets.forEach(preset -> preset.draw(mc, mouseX, mouseY, partialTicks));
         this.sliders.forEach(slider -> slider.drawButton(this.mc, mouseX, mouseY, partialTicks));
         this.buttonList.forEach(btn -> btn.drawButton(this.mc, mouseX, mouseY, partialTicks));
+        if(this.basicInput != null) this.basicInput.draw(mc, mouseX, mouseY);
         if (this.inputFields != null) {
             for (ColorInputField field : this.inputFields) {
                 field.draw(this.mc, mouseX, mouseY);
@@ -235,7 +238,14 @@ public class GuiTrailEditor extends GuiScreen {
      * @param mode - 2 = Decimal field update; 1 = Hexadecimal field update; 0 = Slider update
      */
     public void onColorValueModified(int mode) {
-        if(this.basicInput != null) return;
+        if(this.basicInput != null) {
+            if(editor == EditorType.GENERAL) {
+                int originalColor = this.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("color");
+                int currentColor = Integer.decode("0x" + (this.basicInput.value.isEmpty() ? "0" : this.basicInput.value));
+                this.buttonList.get(4).enabled = this.buttonList.get(4).enabled || originalColor != currentColor;
+            }
+            return;
+        }
         if (mode == 0) {
             int newColor = this.getSlidersColor();
             for (ColorInputField field : this.inputFields) {
@@ -288,6 +298,9 @@ public class GuiTrailEditor extends GuiScreen {
                 for (ColorInputField inputField : this.inputFields) {
                     inputField.updateStatus(mouseX, mouseY);
                 }
+            }
+            if(basicInput != null) {
+                basicInput.updateStatus(mouseX, mouseY);
             }
             for (Preset preset : presets) {
                 if (preset.onClick(mc, mouseX, mouseY)) {
@@ -380,6 +393,7 @@ public class GuiTrailEditor extends GuiScreen {
                     int originalWidth = parentGUI.savedData.getCompoundTag("trailData").getCompoundTag("trail").getInteger("width");
                     int totalCost = Math.abs(parentGUI.editedCap.getTrailData().getTrail().getLength() - originalLength) + Math.abs(parentGUI.editedCap.getTrailData().getTrail().getWidth() - originalWidth);
                     mc.fontRenderer.drawString("Total cost: " + totalCost, x + 10, y + 121, 0x555555);
+                    mc.fontRenderer.drawString("Trail color:", x + 10, y + 65, 0x555555);
                     break;
                 }
                 case COLOR: {
