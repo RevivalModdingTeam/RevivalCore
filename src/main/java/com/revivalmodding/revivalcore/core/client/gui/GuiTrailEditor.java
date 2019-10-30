@@ -123,14 +123,14 @@ public class GuiTrailEditor extends GuiScreen {
             }
             case COLOR: {
                 for (int i = 0; i < trailLength; i++) {
-                    int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null ? trailData.getAdditionalTrailData().stageColors[i] : trailData.getTrail().getColor();
+                    int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null && i < trailData.getAdditionalTrailData().stageColors.length ? trailData.getAdditionalTrailData().stageColors[i] : trailData.getTrail().getColor();
                     this.addButton(new TrailPartButton(i, color, x + (i / 5 >= 1 ? 30 : 10), y + 10 + (i % 5) * 18));
                 }
                 this.sliders.add(new ColorSlider("RED", x + 66, y + 10, 100, 16));
                 this.sliders.add(new ColorSlider("GREEN", x + 66, y + 28, 100, 16));
                 this.sliders.add(new ColorSlider("BLUE", x + 66, y + 46, 100, 16));
                 this.updateTrailColorSliders(0);
-                GuiButton button = new GuiButton(10, x + 10, y + 136, 156, 20, "Apply [1 Level]");
+                GuiButton button = new GuiButton(10, x + 10, y + 136, 156, 20, "Apply");
                 button.enabled = player.isCreative() || this.editedCap.getAbilityData().getLevel() > 0;
                 this.addButton(button);
                 this.inputFields = new ColorInputField[2];
@@ -321,7 +321,7 @@ public class GuiTrailEditor extends GuiScreen {
 
     private void updateTrailColorSliders(int index) {
         PlayerTrailData trailData = this.editedCap.getTrailData();
-        int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null ? trailData.getAdditionalTrailData().stageColors[index] : trailData.getTrail().getColor();
+        int color = trailData.getAdditionalTrailData() != null && trailData.getAdditionalTrailData().stageColors != null && index < trailData.getAdditionalTrailData().stageColors.length ? trailData.getAdditionalTrailData().stageColors[index] : trailData.getTrail().getColor();
         int red = (int) (((color >> 16) & 255) / 255F * 100);
         int green = (int) (((color >> 8) & 255) / 255F * 100);
         int blue = (int) ((color & 255) / 255F * 100);

@@ -7,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nullable;
+
 public class Trail {
 
     protected int length;
@@ -18,20 +20,24 @@ public class Trail {
     }
 
     public void updateTrail(EntityPlayer player) {
-        this.addPoint(new TrailPos(this.offset(player.posX), this.offset(player.posY), this.offset(player.posZ)));
+        boolean canRenderTrail = player.posX != player.lastTickPosX || player.posY != player.lastTickPosY || player.posZ != player.lastTickPosZ;
+        this.addPoint(canRenderTrail ? new TrailPos(this.offset(player.posX), this.offset(player.posY), this.offset(player.posZ)) : null);
     }
 
     private double offset(double base) {
-        return base + (RevivalCore.getRandom().nextDouble()/6)-(RevivalCore.getRandom().nextDouble()/6);
+        return base + (RevivalCore.getRandom().nextDouble()/10)-(RevivalCore.getRandom().nextDouble()/10);
     }
 
-    private void addPoint(TrailPos trailPos) {
+    private void addPoint(@Nullable TrailPos trailPos) {
         try {
             for(int i = this.length - 1; i > 0; i--) {
-                // TODO improve to actually shift null elements
-                if(points[i-1] == null) continue;
-                float alpha = 1 - ((i-1) / (float)this.length) + 0.1F;
-                points[i] = points[i-1].withAlpha(alpha > 1F ? 1.0F : alpha);
+                boolean flag = points[i-1] == null;
+                if(flag) {
+                    points[i] = null;
+                } else {
+                    float alpha = 1 - ((i-1) / (float)this.length) + 0.1F;
+                    points[i] = points[i-1].withAlpha(alpha > 1F ? 1.0F : alpha);
+                }
             }
             points[0] = trailPos;
         } catch (Exception e) {
@@ -50,8 +56,7 @@ public class Trail {
     public void readTrailFromNBT(NBTTagCompound nbt) {
         if(!nbt.hasKey("trail")) {
             RevivalCore.logger.error("Error when parsing NBT, didn't find any trail data! Creating new trail..");
-            Trail trail = new Trail();
-            trail.width = 1; trail.length = 1; trail.color = 0xFFCC00; trail.points = new TrailPos[0];
+            this.width = 6; this.length = 6; this.color = 0xFFCC00; this.points = new TrailPos[6];
             return;
         }
         NBTTagCompound trailData = nbt.getCompoundTag("trail");

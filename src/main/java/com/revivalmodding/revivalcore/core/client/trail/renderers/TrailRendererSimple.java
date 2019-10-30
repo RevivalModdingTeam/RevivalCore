@@ -28,6 +28,7 @@ public class TrailRendererSimple extends TrailRenderer {
             trailWidth = trailWidth <= 0 ? 1 : trailWidth;
             GlStateManager.glLineWidth(trailWidth);
             float a = trail.alpha;
+            // TODO fix: First trail is never rendered
             if(lastRenderVec != null) {
                 float r = (color >> 16) & 15;
                 float g = (color >>  8) & 15;
