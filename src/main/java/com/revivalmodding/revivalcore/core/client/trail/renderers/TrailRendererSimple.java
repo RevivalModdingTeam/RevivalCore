@@ -30,9 +30,9 @@ public class TrailRendererSimple extends TrailRenderer {
             float a = trail.alpha;
             // TODO fix: First trail is never rendered
             if(lastRenderVec != null) {
-                float r = (color >> 16) & 15;
-                float g = (color >>  8) & 15;
-                float b = color & 15;
+                float r = ((color >> 16) & 255) / 255.0F;
+                float g = ((color >>  8) & 255) / 255.0F;
+                float b = (color & 255) / 255.0F;
                 for(TrailPart part : TrailPart.values()) {
                     Vec3d partVec = part.offset().rotateYaw(-player.rotationYaw * 0.017453292F - ((float)Math.PI / 2.0F));
                     Vec3d renderVec = trail.add(partVec.x, partVec.y, partVec.z);
@@ -42,6 +42,8 @@ public class TrailRendererSimple extends TrailRenderer {
                         this.drawLine(renderVec, last, trailWidth, r, g, b, a, x, y, z);
                     }
                 }
+            } else {
+
             }
             lastRenderVec = trail;
         }
