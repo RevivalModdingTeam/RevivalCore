@@ -119,6 +119,7 @@ public class GuiTrailEditor extends GuiScreen {
                 this.buttonList.get(4).enabled = !updateNBT && this.buttonList.get(4).enabled;
                 this.basicInput = new ColorInputField(x + 80, y + 60, 86, 16, true);
                 this.basicInput.value = Integer.toHexString(this.editedCap.getTrailData().getTrail().getColor()).toUpperCase();
+                this.addButton(new GuiButton(5, x + 10, y + 80, 156, 20, "Set as universal color"));
                 break;
             }
             case COLOR: {
@@ -196,7 +197,13 @@ public class GuiTrailEditor extends GuiScreen {
                         player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(nbt);
                         NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(nbt, player.getUniqueID()));
                         this.savedData = nbt;
-                        return;
+                        break;
+                    }
+                    case 5: {
+                        this.editedCap.getTrailData().setAdditionalTrailData(null);
+                        CoreCapabilityImpl.getInstance(this.player).fromNBT(this.editedCap.toNBT());
+                        NetworkManager.INSTANCE.sendToServer(new PacketSendCapabilitiesToServer(this.editedCap.toNBT(), this.player.getUniqueID()));
+                        break;
                     }
                 }
                 this.updateGUIElements(false);
@@ -346,8 +353,7 @@ public class GuiTrailEditor extends GuiScreen {
             editedCap.getTrailData().setAdditionalTrailData(new TrailOptionalData(trail, data.secondaryColor, newColors));
         } else {
             data.stageColors[selectedButtonIndex] = color;
-            NBTTagCompound nbt = this.editedCap.toNBT();
-            this.savedData = nbt;
+            this.savedData = this.editedCap.toNBT();
             mc.player.getCapability(CoreCapabilityProvider.DATA, null).fromNBT(savedData);
         }
     }

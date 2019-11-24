@@ -83,6 +83,7 @@ public class PlayerTrailData {
     }
 
     public void fromNBT(NBTTagCompound nbt) {
+        this.additionalTrailData = null;
         NBTTagCompound tag = nbt.hasKey("trailData") ? nbt.getCompoundTag("trailData") : new NBTTagCompound();
         this.mainTrail = this.getTrail();
         this.mainTrail.readTrailFromNBT(tag);
