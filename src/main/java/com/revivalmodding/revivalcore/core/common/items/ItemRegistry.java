@@ -31,7 +31,7 @@ public class ItemRegistry {
     @GameRegistry.ObjectHolder(RevivalCore.MODID)
     public static final class CoreItems {
         public static final Item COFFEE_MUG = null;
-        public static final ItemSuitMaker SUIT_MAKER = null;
+        public static final Item SUIT_MAKER = null;
         public static final ItemInjection EMPTY_INJECTION = null;
         public static final ItemInjection SPEEDFORCE_INJECTION = null;
         public static final ItemDonatorSuit GRIMMLAWKE_HEAD = null;
