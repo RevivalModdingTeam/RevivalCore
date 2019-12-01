@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.client.render;
 
+import com.revivalmodding.revivalcore.core.client.models.ModelSuit;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
@@ -17,7 +18,7 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
     private final RenderLivingBase<?> renderer;
     @Nullable
     private final AbstractSuit suit;
-    public ModelBiped mainModel;
+    public ModelSuit mainModel;
 
     public LayerSuitBase(RenderLivingBase<?> renderer) {
         this(renderer, null);
@@ -30,7 +31,7 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
     }
 
     public void initModel() {
-        mainModel = new ModelBiped(0.4F);
+        mainModel = new ModelSuit(0F, false);
     }
 
     @Override
@@ -80,12 +81,17 @@ public class LayerSuitBase<E extends EntityLivingBase> implements LayerRenderer<
                 mainModel.bipedBody.showModel = true;
                 mainModel.bipedRightArm.showModel = true;
                 mainModel.bipedLeftArm.showModel = true;
+                mainModel.bipedBodyWear.showModel = true;
+                mainModel.bipedRightArmwear.showModel = true;
+                mainModel.bipedLeftArmwear.showModel = true;
                 break;
             }
 
             case LEGS: {
                 mainModel.bipedRightLeg.showModel = true;
                 mainModel.bipedLeftLeg.showModel = true;
+                mainModel.bipedRightLegwear.showModel = true;
+                mainModel.bipedLeftLegwear.showModel = true;
                 break;
             }
         }
