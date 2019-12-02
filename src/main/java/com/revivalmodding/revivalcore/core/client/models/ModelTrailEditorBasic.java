@@ -4,6 +4,10 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 
+/**
+ * @author Psychokiller
+ * Added by Toma, 12.2.2019
+ */
 public class ModelTrailEditorBasic extends ModelBase {
 
     private final ModelRenderer Lightning;
