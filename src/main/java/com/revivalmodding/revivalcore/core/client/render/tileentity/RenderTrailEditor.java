@@ -4,14 +4,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-import java.util.function.Supplier;
-
 public class RenderTrailEditor<T extends TileEntity> extends TileEntitySpecialRenderer<T> {
 
-    private final Supplier<TrailEditorModel> modelSupplier;
+    private final TrailEditorModel model;
 
-    public RenderTrailEditor(Supplier<TrailEditorModel> model) {
-        this.modelSupplier = model;
+    public RenderTrailEditor(TrailEditorModel model) {
+        this.model = model;
     }
 
     @Override
@@ -19,7 +17,7 @@ public class RenderTrailEditor<T extends TileEntity> extends TileEntitySpecialRe
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
         GlStateManager.scale(0.5, 0.5, 0.5);
-        this.modelSupplier.get().renderTrailEditor();
+        this.model.renderTrailEditor();
         GlStateManager.popMatrix();
     }
 
