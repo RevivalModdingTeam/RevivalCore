@@ -3,11 +3,15 @@ package com.revivalmodding.revivalcore.core.registry;
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.Ability;
 import com.revivalmodding.revivalcore.core.abilities.AbilityVibrate;
+import com.revivalmodding.revivalcore.core.client.models.ModelTrailEditorAdvanced;
+import com.revivalmodding.revivalcore.core.client.models.ModelTrailEditorBasic;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
+import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderTrailEditor;
 import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
+import com.revivalmodding.revivalcore.core.common.tileentity.BasicTileEntities;
 import com.revivalmodding.revivalcore.core.common.tileentity.TileEntitySuitMaker;
 import com.revivalmodding.revivalcore.core.recipes.RVRecipe;
 import net.minecraft.block.Block;
@@ -183,6 +187,8 @@ public class Registries {
         @SideOnly(Side.CLIENT)
         public static void bindEntityTEISR() {
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySuitMaker.class, new RenderSuitMaker());
+            ClientRegistry.bindTileEntitySpecialRenderer(BasicTileEntities.TileEntityTrailEditorBasic.class, new RenderTrailEditor<>(ModelTrailEditorBasic::new));
+            ClientRegistry.bindTileEntitySpecialRenderer(BasicTileEntities.TileEntityTrailEditorAdvanced.class, new RenderTrailEditor<>(ModelTrailEditorAdvanced::new));
         }
     }
     
@@ -312,7 +318,7 @@ public class Registries {
     	
     	@Override
     	public void registerAll(Collection<Ability> toRegister) {
-    		registerAll(toRegister);
+    		registerAll(toRegister.toArray(new Ability[0]));
     	}
     	
     	@Override

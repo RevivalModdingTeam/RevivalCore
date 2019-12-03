@@ -1,5 +1,6 @@
 package com.revivalmodding.revivalcore.core.client.models;
 
+import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderTrailEditor;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
@@ -8,7 +9,7 @@ import net.minecraft.client.model.ModelRenderer;
  * @author Psychokiller
  * Added by Toma, 12.2.2019
  */
-public class ModelTrailEditorAdvanced extends ModelBase {
+public class ModelTrailEditorAdvanced extends ModelBase implements RenderTrailEditor.TrailEditorModel {
 
     private final ModelRenderer Lightning;
     private final ModelRenderer HalfPedestal;
@@ -958,7 +959,8 @@ public class ModelTrailEditorAdvanced extends ModelBase {
         extras.cubeList.add(new ModelBox(extras, 0, 4, -9.0F, -33.0F, 7.3166F, 18, 0, 0, 0.0F, false));
     }
 
-    public void renderAdvancedTrailEditor() {
+    @Override
+    public void renderTrailEditor() {
         Lightning.render(1f);
         HalfPedestal.render(1f);
         Half_Pedestal2.render(1f);
