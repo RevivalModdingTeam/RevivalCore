@@ -1,9 +1,11 @@
 package com.revivalmodding.revivalcore.core.client.models;
 
+import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderTrailEditor;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * @author Psychokiller
@@ -11,6 +13,7 @@ import net.minecraft.client.model.ModelRenderer;
  */
 public class ModelTrailEditorAdvanced extends ModelBase implements RenderTrailEditor.TrailEditorModel {
 
+    public static final ResourceLocation TEXTURE = new ResourceLocation(RevivalCore.MODID, "textures/blocks/trail_editor_advanced.png");
     private final ModelRenderer Lightning;
     private final ModelRenderer HalfPedestal;
     private final ModelRenderer Half_Pedestal2;
@@ -968,6 +971,12 @@ public class ModelTrailEditorAdvanced extends ModelBase implements RenderTrailEd
         Foot_Half2.render(1f);
         extras.render(1f);
     }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE;
+    }
+
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

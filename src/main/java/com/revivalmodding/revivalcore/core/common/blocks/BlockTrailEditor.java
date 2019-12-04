@@ -31,6 +31,16 @@ public class BlockTrailEditor extends BlockBasic {
     }
 
     @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }
