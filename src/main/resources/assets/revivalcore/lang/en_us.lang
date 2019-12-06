@@ -1,4 +1,6 @@
 tile.suit_maker.name=Suit Maker
+tile.trail_editor_basic.name=Trail Editor (Basic)
+tile.trail_editor_advanced.name=Trail Editor (Advanced)
 
 itemGroup.coretab=Revival Core
 

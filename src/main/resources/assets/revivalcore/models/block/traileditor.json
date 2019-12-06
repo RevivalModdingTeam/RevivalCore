@@ -1,6 +1,3 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "revivalcore:blocks/empty"
-    }
+  "parent":"builtin/entity"
 }

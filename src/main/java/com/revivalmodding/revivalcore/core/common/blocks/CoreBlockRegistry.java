@@ -26,7 +26,7 @@ public class CoreBlockRegistry {
         ItemRegistry.ITEMBLOCK_QUEUE = new ArrayList<>();
         event.getRegistry().registerAll(
                 new BlockSuitMaker("suit_maker", Material.ROCK),
-                new BlockTrailEditor("trail_editor", 1).setCreativeTab(RevivalCore.coretab),
+                new BlockTrailEditor("trail_editor_basic", 1).setCreativeTab(RevivalCore.coretab),
                 new BlockTrailEditor("trail_editor_advanced", 2).setCreativeTab(RevivalCore.coretab)
         );
     }
