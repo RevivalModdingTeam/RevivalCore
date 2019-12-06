@@ -19,7 +19,7 @@ public class RenderTrailEditor<T extends TileEntity> extends TileEntitySpecialRe
         GlStateManager.pushMatrix();
         GlStateManager.disableCull();
         GlStateManager.translate(x, y, z);
-        GlStateManager.translate(0, 2, 0);
+        GlStateManager.translate(0.5, 1.2, 0.5);
         GlStateManager.rotate(180, 1, 0, 0);
         GlStateManager.scale(0.05, 0.05, 0.05);
         this.model.renderTrailEditor();
