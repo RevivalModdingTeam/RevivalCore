@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -15,27 +16,31 @@ public abstract class TrailRenderer {
 
     public abstract void renderTrail(EntityPlayer player, Trail trail, @Nullable TrailOptionalData trailData, float partialTick);
 
-    public void drawLine(Vec3d start, Vec3d end, float width, float r, float g, float b, float a, double xPos, double yPos, double zPos) {
+    public void drawLine(Vec3d start, Vec3d end, float width, float r1, float g1, float b1, float r2, float g2, float b2, float a, double xPos, double yPos, double zPos) {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
         GlStateManager.disableLighting();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        this.preRender(start, end, width, r, g, b, a);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.setTranslation(-xPos, -yPos, -zPos);
         GlStateManager.glLineWidth(width);
         bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(start.x, start.y, start.z).color(r, g, b, a).endVertex();
-        bufferBuilder.pos(end.x, end.y, end.z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(start.x, start.y, start.z).color(r1, g1, b1, a).endVertex();
+        bufferBuilder.pos(end.x, end.y, end.z).color(r2, g2, b2, a).endVertex();
         tessellator.draw();
         bufferBuilder.setTranslation(0, 0, 0);
-        this.postRender(start, end, width, r, g, b, a);
+        GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
+    }
+
+    public void drawLine(Vec3d start, Vec3d end, float width, float r, float g, float b, float a, double xPos, double yPos, double zPos) {
+        this.drawLine(start, end, width, r, g, b, r, g, b, a, xPos, yPos, zPos);
     }
 
     public void renderTrailIntoGUI(Trail trail, @Nullable TrailOptionalData optionalData, int x, int y, int w, int h) {
@@ -58,14 +63,6 @@ public abstract class TrailRenderer {
             int separator = x + (int)(w * ((float)i / trail.getLength()));
             Minecraft.getMinecraft().fontRenderer.drawString(i + "", separator, y - 10, 0x121212);
         }
-    }
-
-    public void preRender(Vec3d start, Vec3d end, float width, float r, float g, float b, float a) {
-
-    }
-
-    public void postRender(Vec3d start, Vec3d end, float width, float r, float g, float b, float a) {
-
     }
 
     public double interpolate(double current, double previous, float partial) {

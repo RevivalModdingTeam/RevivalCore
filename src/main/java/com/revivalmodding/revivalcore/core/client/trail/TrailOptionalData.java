@@ -39,14 +39,18 @@ public class TrailOptionalData {
 
     @SideOnly(Side.CLIENT)
     public boolean onTrailRender(TrailRenderer renderer, Vec3d from, Vec3d to, int primaryColor, int primaryTrailWidth, int trailPart, float alpha, double x, double y, double z) {
-        int color = this.getColor(trailPart, primaryColor);
+        int color = this.getColor(trailPart - 1, primaryColor);
+        int color2 = this.getColor(trailPart, primaryColor);
         if(color == primaryColor) {
             return false;
         }
-        float r = ((color >> 16) & 255) / 255.0F;
-        float g = ((color >> 8) & 255) / 255.0F;
-        float b = (color & 255) / 255.0F;
-        renderer.drawLine(from, to, primaryTrailWidth, r, g, b, alpha, x, y, z);
+        float r1 = ((color >> 16) & 255) / 255.0F;
+        float g1 = ((color >> 8) & 255) / 255.0F;
+        float b1 = (color & 255) / 255.0F;
+        float r2 = ((color2 >> 16) & 255) / 255.0F;
+        float g2 = ((color2 >> 8) & 255) / 255.0F;
+        float b2 = (color2 & 255) / 255.0F;
+        renderer.drawLine(from, to, primaryTrailWidth, r1, g1, b1, r2, g2, b2, alpha, x, y, z);
         return true;
     }
 
