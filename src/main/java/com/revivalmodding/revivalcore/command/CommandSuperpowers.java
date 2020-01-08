@@ -99,7 +99,7 @@ public class CommandSuperpowers extends CommandBase {
 						throw new WrongUsageException("Unknown parameter");
 					if(args[1].equalsIgnoreCase("unlockAll")) {
 						Registries.ABILITIES.forEach(a -> {
-							if(!Ability.hasUnlockedAbility(player, a.getName())) {
+							if(!Ability.hasAbility(a.getName(), player, true)) {
 								data.unlockAbility(a);
 							}
 						});
@@ -111,26 +111,26 @@ public class CommandSuperpowers extends CommandBase {
 						sendFeedback(player, "Locked all abilities");
 					} else if(args[1].equalsIgnoreCase("unlock")) {
 						if(args.length > 2) {
-							Ability ability = Ability.getAbilityFromKey(args[2]);
+							Ability ability = Ability.fromString(args[2]);
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
 							data.unlockAbility(ability);
 							coreCapability.sync();
-							sendFeedback(player, "Unlocked: " + ability.getFullName());
+							sendFeedback(player, "Unlocked: " + ability.getDisplayName());
 						} else {
 							throw new WrongUsageException("You must specify ability");
 						}
 					} else if(args[1].equalsIgnoreCase("lock")) {
 						if(args.length > 2) {
-							Ability ability = Ability.getAbilityFromKey(args[2]);
+							Ability ability = Ability.fromString(args[2]);
 							if(ability == null) {
 								throw new WrongUsageException("Unknown ability");
 							}
 							data.lockAbility(ability);
 							data.deactivateAbility(ability);
 							coreCapability.sync();
-							sendFeedback(player, "Locked: " + ability.getFullName());
+							sendFeedback(player, "Locked: " + ability.getDisplayName());
 						} else {
 							throw new WrongUsageException("You must specify ability");
 						}
@@ -142,7 +142,7 @@ public class CommandSuperpowers extends CommandBase {
 						data.setLevel(99);
 					}
 					Registries.ABILITIES.forEach(a -> {
-						if(!Ability.hasAbility(a, data.getUnlockedAbilities())) {
+						if(!Ability.hasAbility(a, player, true)) {
 							data.unlockAbility(a);
 						}
 					});
@@ -179,7 +179,7 @@ public class CommandSuperpowers extends CommandBase {
 				// xp
 				case "unlock": case "lock": {
 					List<String> names = new ArrayList<>();
-					Registries.ABILITIES.forEach(a -> {names.add(a.getName());});
+					Registries.ABILITIES.forEach(a -> names.add(a.getName()));
 					return getListOfStringsMatchingLastWord(args, names);
 				}
 			}

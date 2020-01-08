@@ -4,7 +4,7 @@ import com.revivalmodding.revivalcore.command.CommandSuperpowers;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityStorage;
 import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
-import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
+import com.revivalmodding.revivalcore.core.common.events.RCRegistryEvent;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.tabs.CoreTab;
 import com.revivalmodding.revivalcore.network.NetworkManager;
@@ -56,14 +56,14 @@ public class RevivalCore {
 
     @EventHandler
     public static void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitMakerRecipeRegistryEvent());
-        MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.AbilityRegistryEvent());
+        MinecraftForge.EVENT_BUS.post(new RCRegistryEvent.SuitMakerRecipeRegistryEvent());
+        MinecraftForge.EVENT_BUS.post(new RCRegistryEvent.AbilityRegistryEvent());
         proxy.init(event);
     }
 
     @EventHandler
     public static void postinit(FMLPostInitializationEvent event) {
-    	MinecraftForge.EVENT_BUS.post(new RVRegistryEvent.SuitRegistryEvent());
+    	MinecraftForge.EVENT_BUS.post(new RCRegistryEvent.SuitRegistryEvent());
         proxy.postInit(event);
     }
     
