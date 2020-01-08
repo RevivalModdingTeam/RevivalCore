@@ -38,9 +38,9 @@ public class AbilityButton extends GuiButton {
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		ImageHelper.drawCustomSizedImage(mc, ability.getIcon(), this.x + 3, this.y + 2, 16, 16, true);
-		mc.fontRenderer.drawStringWithShadow(ability.getFullName(), this.x + 20, this.y + 6, 0xFFFFFF);
-		mc.fontRenderer.drawStringWithShadow(ability.getAbilityPrice()+"", ability.getAbilityPrice() >= 10 ? this.x + 135 : this.x + 140, this.y + 6, 0xFFFFFF);
+		ImageHelper.drawCustomSizedImage(mc, ability.getGuiIcon(), this.x + 3, this.y + 2, 16, 16, true);
+		mc.fontRenderer.drawStringWithShadow(ability.getDisplayName(), this.x + 20, this.y + 6, 0xFFFFFF);
+		mc.fontRenderer.drawStringWithShadow(ability.getPrice()+"", ability.getPrice() >= 10 ? this.x + 135 : this.x + 140, this.y + 6, 0xFFFFFF);
 
 		if(hovered) {
 			this.drawAbilityRequirements(mc, mouseX, mouseY);
@@ -93,7 +93,7 @@ public class AbilityButton extends GuiButton {
 			String line = abilityDescription.get(i);
 			mc.fontRenderer.drawString(line, bgX + 10, bgY + 10 + i * 13, 0xFFFFFF);
 		}
-		boolean flag = ability.canActivateAbility(mc.player);
+		boolean flag = ability.canActivate(mc.player);
 		int color = flag ? 0x00FF00 : 0xFF0000;
 		mc.fontRenderer.drawString(flag ? "Ability can be activated" : "Ability cannot be activated", bgX + 10, bgY + 10 + (abilityDescription.size() + 1)*13, color);
 	}
@@ -102,11 +102,11 @@ public class AbilityButton extends GuiButton {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
 		hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-		if(!ability.canActivateAbility(player)) {
+		if(!ability.canActivate(player)) {
 			state = EnumButtonState.INACTIVE;
 		}
-		else if(!Ability.hasUnlockedAbility(player, ability.getName())) {
-			if(abilityData.getLevel() >= ability.getAbilityPrice()) {
+		else if(!Ability.hasAbility(ability, player, true)) {
+			if(abilityData.getLevel() >= ability.getPrice()) {
 				state = EnumButtonState.PURCHASABLE;
 				if(hovered) {
 					state = EnumButtonState.PURCHASABLE_HOVERED;

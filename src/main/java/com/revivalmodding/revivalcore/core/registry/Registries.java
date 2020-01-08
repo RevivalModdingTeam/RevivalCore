@@ -2,12 +2,14 @@ package com.revivalmodding.revivalcore.core.registry;
 
 import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.abilities.Ability;
-import com.revivalmodding.revivalcore.core.abilities.AbilityVibrate;
+import com.revivalmodding.revivalcore.core.abilities.AbilityBuilder;
+import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
+import com.revivalmodding.revivalcore.core.capability.ICoreCapability;
 import com.revivalmodding.revivalcore.core.client.models.ModelTrailEditorAdvanced;
 import com.revivalmodding.revivalcore.core.client.models.ModelTrailEditorBasic;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderSuitMaker;
 import com.revivalmodding.revivalcore.core.client.render.tileentity.RenderTrailEditor;
-import com.revivalmodding.revivalcore.core.common.events.RVRegistryEvent;
+import com.revivalmodding.revivalcore.core.common.events.RCRegistryEvent;
 import com.revivalmodding.revivalcore.core.common.items.ItemRegistry;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.core.common.suits.ItemSuit;
@@ -54,8 +56,21 @@ public class Registries {
     public static class Registry {
 
         @SubscribeEvent
-        public static void onAbilityRegister(RVRegistryEvent.AbilityRegistryEvent e) {
-            e.register(new AbilityVibrate());
+        public static void onAbilityRegister(RCRegistryEvent.AbilityRegistryEvent e) {
+            AbilityBuilder.create()
+                    .name("vibrate", "Ability Vibrate")
+                    .price(3)
+                    .canActivate(p -> CoreCapabilityImpl.getInstance(p).getMetaPowerData().canVibrate())
+                    .guiIcon(new ResourceLocation(RevivalCore.MODID + ":textures/icons/abilityvibrate.png"))
+                    .onUse(ctx -> {
+                        Ability a = ctx.getAbility();
+                        a.toggle();
+                        ICoreCapability cap = CoreCapabilityImpl.getInstance(ctx.getPlayer());
+                        cap.getMetaPowerData().setVibratingState(a.isToggled());
+                        cap.sync();
+                    })
+                    .build()
+                    .register(e);
         }
 
         @SubscribeEvent
@@ -68,7 +83,7 @@ public class Registries {
         }
 
         @SubscribeEvent
-        public static void onSuitRegistry(RVRegistryEvent.SuitRegistryEvent e) {
+        public static void onSuitRegistry(RCRegistryEvent.SuitRegistryEvent e) {
             AbstractSuit grimmlawke = new AbstractSuit("grimmlawke", Color.LIGHT_GRAY) {
                 @Override
                 public ItemSuit getHelmet() {
@@ -133,7 +148,7 @@ public class Registries {
                         player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 10, 15, false, false));
                 }
             };
-            e.registerAll(grimmlawke, royalZano, darkMessiah);
+            e.registerAll(new AbstractSuit[] {grimmlawke, royalZano, darkMessiah});
         }
 
         @SubscribeEvent

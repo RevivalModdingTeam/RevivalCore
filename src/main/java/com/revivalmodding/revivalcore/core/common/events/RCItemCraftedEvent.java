@@ -5,13 +5,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class RVItemCraftedEvent extends Event {
+public class RCItemCraftedEvent extends Event {
 
     private World world;
     private ItemStack item;
     public BlockPos position;
 
-    public RVItemCraftedEvent(World world, ItemStack itemStack, BlockPos pos) {
+    public RCItemCraftedEvent(World world, ItemStack itemStack, BlockPos pos) {
         this.world = world;
         this.item = itemStack;
         this.position = pos;

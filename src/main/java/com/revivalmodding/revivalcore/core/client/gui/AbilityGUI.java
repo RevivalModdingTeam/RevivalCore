@@ -41,7 +41,7 @@ public class AbilityGUI extends GuiScreen {
 				break;
 			}
 			case AVAILABLE: {
-				if(abilityData.getActiveAbilityCount() < 3 && button.getAbility().canActivateAbility(mc.player)) {
+				if(abilityData.getActiveAbilityCount() < 3 && button.getAbility().canActivate(mc.player)) {
 					NetworkManager.INSTANCE.sendToServer(new PacketAbilityAction(button.getAbility(), PacketAbilityAction.AbilityAction.UNLOCK));
 				}
 				break;

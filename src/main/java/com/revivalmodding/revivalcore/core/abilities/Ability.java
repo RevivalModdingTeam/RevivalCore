@@ -1,177 +1,127 @@
 package com.revivalmodding.revivalcore.core.abilities;
 
-import com.revivalmodding.revivalcore.RevivalCore;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
 import com.revivalmodding.revivalcore.core.capability.data.PlayerAbilityData;
+import com.revivalmodding.revivalcore.core.common.events.RCRegistryEvent;
 import com.revivalmodding.revivalcore.core.registry.IRegistry;
 import com.revivalmodding.revivalcore.core.registry.IRegistryEntry;
 import com.revivalmodding.revivalcore.core.registry.Registries;
 import com.revivalmodding.revivalcore.core.registry.Registries.AbilityRegistry;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
- * Base class for all abilities
- * Each ability has to be registered in RVRegistryEvent.AbilityRegistryEvent
- * Once registered, players can unlock and use this ability using the AbilityGUI
+ * Core class for abilities
+ * Each ability has it's own {@link Ability#name} field, which has to be unique
+ * for all abilities. {@link Ability#displayName} is for GUIs.
+ * For more information see {@link AbilityBuilder} which contains
+ * description for all fields in this class.
  *
- * Each ability interaction fires some event (AbilityEvent.Activate and AbilityEvent.Deactivate)
- * Keep in mind that not all abilites might call the .Deactivate event, design feature/flaw, whatever
+ * This class is instance of {@link IRegistryEntry} which means
+ * there's custom {@link RCRegistryEvent} fired for this. All abilities should be registered
+ * in the {@link RCRegistryEvent.AbilityRegistryEvent} event. To register the ability
+ * you can use the event's {@link RCRegistryEvent#register(IRegistryEntry)} function or
+ * use the {@link Ability#register(RCRegistryEvent.AbilityRegistryEvent)} directly from
+ * the {@link Ability}
  *
- * - Made by Toma
+ *
+ * Created by Toma, 8.1.2020
  */
-public abstract class Ability implements IRegistryEntry
+public class Ability implements IRegistryEntry
 {
-	public final int maxCooldown;
-	public int currentCooldown;
-	private final String name;
-	private boolean active;
+	public final String name, displayName;
+	public final int price;
+	public final ResourceLocation iconLocation;
+	protected final Consumer<EntityPlayer> activate, deactivate, tick;
+	protected final Consumer<AbilityUseContex> use;
+	protected final Predicate<EntityPlayer> activationVerification;
+	@Nullable
+	private final String[] hoveredDesc;
+	private final int cooldownLimit;
+	private int cooldown;
+	private boolean toggled = false;
 
-
-	public Ability(String name, int cooldown) {
-		this.name = name;
-		this.maxCooldown = cooldown;
-	}
-	
-	public Ability(String name) {
-		this(name, 0);
-	}
-	
-	/**
-	 * Icon into ability gui
-	 */
-	@SideOnly(Side.CLIENT)
-	@Nonnull
-	public abstract ResourceLocation getIcon();
-	
-	/**
-	 * Amount of levels to buy this the ability
-	 */
-	public abstract int getAbilityPrice();
-	
-	/**
-	 * Name for displaying on GUI buttons
-	 */
-	public abstract String getFullName();
-	
-	public void update(EntityPlayer player) {
-		if(hasCooldown()) {
-			--currentCooldown;
-		}
+	protected Ability(AbilityBuilder builder) {
+		this.name = builder.registryName;
+		this.displayName = builder.displayName;
+		this.hoveredDesc = builder.hover;
+		this.price = builder.price;
+		this.iconLocation = builder.iconLocation;
+		this.activate = builder.activateAction;
+		this.deactivate = builder.deactivateAction;
+		this.tick = builder.tickUpdate;
+		this.use = builder.useAction;
+		this.activationVerification = builder.activateValidator;
+		this.cooldownLimit = builder.cooldown;
 	}
 
-	/**
-	 * Ability won't be activated unless this returns true. 
-	 */
-	public boolean canActivateAbility(EntityPlayer player) {
-		return true;
-	}
-	
-	/** Called when player removes this ability from active ability list **/
-	public void onAbilityDeactivated(EntityPlayer player) {
-		
+	public void register(RCRegistryEvent.AbilityRegistryEvent event) {
+		event.register(this);
 	}
 
-	/**
-	 * Description which will be displayed when player hovers over this
-	 * ability inside AbilityGUI.
-	 * return null for no description
-	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
 	@Nullable
 	public String[] getHoveredDescription() {
-		return null;
-	}
-	
-	public final void toggleAbility() {
-		active = !active;
-	}
-	
-	public final boolean hasCooldown() {
-		return currentCooldown > 0;
-	}
-	
-	public final boolean isActive() {
-		return active;
+		return hoveredDesc;
 	}
 
-	/**
-	 * @return if player has currently active ability with the name of abilityName
-	 */
-	public static boolean hasAbility(EntityPlayer player, String abilityName) {
-		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
-		for(Ability base : abilityData.getActiveAbilities()) {
-			if(base.getName().equalsIgnoreCase(abilityName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static boolean hasAbility(Ability ability, Collection<Ability> collection) {
-		for(Ability a : collection) {
-			if(a.getName().equalsIgnoreCase(ability.getName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static boolean hasUnlockedAbility(EntityPlayer player, String abilityName) {
-		PlayerAbilityData abilityData = CoreCapabilityImpl.getInstance(player).getAbilityData();
-		for(Ability base : abilityData.getUnlockedAbilities()) {
-			if(base.getName().equalsIgnoreCase(abilityName)) {
-				return true;
-			}
-		}
-		return false;
+	public void onUse(EntityPlayer player) {
+		this.use.accept(AbilityUseContex.newContex(this, player));
 	}
 
-	@Nullable
-	public static Ability getAbility(EntityPlayer player, int powerKeybind) {
-		if(powerKeybind > 2 || powerKeybind < 0) {
-			return null;
-		}
-		return CoreCapabilityImpl.getInstance(player).getAbilityData().getActiveAbilities()[powerKeybind];
+	public void onActivate(EntityPlayer player) {
+		this.activate.accept(player);
 	}
 
-	/**
-	 * Called only during capability sync, you shouldn't have to call this method
-	 * @param key - the ability registry name
-	 * @return ability, can be null
-	 */
-	public static Ability getAbilityFromKey(String key) {
-		for(Ability base : Registries.ABILITIES) {
-			if(base.getName().equalsIgnoreCase(key)) {
-				return base;
-			}
-		}
-		RevivalCore.logger.error("Couldn't find ability with key {}, skipping...", key.toUpperCase());
-		return null;
+	public void onDeactivate(EntityPlayer player) {
+		this.deactivate.accept(player);
 	}
-	
-	public static NBTTagCompound writeNBT(String name) {
-		NBTTagCompound comp = new NBTTagCompound();
-		comp.setString("abilityID", name);
-		return comp;
+
+	public void onTick(EntityPlayer player) {
+		this.tick.accept(player);
 	}
-	
-	public static Ability readNBT(NBTTagCompound comp) {
-		if(!comp.hasKey("abilityID"))
-			return null;
-		
-		return getAbilityFromKey(comp.getString("abilityID"));
+
+	public boolean canActivate(EntityPlayer player) {
+		return this.activationVerification.test(player);
 	}
-	
-	@Override
+
+	public int getPrice() {
+		return price;
+	}
+
+	public ResourceLocation getGuiIcon() {
+		return iconLocation;
+	}
+
+	public boolean hasCooldown() {
+		return cooldown > 0;
+	}
+
+	public void setMaxCooldown() {
+		this.cooldown = this.cooldownLimit;
+	}
+
+	public void setCooldown(int cooldown) {
+		this.cooldown = cooldown;
+	}
+
+	public void toggle() {
+		this.toggled = !this.toggled;
+	}
+
+	public boolean isToggled() {
+		return toggled;
+	}
+
 	public String toString() {
-		return "Ability:[registry name="+name+", active="+active+"]";
+		return "Ability:[Registry name="+name+", cooldown="+cooldown+"]";
 	}
 	
 	@Override
@@ -190,5 +140,54 @@ public abstract class Ability implements IRegistryEntry
 	@Override
 	public IRegistry getRegistry() {
 		return AbilityRegistry.instance();
+	}
+
+	public static Ability fromString(String key) {
+		for(Ability a : Registries.AbilityRegistry.instance().getRegistry()) {
+			if(a.getName().equalsIgnoreCase(key)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
+	public static Ability get(EntityPlayer player, int key) {
+		return CoreCapabilityImpl.getInstance(player).getAbilityData().getActiveAbilities()[key];
+	}
+
+	public static boolean hasAbility(String key, EntityPlayer player, boolean includeUnlocked) {
+		return hasAbility(fromString(key), player, includeUnlocked);
+	}
+
+	public static boolean hasAbility(Ability ability, EntityPlayer player, boolean includeUnlocked) {
+		PlayerAbilityData data = CoreCapabilityImpl.getInstance(player).getAbilityData();
+		if(includeUnlocked) {
+			for(Ability a : data.getUnlockedAbilities()) {
+				if(a.getName().equalsIgnoreCase(ability.getName())) {
+					return true;
+				}
+			}
+			return false;
+		}
+		for(Ability a : data.getActiveAbilities()) {
+			if(a.getName().equalsIgnoreCase(ability.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isUnlocked(String key, EntityPlayer player) {
+		return isUnlocked(fromString(key), player);
+	}
+
+	static boolean isUnlocked(Ability ability, EntityPlayer player) {
+		PlayerAbilityData data = CoreCapabilityImpl.getInstance(player).getAbilityData();
+		for(Ability a : data.getUnlockedAbilities()) {
+			if(a.getName().equalsIgnoreCase(ability.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -2,7 +2,7 @@ package com.revivalmodding.revivalcore.util.handlers;
 
 import com.revivalmodding.revivalcore.core.RCoreConfig;
 import com.revivalmodding.revivalcore.core.capability.CoreCapabilityImpl;
-import com.revivalmodding.revivalcore.core.common.events.RVItemCraftedEvent;
+import com.revivalmodding.revivalcore.core.common.events.RCItemCraftedEvent;
 import com.revivalmodding.revivalcore.core.common.suits.AbstractSuit;
 import com.revivalmodding.revivalcore.util.helper.Constants;
 import net.minecraft.entity.Entity;
@@ -53,7 +53,7 @@ public class EventHandler
     }
     
     @SubscribeEvent
-    public static void onSuitCrafted(RVItemCraftedEvent e) {
+    public static void onSuitCrafted(RCItemCraftedEvent e) {
     	if(!e.getWorld().isRemote) {
     		for(int i = 0; i < 3 + Constants.RANDOM.nextInt(5); i++) {
     			EntityXPOrb xp = new EntityXPOrb(e.getWorld(), e.position.getX(), e.position.getY() + 2, e.position.getZ(), Constants.RANDOM.nextInt(5) + 1);
