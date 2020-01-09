@@ -12,6 +12,7 @@ import com.revivalmodding.revivalcore.proxy.IProxy;
 import com.revivalmodding.revivalcore.util.handlers.GuiHandlerRV;
 import com.revivalmodding.revivalcore.util.helper.ModHelper;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
@@ -74,6 +75,10 @@ public class RevivalCore {
 
     public static Random getRandom() {
         return random;
+    }
+
+    public static ResourceLocation getResource(String resourcePath) {
+        return new ResourceLocation(MODID, resourcePath);
     }
 }
 

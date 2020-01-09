@@ -36,12 +36,12 @@ public class Ability implements IRegistryEntry
 	public final String name, displayName;
 	public final int price;
 	public final ResourceLocation iconLocation;
+	public final int cooldownLimit;
 	protected final Consumer<EntityPlayer> activate, deactivate, tick;
 	protected final Consumer<AbilityUseContex> use;
 	protected final Predicate<EntityPlayer> activationVerification;
 	@Nullable
 	private final String[] hoveredDesc;
-	private final int cooldownLimit;
 	private int cooldown;
 	private boolean toggled = false;
 
@@ -118,6 +118,10 @@ public class Ability implements IRegistryEntry
 
 	public boolean isToggled() {
 		return toggled;
+	}
+
+	public int getCooldown() {
+		return cooldown;
 	}
 
 	public String toString() {
