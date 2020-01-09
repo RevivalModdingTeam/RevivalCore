@@ -66,6 +66,7 @@ public class PacketAbilityAction implements IMessage {
                         int key = message.data;
                         if(key < 0) return;
                         abilityData.toggleAbility(player, key);
+                        message.ability.onActivate(player);
                         break;
                     }
                     case ACTIVATE: {
