@@ -11,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -37,8 +36,8 @@ public class Ability implements IRegistryEntry
 	public final int price;
 	public final ResourceLocation iconLocation;
 	public final int cooldownLimit;
-	protected final Consumer<EntityPlayer> activate, deactivate, tick;
-	protected final Consumer<AbilityUseContex> use;
+	protected final AbilityConsumer activate, deactivate, tick;
+	protected final AbilityConsumer use;
 	protected final Predicate<EntityPlayer> activationVerification;
 	@Nullable
 	private final String[] hoveredDesc;
@@ -73,19 +72,19 @@ public class Ability implements IRegistryEntry
 	}
 
 	public void onUse(EntityPlayer player) {
-		this.use.accept(AbilityUseContex.newContex(this, player));
+		this.use.apply(this, player);
 	}
 
 	public void onActivate(EntityPlayer player) {
-		this.activate.accept(player);
+		this.activate.apply(this, player);
 	}
 
 	public void onDeactivate(EntityPlayer player) {
-		this.deactivate.accept(player);
+		this.deactivate.apply(this, player);
 	}
 
 	public void onTick(EntityPlayer player) {
-		this.tick.accept(player);
+		this.tick.apply(this, player);
 	}
 
 	public boolean canActivate(EntityPlayer player) {
