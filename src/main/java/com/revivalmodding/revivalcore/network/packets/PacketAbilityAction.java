@@ -66,12 +66,12 @@ public class PacketAbilityAction implements IMessage {
                         int key = message.data;
                         if(key < 0) return;
                         abilityData.toggleAbility(player, key);
-                        message.ability.onActivate(player);
                         break;
                     }
                     case ACTIVATE: {
                         if(abilityData.getActiveAbilityCount() < 3) {
                             abilityData.activateAbility(message.ability);
+                            message.ability.onActivate(player);
                             PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated " + message.ability.getDisplayName(), true);
                         }
                         break;
