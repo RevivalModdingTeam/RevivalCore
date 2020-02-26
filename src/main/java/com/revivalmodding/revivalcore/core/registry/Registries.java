@@ -62,11 +62,10 @@ public class Registries {
                     .price(3)
                     .canActivate(p -> CoreCapabilityImpl.getInstance(p).getMetaPowerData().canVibrate())
                     .guiIcon(new ResourceLocation(RevivalCore.MODID + ":textures/icons/abilityvibrate.png"))
-                    .onUse(ctx -> {
-                        Ability a = ctx.getAbility();
-                        a.toggle();
-                        ICoreCapability cap = CoreCapabilityImpl.getInstance(ctx.getPlayer());
-                        cap.getMetaPowerData().setVibratingState(a.isToggled());
+                    .onUse((ability, player) -> {
+                        ability.toggle();
+                        ICoreCapability cap = CoreCapabilityImpl.getInstance(player);
+                        cap.getMetaPowerData().setVibratingState(ability.isToggled());
                         cap.sync();
                     })
                     .build()

@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -21,9 +20,9 @@ public class AbilityBuilder {
     @Nullable
     protected String[] hover;
     /** What happens on keybind press */
-    protected Consumer<AbilityUseContex> useAction;
+    protected AbilityConsumer useAction;
     /** Actions based on ability manipulation*/
-    protected Consumer<EntityPlayer> activateAction = p -> {}, deactivateAction = p -> {}, tickUpdate = p -> {};
+    protected AbilityConsumer activateAction = (a, p) -> {}, deactivateAction = (a, p) -> {}, tickUpdate = (a, p) -> {};
     /** If player can actually enable this ability, could be useful for abilities depending on each other */
     protected Predicate<EntityPlayer> activateValidator = p -> true;
     /** Amount of levels required to unlock this ability */
@@ -50,25 +49,25 @@ public class AbilityBuilder {
     }
 
     /** REQUIRED: What happens when keybind is activated */
-    public AbilityBuilder onUse(final Consumer<AbilityUseContex> useAction) {
+    public AbilityBuilder onUse(final AbilityConsumer useAction) {
         this.useAction = useAction;
         return this;
     }
 
     /** OPTIONAL: When ability is selected as active */
-    public AbilityBuilder onActivate(final Consumer<EntityPlayer> activateAction) {
+    public AbilityBuilder onActivate(final AbilityConsumer activateAction) {
         this.activateAction = activateAction;
         return this;
     }
 
     /** OPTIONAL: When ability is disabled from active selection */
-    public AbilityBuilder onDeactivate(final Consumer<EntityPlayer> deactivateAction) {
+    public AbilityBuilder onDeactivate(final AbilityConsumer deactivateAction) {
         this.deactivateAction = deactivateAction;
         return this;
     }
 
     /** OPTIONAL: Called every tick */
-    public AbilityBuilder onTick(final Consumer<EntityPlayer> tickUpdate) {
+    public AbilityBuilder onTick(final AbilityConsumer tickUpdate) {
         this.tickUpdate = tickUpdate;
         return this;
     }
