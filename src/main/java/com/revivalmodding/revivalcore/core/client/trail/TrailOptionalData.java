@@ -41,7 +41,7 @@ public class TrailOptionalData {
     public boolean onTrailRender(TrailRenderer renderer, Vec3d from, Vec3d to, int primaryColor, int primaryTrailWidth, int trailPart, float alpha, double x, double y, double z) {
         int color = this.getColor(trailPart - 1, primaryColor);
         int color2 = this.getColor(trailPart, primaryColor);
-        if(stageColors == null) {
+        if(color == primaryColor) {
             return false;
         }
         float r1 = ((color >> 16) & 255) / 255.0F;

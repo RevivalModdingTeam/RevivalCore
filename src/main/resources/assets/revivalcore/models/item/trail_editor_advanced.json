@@ -1,3 +1,6 @@
 {
-    "parent": "revivalcore:block/traileditor"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "revivalcore:items/trail_editor_advanced"
+    }
 }

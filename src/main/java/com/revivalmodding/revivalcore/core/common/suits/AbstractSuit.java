@@ -13,7 +13,7 @@ import java.awt.*;
  * Base class for suit system.
  * Every suit contains 3 armor items (ItemSuit instances)
  *
- * Every suit has to be registered in appropriate event - in this case it's RCRegistryEvent.SuitRegistryEvent
+ * Every suit has to be registered in appropriate event - in this case it's RVRegistryEvent.SuitRegistryEvent
  */
 public abstract class AbstractSuit implements IRegistryEntry
 {

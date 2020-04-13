@@ -26,12 +26,10 @@ public class ItemRegistry {
 
     public static ItemArmor.ArmorMaterial SUIT_MATERIAL = EnumHelper.addArmorMaterial("suit", "", -1, new int[4], 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
     public static final EntityEquipmentSlot[] ARMOR = {EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD};
-    public static ArrayList<ItemBlock> ITEMBLOCK_QUEUE;
 
     @GameRegistry.ObjectHolder(RevivalCore.MODID)
     public static final class CoreItems {
         public static final Item COFFEE_MUG = null;
-        public static final Item SUIT_MAKER = null;
         public static final ItemInjection EMPTY_INJECTION = null;
         public static final ItemInjection SPEEDFORCE_INJECTION = null;
         public static final ItemDonatorSuit GRIMMLAWKE_HEAD = null;
@@ -49,25 +47,12 @@ public class ItemRegistry {
     public static void onItemRegister(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
                 new ItemEatable("coffee_mug", 3, 0F, true),
-                new ItemSuitMaker(CoreBlockRegistry.CoreBlocks.SUIT_MAKER),
                 new ItemInjection("empty_injection", InjectionTypes.EMPTY)
         );
 
         registerDonatorSuit(event, "grimmlawke", 100, () -> getSuitForName("grimmlawke"));
         registerDonatorSuit(event, "royal_zano", 10, () -> getSuitForName("royal_zano"));
         registerDonatorSuit(event, "dark_messiah", 6, () -> getSuitForName("dark_messiah"));
-
-        event.getRegistry().registerAll(ITEMBLOCK_QUEUE.toArray(new ItemBlock[0]));
-        ITEMBLOCK_QUEUE = null;
-    }
-
-    public static void registerItemBlock(Block block) {
-        if(ITEMBLOCK_QUEUE == null) {
-            throw new IllegalStateException("Attempted to register outside Forge registry event!");
-        }
-        ItemBlock block1 = new ItemBlock(block);
-        block1.setRegistryName(block.getRegistryName());
-        ITEMBLOCK_QUEUE.add(block1);
     }
 
     private static void registerDonatorSuit(RegistryEvent.Register<Item> event, String name, double amount, ISimpleSuit simpleSuit) {

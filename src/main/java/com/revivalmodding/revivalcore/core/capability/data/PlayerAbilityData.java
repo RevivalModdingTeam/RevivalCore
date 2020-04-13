@@ -75,9 +75,9 @@ public class PlayerAbilityData {
         return false;
     }
 
-    public void toggleAbility(EntityPlayer player, int key) {
+    public void toggleAbility(int key) {
         if(this.hasActiveAbilityForKey(key)) {
-            this.getActiveAbilities()[key].onUse(player);
+            this.getActiveAbilities()[key].toggleAbility();
         }
     }
 
@@ -178,14 +178,14 @@ public class PlayerAbilityData {
         NBTTagList unlocked = tag.getTagList("unlocked", Constants.NBT.TAG_STRING);
         this.unlockedAbilities = new ArrayList<>();
         for(int i = 0; i < unlocked.tagCount(); i++) {
-            Ability ability = Ability.fromString(unlocked.getStringTagAt(i));
+            Ability ability = Ability.getAbilityFromKey(unlocked.getStringTagAt(i));
             if(ability == null) continue;
             unlockedAbilities.add(ability);
         }
         NBTTagList active = tag.getTagList("active", Constants.NBT.TAG_STRING);
         this.activeAbilities = new Ability[3];
         for(int i = 0; i < active.tagCount(); i++) {
-            Ability ability = Ability.fromString(active.getStringTagAt(i));
+            Ability ability = Ability.getAbilityFromKey(active.getStringTagAt(i));
             if(ability == null) continue;
             activeAbilities[i] = ability;
         }
@@ -203,7 +203,7 @@ public class PlayerAbilityData {
     public void update(EntityPlayer player) {
         for(Ability ability : this.getActiveAbilities()) {
             if(ability == null) continue;
-            ability.onTick(player);
+            ability.update(player);
         }
         if(this.getXP() >= this.getRequiredXPForLevel() && this.getLevel() < 99) {
             this.setXP(0);

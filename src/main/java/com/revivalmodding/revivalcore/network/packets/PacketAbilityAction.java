@@ -48,7 +48,7 @@ public class PacketAbilityAction implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.ability = Ability.fromString(ByteBufUtils.readUTF8String(buf));
+        this.ability = Ability.getAbilityFromKey(ByteBufUtils.readUTF8String(buf));
         this.action = AbilityAction.values()[buf.readInt()];
         this.data = buf.readInt();
     }
@@ -65,14 +65,13 @@ public class PacketAbilityAction implements IMessage {
                     case TOGGLE: {
                         int key = message.data;
                         if(key < 0) return;
-                        abilityData.toggleAbility(player, key);
+                        abilityData.toggleAbility(key);
                         break;
                     }
                     case ACTIVATE: {
                         if(abilityData.getActiveAbilityCount() < 3) {
                             abilityData.activateAbility(message.ability);
-                            message.ability.onActivate(player);
-                            PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated " + message.ability.getDisplayName(), true);
+                            PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have activated " + message.ability.getFullName(), true);
                         }
                         break;
                     }
@@ -83,17 +82,17 @@ public class PacketAbilityAction implements IMessage {
                                 RevivalCore.logger.error("Couldn't disable ability {}!", message.ability);
                                 return;
                             }
-                            message.ability.onDeactivate(player);
-                            PlayerHelper.sendMessage(player, TextFormatting.RED + "You have deactivated " + message.ability.getDisplayName(), true);
+                            message.ability.onAbilityDeactivated(player);
+                            PlayerHelper.sendMessage(player, TextFormatting.RED + "You have deactivated " + message.ability.getFullName(), true);
                         }
                         break;
                     }
                     case UNLOCK: {
                         Ability ability = message.ability;
                         if(!abilityData.getUnlockedAbilities().contains(ability)) {
-                            if(abilityData.getLevel() >= ability.getPrice()) {
+                            if(abilityData.getLevel() >= ability.getAbilityPrice()) {
                                 abilityData.unlockAbility(ability);
-                                PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have unlocked " + ability.getDisplayName(), true);
+                                PlayerHelper.sendMessage(player, TextFormatting.GREEN + "You have unlocked " + ability.getFullName(), true);
                             }
                         }
                         break;

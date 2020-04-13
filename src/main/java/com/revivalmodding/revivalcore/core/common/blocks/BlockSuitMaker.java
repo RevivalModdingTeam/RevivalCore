@@ -53,7 +53,7 @@ public class BlockSuitMaker extends BlockBasic {
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         super.getDrops(drops, world, pos, state, fortune);
         drops.clear();
-        drops.add(new ItemStack(ItemRegistry.CoreItems.SUIT_MAKER));
+        drops.add(new ItemStack(CoreBlockRegistry.SUIT_MAKER));
          TileEntitySuitMaker tileEntitySuitMaker = (TileEntitySuitMaker) world.getTileEntity(pos);
          for(int i = 0; i < tileEntitySuitMaker.getInventory().size(); i++) {
              drops.add(new ItemStack(tileEntitySuitMaker.getStackInSlot(i).getItem()));

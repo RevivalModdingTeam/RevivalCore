@@ -14,6 +14,6 @@ public class CoreTab extends CreativeTabs {
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Item.getItemFromBlock(CoreBlockRegistry.CoreBlocks.SUIT_MAKER));
+        return new ItemStack(Item.getItemFromBlock(CoreBlockRegistry.SUIT_MAKER));
     }
 }

@@ -10,6 +10,5 @@ public class BlockBasic extends Block {
         super(material);
         this.setTranslationKey(name);
         this.setRegistryName(name);
-        ItemRegistry.registerItemBlock(this);
     }
 }

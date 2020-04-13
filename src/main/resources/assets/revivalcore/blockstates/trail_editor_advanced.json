@@ -1,7 +1,26 @@
 {
-    "variants": {
-        "normal": {
-            "model": "revivalcore:traileditor"
-        }
-    }
+  "forge_marker": 1,
+  "defaults": {
+      "model": "revivalcore:trail_editor_advanced"
+    },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ],
+    "facing=north": [
+      {}
+    ],
+    "facing=east": [
+      {}
+    ],
+    "facing=west": [
+      {}
+    ],
+    "facing=south": [
+      {}
+    ]
+  }
 }
