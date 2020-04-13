@@ -1,9 +1,9 @@
 {
 	"credit": "Made by Chappie",
 	"textures": {
-		"0": "blocks/concrete_powder_white",
+		"0": "revivalcore:blocks/concrete_powder_white",
 		"1": "revivalcore:items/coffee",
-		"particle": "blocks/concrete_powder_white"
+		"particle": "revivalcore:blocks/concrete_powder_white"
 	},
 	"elements": [
 		{
